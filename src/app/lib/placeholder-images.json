@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "lofi-girl",
+      "description": "Lo-Fi girl studying at desk",
+      "imageUrl": "https://picsum.photos/seed/lofi1/800/600",
+      "imageHint": "lofi study"
+    },
+    {
+      "id": "rainy-window",
+      "description": "Rainy window view of a city at night",
+      "imageUrl": "https://picsum.photos/seed/lofi2/800/600",
+      "imageHint": "rainy city"
+    },
+    {
+      "id": "cozy-cafe",
+      "description": "Cozy cafe interior with warm lighting",
+      "imageUrl": "https://picsum.photos/seed/lofi3/800/600",
+      "imageHint": "cozy cafe"
+    },
+    {
+      "id": "pixel-room",
+      "description": "Pixel art of a bedroom with a computer",
+      "imageUrl": "https://picsum.photos/seed/lofi4/800/600",
+      "imageHint": "pixel bedroom"
+    }
+  ]
+}
