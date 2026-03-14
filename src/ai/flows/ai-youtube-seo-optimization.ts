@@ -57,10 +57,37 @@ Here is the information about the video:
 Micro-Niche: {{{microNiche}}}
 Video Topic: {{{videoTopic}}}
 Target Keywords: {{#each keywords}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
+{{#if artistName}}Artist: {{{artistName}}}{{/if}}
+{{#if bpm}}BPM: {{{bpm}}}{{/if}}
+{{#if key}}Key: {{{key}}}{{/if}}
+{{#if licensingInfo}}Licensing: {{{licensingInfo}}}{{/if}}
 
 Generate the following:
 
-1.  An engaging and optimized YouTube video title (max 70 characters) that includes relevant keywords and creates curiosity.
-2.  A detailed YouTube video description (minimum 200 words) that includes:
-    - A compelling introduction related to the video topic and micro-niche.
-    - Call-to-actions (e.g., 
+1. An engaging and optimized YouTube video title (max 70 characters) that includes relevant keywords.
+2. A detailed YouTube video description (minimum 200 words) that includes:
+    - A compelling introduction.
+    - Purchase/License links (placeholder).
+    - BPM and Key info.
+    - Social media links (placeholder).
+    - SEO paragraph stacking keywords naturally.
+    - 5 relevant hashtags.
+3. A list of 20-30 relevant tags for the YouTube tags field.
+
+Use the "FREE {Artist} Type Beat" title format where applicable.`,
+});
+
+const aiYoutubeSeoOptimizationFlow = ai.defineFlow(
+  {
+    name: 'aiYoutubeSeoOptimizationFlow',
+    inputSchema: AiYoutubeSeoOptimizationInputSchema,
+    outputSchema: AiYoutubeSeoOptimizationOutputSchema,
+  },
+  async input => {
+    const {output} = await prompt(input);
+    if (!output) {
+      throw new Error('Failed to generate SEO optimization.');
+    }
+    return output;
+  }
+);
