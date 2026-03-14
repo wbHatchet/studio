@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -17,7 +18,9 @@ import {
   Music,
   Video,
   Search,
-  ExternalLink
+  ExternalLink,
+  FileSpreadsheet,
+  Upload
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -26,6 +29,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 const initialProjects = [
   { 
@@ -67,7 +80,21 @@ const initialProjects = [
 ];
 
 export default function ProjectsPage() {
-  const [projects] = useState(initialProjects);
+  const [projects, setProjects] = useState(initialProjects);
+  const { toast } = useToast();
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleBulkUpload = () => {
+    setIsUploading(true);
+    // Simulate processing
+    setTimeout(() => {
+      setIsUploading(false);
+      toast({
+        title: "Spreadsheet Processed",
+        description: "Added 12 new jobs to the production queue.",
+      });
+    }, 2000);
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -93,15 +120,44 @@ export default function ProjectsPage() {
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
             <h1 className="font-headline font-bold text-xl">Production Queue</h1>
-            <Button size="sm" className="ml-auto bg-primary text-primary-foreground">
-              <PlusCircle className="w-4 h-4 mr-2" /> New Factory Job
-            </Button>
+            <div className="ml-auto flex gap-2">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <FileSpreadsheet className="w-4 h-4" /> Bulk Upload
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Ingest Production Sheet</DialogTitle>
+                    <DialogDescription>
+                      Upload an Excel or CSV file containing your beat metadata, niche artist, and mood parameters.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-border rounded-xl bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer group">
+                      <Upload className="w-8 h-8 mb-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <p className="text-sm font-medium">Drop your .xlsx or .csv here</p>
+                      <p className="text-xs text-muted-foreground mt-1">Maximum 500 rows per upload</p>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={handleBulkUpload} disabled={isUploading} className="w-full bg-primary text-primary-foreground font-bold">
+                      {isUploading ? "Initializing Factory..." : "Start Production Run"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Button size="sm" className="bg-primary text-primary-foreground font-bold">
+                <PlusCircle className="w-4 h-4 mr-2" /> Single Job
+              </Button>
+            </div>
           </header>
 
           <main className="p-6 md:p-8 space-y-6">
             <div className="grid gap-6">
               {projects.map((project) => (
-                <Card key={project.id} className="bg-card hover:border-primary/30 transition-colors cursor-pointer">
+                <Card key={project.id} className="bg-card hover:border-primary/30 transition-colors">
                   <CardContent className="p-0">
                     <div className="flex flex-col md:flex-row md:items-center gap-6 p-6">
                       <div className="flex-1 space-y-4">

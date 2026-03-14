@@ -1,0 +1,46 @@
+
+{
+  "collections": {
+    "users": {
+      "description": "User profile and API key references",
+      "fields": {
+        "email": "string",
+        "createdAt": "timestamp",
+        "subscription": "string"
+      }
+    },
+    "channels": {
+      "description": "Connected YouTube channels and their metadata",
+      "fields": {
+        "name": "string",
+        "niche": "string",
+        "youtubeId": "string",
+        "status": "string",
+        "userId": "string"
+      }
+    },
+    "projects": {
+      "description": "Production jobs and content metadata",
+      "fields": {
+        "name": "string",
+        "status": "string",
+        "progress": "number",
+        "type": "string",
+        "niche": "string",
+        "assets": {
+          "audioUrl": "string",
+          "imageUrl": "string",
+          "videoUrl": "string"
+        }
+      }
+    },
+    "apiKeys": {
+      "description": "Encrypted or secure storage references for keys (simulated)",
+      "fields": {
+        "userId": "string",
+        "provider": "string",
+        "key": "string"
+      }
+    }
+  }
+}
