@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -19,8 +20,6 @@ import {
   MessageSquare,
   Mic2,
   Share2,
-  BrainCircuit,
-  Cpu,
   Workflow
 } from "lucide-react";
 
@@ -72,16 +71,21 @@ export function AppSidebar() {
   return (
     <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-sidebar-border">
       <SidebarHeader className="p-4">
-        <div className="flex items-center gap-2 px-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Workflow className="h-5 w-5" />
+        <div className="flex items-center gap-3 px-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 border border-primary/30">
+            <Workflow className="h-6 w-6" />
           </div>
-          <span className="font-headline font-bold text-lg group-data-[collapsible=icon]:hidden">
-            Content Studio
-          </span>
+          <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+            <span className="font-headline font-bold text-base leading-tight">
+              Studio Factory
+            </span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+              Autonomous v4.0
+            </span>
+          </div>
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarMenu>
             {studioNav.map((item) => (
@@ -90,6 +94,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
+                  className="h-10 rounded-xl"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -102,7 +107,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Intelligence</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Intelligence</SidebarGroupLabel>
           <SidebarMenu>
             {intelligenceNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -110,6 +115,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
+                  className="h-10 rounded-xl"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -122,7 +128,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Production</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Production</SidebarGroupLabel>
           <SidebarMenu>
             {productionNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -130,6 +136,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
+                  className="h-10 rounded-xl"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -142,7 +149,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Growth</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Growth</SidebarGroupLabel>
           <SidebarMenu>
             {growthNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -150,6 +157,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname.startsWith(item.url)}
                   tooltip={item.title}
+                  className="h-10 rounded-xl"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -162,7 +170,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Analytics</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Analytics</SidebarGroupLabel>
           <SidebarMenu>
             {analyticsNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -170,6 +178,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
+                  className="h-10 rounded-xl"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -184,7 +193,7 @@ export function AppSidebar() {
       <SidebarFooter className="p-4 border-t border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Settings" className="hover:bg-sidebar-accent">
+            <SidebarMenuButton asChild tooltip="Settings" className="h-10 rounded-xl hover:bg-sidebar-accent">
               <Link href="/settings">
                 <Settings className="h-4 w-4" />
                 <span className="font-medium">Settings</span>
