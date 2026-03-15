@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, Target, TrendingUp, Layers, BookOpen, DollarSign, Repeat, Zap, Brain } from "lucide-react";
+import { Loader2, Sparkles, Target, TrendingUp, Layers, BookOpen, DollarSign, Zap, Brain, Search, Activity } from "lucide-react";
 import { aiNicheStrategy } from "@/ai/flows/ai-niche-strategy";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -46,7 +47,7 @@ export default function StrategyPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Niche Discovery ($1M Network Blueprint)</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Intelligence Hub (12-Agent Cluster)</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
@@ -55,32 +56,14 @@ export default function StrategyPage() {
                 <Card className="bg-card">
                   <CardHeader>
                     <CardTitle className="font-headline text-lg flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-primary" />
-                      $1M Network Intelligence
+                      <Search className="w-5 h-5 text-primary" />
+                      Keyword Intelligence Agent
                     </CardTitle>
-                    <CardDescription>Calibrate the network for 100M+ views/month reach</CardDescription>
+                    <CardDescription>Scans Google Trends & VidIQ for low-competition gaps</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label>Blueprint Signals (AI Tools / Psychology / History)</Label>
-                      <Textarea 
-                        placeholder="Paste trend snippets..."
-                        value={formData.youtubeTrends}
-                        onChange={(e) => setFormData({...formData, youtubeTrends: e.target.value})}
-                        className="min-h-[100px] bg-secondary/30"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Competitive Gap Validation</Label>
-                      <Textarea 
-                        placeholder="Current saturation levels..."
-                        value={formData.competitionAnalysis}
-                        onChange={(e) => setFormData({...formData, competitionAnalysis: e.target.value})}
-                        className="min-h-[100px] bg-secondary/30"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Keyword Velocity Data</Label>
+                      <Label>Trending Keywords (VidIQ Scan)</Label>
                       <Input 
                         placeholder="Search volumes, CTR trends..."
                         value={formData.keywordData}
@@ -88,20 +71,29 @@ export default function StrategyPage() {
                         className="bg-secondary/30"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label>Trend Prediction Signals</Label>
+                      <Textarea 
+                        placeholder="Paste trend snippets..."
+                        value={formData.youtubeTrends}
+                        onChange={(e) => setFormData({...formData, youtubeTrends: e.target.value})}
+                        className="min-h-[100px] bg-secondary/30"
+                      />
+                    </div>
                     <Button 
-                      className="w-full bg-primary text-primary-foreground font-bold h-12 shadow-lg"
+                      className="w-full bg-primary text-primary-foreground font-bold h-12 shadow-lg uppercase tracking-widest text-[10px]"
                       onClick={handleAnalyze}
                       disabled={loading}
                     >
                       {loading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Syncing $1M Blueprint...
+                          Calibrating Intel...
                         </>
                       ) : (
                         <>
                           <Sparkles className="mr-2 h-4 w-4" />
-                          Evaluate Network Scale
+                          Execute Market Analysis
                         </>
                       )}
                     </Button>
@@ -111,46 +103,26 @@ export default function StrategyPage() {
                 <Card className="bg-primary/5 border-primary/20 shadow-xl overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                      <Zap className="w-3 h-3" /> 4-Part Viral Formula (30s Blueprint)
+                      <Activity className="w-3 h-3" /> Retention Blueprint (95%+ Target)
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="p-3 border border-primary/20 rounded-xl bg-background/50 space-y-1">
-                        <p className="text-[10px] font-bold text-primary uppercase">0-2s: Pattern Hook</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Shock the brain immediately."</p>
+                        <p className="text-[10px] font-bold text-primary uppercase">0-2s: Shock Hook</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Stop the scroll immediately."</p>
                       </div>
                       <div className="p-3 border border-border/50 rounded-xl bg-secondary/30 space-y-1">
                         <p className="text-[10px] font-bold text-foreground uppercase">2-10s: Curiosity Gap</p>
                         <p className="text-[9px] text-muted-foreground leading-tight italic">"Force viewer to stay."</p>
                       </div>
                       <div className="p-3 border border-border/50 rounded-xl bg-secondary/30 space-y-1">
-                        <p className="text-[10px] font-bold text-foreground uppercase">10-20s: Rapid Value</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"3 quick facts. Fast dopamine."</p>
+                        <p className="text-[10px] font-bold text-foreground uppercase">10-20s: Value Reveal</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Fast dopamine hits."</p>
                       </div>
                       <div className="p-3 border border-primary/20 rounded-xl bg-background/50 space-y-1">
                         <p className="text-[10px] font-bold text-primary uppercase">20-30s: Twist + Loop</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Surprise ending. Auto-replay."</p>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 space-y-2">
-                      <p className="text-[10px] font-bold uppercase flex items-center gap-2 text-primary">
-                        <Brain className="w-3 h-3" /> Algorithm Signal Optimization
-                      </p>
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="text-center">
-                          <p className="text-[10px] font-bold">95%+</p>
-                          <p className="text-[8px] text-muted-foreground uppercase">Retention</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] font-bold">20%+</p>
-                          <p className="text-[8px] text-muted-foreground uppercase">Replays</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] font-bold">8%+</p>
-                          <p className="text-[8px] text-muted-foreground uppercase">Like Ratio</p>
-                        </div>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Trigger binge-watching."</p>
                       </div>
                     </div>
                   </CardContent>
@@ -161,17 +133,9 @@ export default function StrategyPage() {
                 {!result && !loading && (
                   <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
                     <Target className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium">Blueprint Calibrator Idle</p>
-                    <p className="text-sm text-muted-foreground">Ready to scale 12-20 micro-niche asset nodes.</p>
+                    <p className="text-lg font-medium">Growth Engine Idle</p>
+                    <p className="text-sm text-muted-foreground">Ready to scan for viral high-CPM content gaps.</p>
                   </div>
-                )}
-
-                {loading && (
-                   <div className="space-y-4 animate-pulse">
-                     {[1, 2, 3].map(i => (
-                       <div key={i} className="h-40 bg-secondary/30 rounded-2xl" />
-                     ))}
-                   </div>
                 )}
 
                 {result && (
@@ -182,7 +146,7 @@ export default function StrategyPage() {
                           <Layers className="w-5 h-5" />
                           Network Asset Scoring
                         </CardTitle>
-                        <Badge variant="outline" className="border-primary/20 text-primary">BLUEPRINT_ACTIVE</Badge>
+                        <Badge variant="outline" className="border-primary/20 text-primary uppercase font-mono text-[10px]">BLUEPRINT_V12</Badge>
                       </CardHeader>
                       <CardContent className="pt-6 space-y-6">
                         {result.suggestedMicroNiches.map((niche: any, idx: number) => (
@@ -200,10 +164,6 @@ export default function StrategyPage() {
                               </div>
                             </div>
                             <Progress value={niche.score} className="h-1.5" />
-                            <div className="flex justify-between text-[10px] uppercase font-bold text-muted-foreground">
-                              <span>Trend: {niche.trendVelocity}</span>
-                              <span>Scalability: {niche.stackingPotential}</span>
-                            </div>
                           </div>
                         ))}
                       </CardContent>
@@ -213,19 +173,15 @@ export default function StrategyPage() {
                       <CardHeader className="bg-blue-500/5">
                         <CardTitle className="flex items-center gap-2 text-blue-400 font-headline text-lg">
                           <BookOpen className="w-5 h-5" />
-                          Serialized Asset Formula
+                          Trend Prediction Node
                         </CardTitle>
                         <CardDescription>Binge-watch behavior triggers algorithm amplification</CardDescription>
                       </CardHeader>
                       <CardContent className="pt-6 space-y-4">
                         {result.serializedSeriesIdeas.map((series: any, idx: number) => (
                           <div key={idx} className="p-3 rounded-lg border border-blue-500/10 bg-blue-500/5">
-                            <div className="flex justify-between items-start mb-1">
-                              <p className="text-xs font-bold text-blue-400">{series.seriesTitle}</p>
-                              <Badge variant="outline" className="text-[8px] border-blue-500/30">REPLICATION_READY</Badge>
-                            </div>
-                            <p className="text-[11px] text-muted-foreground italic leading-relaxed mb-2">"{series.concept}"</p>
-                            <p className="text-[9px] text-blue-500/80 font-bold uppercase">Clone Logic: {series.viralMultiplier}</p>
+                            <p className="text-xs font-bold text-blue-400">{series.seriesTitle}</p>
+                            <p className="text-[11px] text-muted-foreground italic leading-relaxed mt-1">"{series.concept}"</p>
                           </div>
                         ))}
                       </CardContent>
@@ -234,12 +190,12 @@ export default function StrategyPage() {
                     <Card className="bg-card">
                       <CardHeader>
                         <CardTitle className="font-headline text-lg flex items-center gap-2">
-                          <DollarSign className="w-5 h-5 text-green-500" /> $1M Network Revenue Forecast
+                          <DollarSign className="w-5 h-5 text-green-500" /> Monetization Forecast
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="grid grid-cols-3 gap-4">
                         <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Ad Rev</p>
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase">AdSense</p>
                           <p className="text-sm font-bold text-primary mt-1">$20K/mo</p>
                         </div>
                         <div className="p-3 rounded-xl bg-secondary/30 text-center">

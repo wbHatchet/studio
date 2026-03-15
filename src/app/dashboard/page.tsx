@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -15,19 +16,22 @@ import {
   Layers,
   Server,
   Network,
-  DollarSign,
   Flame,
   Star,
   Activity,
   Cpu,
   Sparkles,
   Repeat,
-  TriangleAlert,
   Youtube,
   Music,
   ImageIcon,
   Video,
-  BarChart3
+  BarChart3,
+  Search,
+  MessageSquare,
+  Share2,
+  DollarSign,
+  Target
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -38,12 +42,12 @@ export default function DashboardPage() {
   const [renderCluster, setRenderCluster] = useState<{id: number, status: string, load: number}[]>([]);
   
   const [logs, setLogs] = useState([
-    { node: "UPLOAD-AGENT", status: "YouTube Data API: Scheduling Scheduled Post", progress: 15 },
-    { node: "FFMPEG-AGENT", status: "Looping 2min Suno track to 3 hours...", progress: 42 },
-    { node: "IMAGE-AGENT", status: "Midjourney: Upscaling rainy cafe scene", progress: 85 },
-    { node: "MUSIC-AGENT", status: "Suno AI: Synthesis Complete (Deep Focus)", progress: 100 },
-    { node: "METADATA-AI", status: "Claude: Generating SEO Metadata Block", progress: 100 },
-    { node: "IDEA-SCRAPER", status: "VidIQ: Extracting content gaps", progress: 100 },
+    { node: "KEYWORD-INTEL", status: "Scanning VidIQ for 'ADHD Coding' gaps...", progress: 100 },
+    { node: "TREND-PREDICT", status: "Emerging: 'Dark Academia Study' rising 42%", progress: 85 },
+    { node: "SHORTS-TRAFFIC", status: "Extracting viral clips from Render #42", progress: 42 },
+    { node: "THUMBNAIL-AI", status: "Canva API: Rotating Variant B for CTR boost", progress: 100 },
+    { node: "RETENTION-AGENT", status: "Analyzing drop-off at 0:12 in Lofi #8", progress: 100 },
+    { node: "SCALING-NODE", status: "Cloning winning 'Rainy Cafe' to 5 channels", progress: 15 },
   ]);
 
   useEffect(() => {
@@ -55,14 +59,14 @@ export default function DashboardPage() {
     })));
 
     const interval = setInterval(() => {
-      const agents = ["IDEA-SCRAPER", "MUSIC-AGENT", "IMAGE-AGENT", "FFMPEG-AGENT", "METADATA-AI", "UPLOAD-AGENT"];
+      const agents = ["KEYWORD-INTEL", "SHORTS-TRAFFIC", "ENGAGEMENT-BOT", "MONETIZATION-AGENT", "SCALING-NODE", "RETENTION-AGENT"];
       const statuses = [
-        "Mining YouTube Gaps...",
-        "Calling Suno API...",
-        "Generating Midjourney Scene...",
-        "Merging 3h Lo-Fi Loop...",
-        "Optimizing Titles/Tags...",
-        "Syncing to YouTube API..."
+        "Mining Keyword Gaps...",
+        "Syncing Shorts to TikTok...",
+        "Replying to Top Fans...",
+        "Optimizing Affiliate Stack...",
+        "Cloning Asset Node...",
+        "Analyzing Watch Time..."
       ];
       const randomIdx = Math.floor(Math.random() * agents.length);
       
@@ -74,13 +78,13 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const toolStack = [
-    { name: "Suno AI", icon: Music, status: "Active", color: "text-blue-400" },
-    { name: "Midjourney", icon: ImageIcon, status: "Active", color: "text-purple-400" },
-    { name: "FFmpeg", icon: Video, status: "Active", color: "text-amber-400" },
-    { name: "YouTube API", icon: Youtube, status: "Active", color: "text-red-400" },
-    { name: "Claude AI", icon: Sparkles, status: "Active", color: "text-green-400" },
-    { name: "VidIQ", icon: BarChart3, status: "Active", color: "text-cyan-400" }
+  const growthAgents = [
+    { name: "Keyword Intel", icon: Search, status: "Active", color: "text-blue-400" },
+    { name: "Shorts Traffic", icon: Share2, status: "Active", color: "text-purple-400" },
+    { name: "Thumbnail AI", icon: ImageIcon, status: "Active", color: "text-amber-400" },
+    { name: "Retention", icon: Activity, status: "Active", color: "text-red-400" },
+    { name: "Engagement", icon: MessageSquare, status: "Active", color: "text-green-400" },
+    { name: "Scaling", icon: Network, status: "Active", color: "text-cyan-400" }
   ];
 
   if (!isMounted) return null;
@@ -95,36 +99,36 @@ export default function DashboardPage() {
             <div className="h-4 w-px bg-border/50 mx-2" />
             <div className="flex flex-col">
               <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2 text-primary uppercase">
-                AI Lo-Fi Automation Factory <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v12.0</span>
+                12-Agent Growth Engine <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v1.1M</span>
               </h1>
               <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest text-primary flex items-center gap-2">
-                <Flame className="w-3 h-3 text-orange-500" /> PRODUCTION SCALE: 450 VIDEOS/MO | 5 CHANNELS
+                <Flame className="w-3 h-3 text-orange-500" /> CAPACITY: 1,800 VIDEOS/MO | 20 CHANNELS
               </span>
             </div>
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Videos Produced (30d)" value="450" icon={Layers} trend="15%" trendType="positive" />
-              <StatCard label="Total Views (30d)" value="42.8M" icon={TrendingUp} trend="420%" trendType="positive" />
-              <StatCard label="Active Production Channels" value="5" icon={Network} />
-              <StatCard label="Parallel FFmpeg Nodes" value="50" icon={Cpu} />
+              <StatCard label="Monthly Network Reach" value="100M+" icon={TrendingUp} trend="420%" trendType="positive" />
+              <StatCard label="Daily Production Node" value="60" icon={Layers} />
+              <StatCard label="Scaling Grid Assets" value="20 CH" icon={Network} />
+              <StatCard label="Revenue Velocity" value="$80K/mo" icon={DollarSign} />
             </div>
 
             <div className="grid gap-6 lg:grid-cols-3">
               <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
                 <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
                   <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                    <Star className="w-3 h-3" /> Hidden YouTube Automation Stack (7 Tools)
+                    <Star className="w-3 h-3" /> Autonomous Growth Agents (12 Nodes Active)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {toolStack.map((tool) => (
-                      <div key={tool.name} className="p-4 rounded-2xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-center space-y-2">
-                        <tool.icon className={cn("w-6 h-6 mx-auto", tool.color)} />
-                        <p className={cn("text-[10px] font-bold uppercase tracking-tighter", tool.color)}>{tool.name}</p>
-                        <p className="text-[8px] text-muted-foreground font-mono">{tool.status}</p>
+                    {growthAgents.map((agent) => (
+                      <div key={agent.name} className="p-4 rounded-2xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-center space-y-2">
+                        <agent.icon className={cn("w-6 h-6 mx-auto", agent.color)} />
+                        <p className={cn("text-[10px] font-bold uppercase tracking-tighter", agent.color)}>{agent.name}</p>
+                        <p className="text-[8px] text-muted-foreground font-mono">SYNCED</p>
                       </div>
                     ))}
                   </div>
@@ -136,7 +140,7 @@ export default function DashboardPage() {
                   <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
                     <Server className="w-4 h-4 text-primary" /> FFmpeg Cluster Load
                   </CardTitle>
-                  <CardDescription>Merging Image + 3h Music Loop</CardDescription>
+                  <CardDescription>Industrial-Scale 1,800/mo Throughput</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-6 gap-1">
@@ -160,9 +164,9 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2 text-primary">
                     <Workflow className="w-5 h-5" />
-                    Production Sequence (Idea &rarr; Upload)
+                    Growth Sequence (Trend &rarr; Scale)
                   </CardTitle>
-                  <CardDescription>Autonomous content queue tracking</CardDescription>
+                  <CardDescription>12-Agent autonomous network control</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <PerformanceChart />
@@ -173,9 +177,9 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <Terminal className="w-5 h-5 text-primary" />
-                    Automation Logs (Firebase Logic)
+                    Agent Logic Stream (Firebase)
                   </CardTitle>
-                  <CardDescription>Cloud Functions triggering now</CardDescription>
+                  <CardDescription>12-Agent Cluster Execution Logs</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {logs.map((job, idx) => (

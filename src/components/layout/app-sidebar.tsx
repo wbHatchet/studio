@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -39,26 +40,26 @@ const studioNav = [
 ];
 
 const intelligenceNav = [
-  { title: "Trend Intelligence (Apify)", icon: TrendingUp, url: "/growth/signals" },
-  { title: "Niche Discovery Engine", icon: Target, url: "/strategy" },
+  { title: "Viral Signals (12-Agent)", icon: TrendingUp, url: "/growth/signals" },
+  { title: "Keyword Intelligence", icon: Target, url: "/strategy" },
 ];
 
 const productionNav = [
-  { title: "Production Pipeline Monitor", icon: Layers, url: "/projects" },
-  { title: "Voice Architect (Batch)", icon: Mic2, url: "/production/voice" },
-  { title: "Visuals Director (FFmpeg)", icon: Video, url: "/production/visuals" },
-  { title: "SEO Metadata Engine", icon: Search, url: "/seo" },
+  { title: "Production Queue", icon: Layers, url: "/projects" },
+  { title: "Voice Architect", icon: Mic2, url: "/production/voice" },
+  { title: "Visuals Director", icon: Video, url: "/production/visuals" },
+  { title: "SEO Metadata Hub", icon: Search, url: "/seo" },
   { title: "Approval & Publish", icon: CheckCircle2, url: "/review" },
 ];
 
 const growthNav = [
-  { title: "Viral Replication Engine", icon: Zap, url: "/growth/lab" },
-  { title: "Multi-Platform Dist", icon: Share2, url: "/growth/repurpose" },
-  { title: "Engagement Bot", icon: MessageSquare, url: "/growth/engagement" },
+  { title: "Viral Replication (Lab)", icon: Zap, url: "/growth/lab" },
+  { title: "Shorts & Multi-Platform", icon: Share2, url: "/growth/repurpose" },
+  { title: "Engagement Cluster", icon: MessageSquare, url: "/growth/engagement" },
 ];
 
 const analyticsNav = [
-  { title: "Network Intelligence Hub", icon: BarChart3, url: "/analytics" },
+  { title: "Retention & Monetization", icon: BarChart3, url: "/analytics" },
   { title: "Managed Channel Grid", icon: Radio, url: "/channels" },
 ];
 
@@ -74,10 +75,10 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-headline font-bold text-base leading-tight">
-              Command Grid
+              12-Agent Engine
             </span>
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-primary">
-              Hyper-Scale v12.0
+              Hyper-Scale v1.1M
             </span>
           </div>
         </div>
@@ -125,7 +126,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Content Factory Layer</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Content Factory</SidebarGroupLabel>
           <SidebarMenu>
             {productionNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -146,7 +147,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Growth Engine Layer</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Growth Cluster</SidebarGroupLabel>
           <SidebarMenu>
             {growthNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -167,7 +168,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Network Analytics</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Performance Hub</SidebarGroupLabel>
           <SidebarMenu>
             {analyticsNav.map((item) => (
               <SidebarMenuItem key={item.title}>
