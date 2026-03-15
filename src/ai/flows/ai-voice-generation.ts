@@ -1,7 +1,7 @@
 'use server';
 /**
- * @fileOverview An AI agent that generates scripts optimized for the "2026 Viral Formula".
- * Refined for 30-second viral YouTube shorts with strict retention timing.
+ * @fileOverview An AI agent that generates scripts optimized for the "$1M AI YouTube Network Blueprint".
+ * Refined for 30-second viral YouTube shorts with strict 4-stage retention timing.
  */
 
 import {ai} from '@/ai/genkit';
@@ -17,10 +17,10 @@ const VoiceOutputSchema = z.object({
   script: z.string().describe('The optimized script for ElevenLabs.'),
   retentionTriggers: z.array(z.string()).describe('List of points where visual/audio changes should occur.'),
   structure: z.object({
-    hook: z.string().describe('0-2s Curiosity Hook'),
-    explanation: z.string().describe('2-12s Setup'),
-    reveal: z.string().describe('12-25s Value Delivery'),
-    loop: z.string().describe('25-30s Loop Hook'),
+    hook: z.string().describe('0-2s Shock Hook'),
+    curiosity: z.string().describe('2-10s Curiosity Gap'),
+    reveal: z.string().describe('10-20s Value Delivery'),
+    twist: z.string().describe('20-30s Twist/Loop Hook'),
   }),
   estimatedWordCount: z.number(),
   characterCount: z.number(),
@@ -34,15 +34,15 @@ const prompt = ai.definePrompt({
   name: 'voiceGenerationPrompt',
   input: {schema: VoiceGenerationInputSchema},
   output: {schema: VoiceOutputSchema},
-  prompt: `You are a viral YouTube Shorts scriptwriter specializing in the "2026 Cash-Cow" formula.
+  prompt: `You are a viral YouTube Shorts scriptwriter for a $1M/year automation network.
 Your goal is to write a high-retention, 30-second script about: {{{topic}}}
 Tone: {{{tone}}}
 
-STRICT VIRAL STRUCTURE (30s Total):
-1. CURIOSITY HOOK (0-2s): A scroll-stopping sentence that creates an immediate curiosity gap (e.g., "Use this psychology trick carefully...").
-2. EXPLANATION (2-12s): Rapidly set the stage and provide context. No fluff.
-3. THE REVEAL (12-25s): Deliver the core value, story payoff, or secret with high velocity.
-4. LOOP HOOK (25-30s): A transition or quick CTA that makes the video loop seamlessly or encourages a re-watch.
+STRICT $1M BLUEPRINT STRUCTURE (30s Total):
+1. SHOCK HOOK (0-2s): A scroll-stopping sentence that creates immediate shock or curiosity.
+2. CURIOSITY GAP (2-10s): Rapidly set the stage and deepen the mystery. No fluff.
+3. THE REVEAL (10-20s): Deliver the core secret or story payoff with high velocity.
+4. TWIST/LOOP (20-30s): A sudden twist or transition that makes the video loop seamlessly.
 
 Retention Triggers: Provide specific timestamps for visual cuts or overlays to maintain 100%+ retention.
 

@@ -43,9 +43,10 @@ export default function DashboardPage() {
   const nicheStack = [
     { name: "AI Tools", status: "15 Channels", growth: "+450%", color: "text-blue-400" },
     { name: "Psychology", status: "12 Channels", growth: "+310%", color: "text-purple-400" },
-    { name: "Body Facts", status: "20 Channels", growth: "+210%", color: "text-green-400" },
     { name: "Luxury Life", status: "8 Channels", growth: "+124%", color: "text-amber-400" },
-    { name: "History Stories", status: "10 Channels", growth: "+92%", color: "text-pink-400" }
+    { name: "Weird History", status: "10 Channels", growth: "+92%", color: "text-pink-400" },
+    { name: "Body Facts", status: "20 Channels", growth: "+210%", color: "text-green-400" },
+    { name: "Future Tech", status: "5 Channels", growth: "+180%", color: "text-cyan-400" }
   ];
 
   if (!isMounted) return null;
@@ -60,10 +61,10 @@ export default function DashboardPage() {
             <div className="h-4 w-px bg-border/50 mx-2" />
             <div className="flex flex-col">
               <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2 text-primary">
-                Network Grid Control <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v100+ (Enterprise)</span>
+                $1M Network Blueprint Control <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">Phase 3</span>
               </h1>
               <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest text-primary flex items-center gap-2">
-                <Flame className="w-3 h-3 text-orange-500" /> ACTIVE CHANNELS: 104 | VIRAL UPLOADS TODAY: 312
+                <Flame className="w-3 h-3 text-orange-500" /> ACTIVE CHANNELS: 104 | 1,080 VIDEOS/MO TARGET
               </span>
             </div>
             <div className="ml-auto flex items-center gap-4">
@@ -77,7 +78,7 @@ export default function DashboardPage() {
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Monthly Factory Output" value="9,450" icon={Layers} trend="12%" trendType="positive" />
+              <StatCard label="Monthly Video Output" value="9,450" icon={Layers} trend="12%" trendType="positive" />
               <StatCard label="Network Reach (30d)" value="214.8M" icon={TrendingUp} trend="420%" trendType="positive" />
               <StatCard label="Est. Net Revenue" value="$84,250" icon={DollarSign} trend="15%" trendType="positive" />
               <StatCard label="Active Nodes" value="50" icon={Cpu} />
@@ -87,11 +88,11 @@ export default function DashboardPage() {
               <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
                 <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
                   <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                    <Star className="w-3 h-3" /> 7-Niche Master Stack Status
+                    <Star className="w-3 h-3" /> $1M Network Blueprint Stack
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {nicheStack.map((niche) => (
                       <div key={niche.name} className="p-4 rounded-2xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-center space-y-1">
                         <p className={cn("text-xs font-bold uppercase tracking-tighter", niche.color)}>{niche.name}</p>
@@ -108,7 +109,7 @@ export default function DashboardPage() {
                   <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
                     <Server className="w-4 h-4 text-primary" /> FFmpeg Cluster (50 Nodes)
                   </CardTitle>
-                  <CardDescription>Rendering Capacity: 300 videos/day</CardDescription>
+                  <CardDescription>Industrial Scale: 300+ videos/day</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-6 gap-1">
@@ -138,9 +139,9 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2 text-primary">
                     <Workflow className="w-5 h-5" />
-                    Network Analytics (200M+ Views)
+                    Network View Velocity (100M+ Target)
                   </CardTitle>
-                  <CardDescription>Views compounding across 104 active channels</CardDescription>
+                  <CardDescription>Views compounding across 104 media assets</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <PerformanceChart />
@@ -151,15 +152,15 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <Terminal className="w-5 h-5 text-primary" />
-                    Agent Logic Stream
+                    $1M Pipeline Stream
                   </CardTitle>
-                  <CardDescription>Director: [n8n] &rarr; [Suno] &rarr; [FFmpeg] &rarr; [YT]</CardDescription>
+                  <CardDescription>Director: [Scraper] &rarr; [Script] &rarr; [Voice] &rarr; [Render] &rarr; [Dist]</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {[
-                    { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views &rarr; Cloning 10 Variants", progress: 100 },
-                    { node: "NODE-APIFY-SCAN", status: "Scraping Top 7 Niches: Mining 100 Viral Topics", progress: 85 },
-                    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts (30s Formula)", progress: 42 },
+                    { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views &rarr; Generating 10 Variants", progress: 100 },
+                    { node: "NODE-APIFY-SCAN", status: "Mining 10 Blueprint Niches: 100 Topics Extracted", progress: 85 },
+                    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts (30s Twist Structure)", progress: 42 },
                     { node: "NODE-11LABS-VOICE", status: "ElevenLabs: Batch Synthesis (50 Voiceovers)", progress: 100 },
                     { node: "NODE-YT-PUSH", status: "YouTube API: Distributed Bulk Upload", progress: 15 },
                   ].map((job, idx) => (
@@ -184,12 +185,12 @@ export default function DashboardPage() {
                 <Repeat className="w-8 h-8 fill-white/20" />
               </div>
               <div>
-                <p className="font-bold text-lg font-headline tracking-tight">Viral Replication Protocol: READY</p>
-                <p className="text-xs opacity-80 italic max-w-lg">"500K View threshold detected on 'Psychology Hacks #12'. Triggering 10 similar variants for autonomous serialized compounding."</p>
+                <p className="font-bold text-lg font-headline tracking-tight">Viral Multiplication Protocol: READY</p>
+                <p className="text-xs opacity-80 italic max-w-lg">"1M View threshold detected. Triggering autonomous generation of 10 variants to dominate the current viral gap."</p>
               </div>
             </div>
             <button className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" /> Deploy Viral Variants
+              <Sparkles className="w-4 h-4" /> Scale Viral Winning Asset
             </button>
           </div>
         </SidebarInset>
