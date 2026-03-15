@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Mic2, Play, Download, Sparkles, Wand2, Copy, CheckCircle2, Volume2 } from "lucide-react";
+import { Loader2, Mic2, Download, Wand2, Copy, Sparkles } from "lucide-react";
 import { generateVoiceScript, textToSpeech } from "@/ai/flows/ai-voice-generation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +24,7 @@ export default function VoiceProductionPage() {
   const [formData, setFormData] = useState({
     topic: "The secret history of Lo-Fi music and why it helps you study.",
     tone: "Narrative & Calm",
-    targetDuration: 60
+    targetDuration: 30
   });
 
   async function handleGenerateScript() {
@@ -33,7 +33,7 @@ export default function VoiceProductionPage() {
     try {
       const output = await generateVoiceScript(formData);
       setResult(output);
-      toast({ title: "Script Engineered", description: "Optimization for ElevenLabs complete." });
+      toast({ title: "Script Engineered", description: "30-second viral optimization complete." });
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "Failed to generate script." });
     } finally {

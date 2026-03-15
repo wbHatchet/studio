@@ -1,7 +1,7 @@
 'use server';
 /**
  * @fileOverview An AI agent that generates scripts and optimizes them for high-retention text-to-speech.
- * Includes ElevenLabs integration for actual vocal synthesis.
+ * Refined for 30-second viral YouTube shorts as per the Ultra-Scale Factory blueprint.
  */
 
 import {ai} from '@/ai/genkit';
@@ -27,13 +27,18 @@ const prompt = ai.definePrompt({
   name: 'voiceGenerationPrompt',
   input: {schema: VoiceGenerationInputSchema},
   output: {schema: VoiceOutputSchema},
-  prompt: `You are an expert scriptwriter for faceless YouTube channels. 
-Create a high-retention script about: {{{topic}}}
+  prompt: `You are a viral YouTube Shorts scriptwriter specializing in high-velocity, faceless content.
+Your goal is to write a high-retention, {{{targetDuration}}}-second script about: {{{topic}}}
 Tone: {{{tone}}}
-Duration: {{{targetDuration}}} seconds
 
-Ensure the script includes emotional hooks and follows a structure that maximizes AVD (Average View Duration).
-`
+STRICT STRUCTURE:
+1. THE HOOK (0-3s): Must be a scroll-stopping sentence that creates a curiosity gap.
+2. THE PAYOFF (3-{{{targetDuration}}}s): Deliver the story or value quickly with zero fluff.
+3. THE LOOP (Final 2s): A seamless transition or quick CTA that encourages a re-watch or subscribe.
+
+Retention Triggers: Provide specific moments (in seconds) where the visual editor should cut to a new clip or add an overlay to prevent swiping.
+
+Estimated Word Count: A 30s script should be approx 70-85 words. A 60s script should be 140-160 words.`
 });
 
 const generateVoiceScriptFlow = ai.defineFlow(
