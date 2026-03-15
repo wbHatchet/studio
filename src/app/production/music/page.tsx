@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Music, Copy, RefreshCcw, Link as LinkIcon, Download, Play, CheckCircle2 } from "lucide-react";
+import { Loader2, Music, Copy, RefreshCcw, Link as LinkIcon, Download, Play, CheckCircle2, AlertCircle } from "lucide-react";
 import { generateMusicPrompt, GenerateMusicPromptOutput } from "@/ai/flows/ai-music-generation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,6 @@ export default function MusicProductionPage() {
     setLoading(true);
     setStatus("prompting");
     try {
-      // Simulate checking for API Endpoint in settings (local storage for demo)
       const sunoEndpoint = localStorage.getItem("suno_api_endpoint") || "";
       
       const output = await generateMusicPrompt({
@@ -43,19 +42,27 @@ export default function MusicProductionPage() {
       
       setResult(output);
       
-      if (sunoEndpoint) {
+      if (sunoEndpoint && output.status !== "Connection Failed" && output.status !== "API Error") {
         setStatus("generating");
-        // Simulate waiting for unofficial API generation
+        // For the unofficial API, we usually wait for audio files to be ready or poll /api/get?ids=...
+        // For this UI, we'll simulate the "synthesis" completion
         setTimeout(() => {
           setStatus("complete");
-          toast({ title: "Music Generated", description: "Your Lo-Fi track is ready for download." });
-        }, 5000);
+          toast({ title: "Music Task Triggered", description: `Generation started. ID: ${output.generationId}` });
+        }, 3000);
+      } else if (output.status === "Connection Failed" || output.status === "API Error") {
+        setStatus("idle");
+        toast({ 
+          variant: "destructive", 
+          title: "API Error", 
+          description: "Check your Suno API endpoint in Settings." 
+        });
       } else {
         setStatus("idle");
         toast({ title: "Prompt Ready", description: "Music prompt has been engineered." });
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to process music task." });
+      toast({ variant: "destructive", title: "Error", description: "Failed to process music task." });
       setStatus("idle");
     } finally {
       setLoading(false);
@@ -153,14 +160,14 @@ export default function MusicProductionPage() {
                     disabled={loading || status === "generating"}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <RefreshCcw className="mr-2 h-4 w-4" />}
-                    {status === "idle" ? "Start Production Run" : status === "prompting" ? "Engineering Prompt..." : "AI Generating Beat..."}
+                    {status === "idle" ? "Start Production Run" : status === "prompting" ? "Engineering Prompt..." : "Triggering Suno API..."}
                   </Button>
                   
                   {status === "generating" && (
                     <div className="w-full space-y-2 animate-pulse">
                       <div className="flex justify-between text-[10px] uppercase font-bold text-muted-foreground">
-                        <span>Suno AI Status</span>
-                        <span>Synthesis in progress...</span>
+                        <span>Suno-API Status</span>
+                        <span>Requesting synthesis...</span>
                       </div>
                       <div className="h-1 bg-secondary rounded-full overflow-hidden">
                         <div className="h-full bg-primary w-1/2 animate-[progress_2s_ease-in-out_infinite]" />
@@ -176,22 +183,25 @@ export default function MusicProductionPage() {
                     <Card className="bg-card border-green-500/20 shadow-xl overflow-hidden">
                       <CardHeader className="bg-green-500/5 py-3">
                         <CardTitle className="text-sm font-headline text-green-500 flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4" /> Ready for Download
+                          <CheckCircle2 className="w-4 h-4" /> API Task Initiated
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="pt-6 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <Button size="icon" className="h-12 w-12 rounded-full bg-primary text-primary-foreground">
-                            <Play className="h-6 w-6 ml-1" />
-                          </Button>
+                          <div className="p-3 bg-secondary rounded-full">
+                            <Music className="h-6 w-6 text-primary" />
+                          </div>
                           <div>
-                            <p className="font-bold text-sm">Generated Lo-Fi Track</p>
-                            <p className="text-xs text-muted-foreground">3:42 • 320kbps MP3</p>
+                            <p className="font-bold text-sm">Lo-Fi Generation ID</p>
+                            <p className="text-xs text-muted-foreground font-mono">{result.generationId}</p>
                           </div>
                         </div>
-                        <Button variant="outline" className="gap-2 border-primary/20">
-                          <Download className="w-4 h-4" /> Export Assets
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Active</Badge>
+                          <Button variant="outline" size="sm" className="h-8 text-xs border-primary/20">
+                            Check Status
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   )}

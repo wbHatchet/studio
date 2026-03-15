@@ -1,7 +1,9 @@
 'use server';
 /**
  * @fileOverview This file implements a Genkit flow for generating music prompts and
- * optionally triggering generation via an unofficial Suno API endpoint.
+ * triggering generation via an unofficial Suno API endpoint.
+ * 
+ * Supported API: https://github.com/gcui-art/suno-api
  *
  * - generateMusicPrompt - A function that orchestrates the generation of music prompts.
  * - GenerateMusicPromptInput - The input type for the generateMusicPrompt function.
@@ -44,7 +46,7 @@ const GenerateMusicPromptInputSchema = z.object({
     .string()
     .optional()
     .describe('Any other specific instructions or elements to include in the music generation prompt.'),
-  apiEndpoint: z.string().optional().describe('Unofficial Suno API endpoint URL.'),
+  apiEndpoint: z.string().optional().describe('Unofficial Suno API endpoint URL (https://github.com/gcui-art/suno-api).'),
 });
 export type GenerateMusicPromptInput = z.infer<
   typeof GenerateMusicPromptInputSchema
@@ -61,6 +63,7 @@ const GenerateMusicPromptOutputSchema = z.object({
     .string()
     .describe('A human-readable description of the Lo-Fi track to be generated.'),
   generationId: z.string().optional().describe('The ID of the music generation task if triggered.'),
+  status: z.string().optional().describe('The status of the API request.'),
 });
 export type GenerateMusicPromptOutput = z.infer<
   typeof GenerateMusicPromptOutputSchema
@@ -113,17 +116,39 @@ const generateMusicPromptFlow = ai.defineFlow(
       throw new Error('Failed to generate music prompt output.');
     }
 
-    // Logic for unofficial Suno API (GitHub: Suno-API/Suno-API)
-    // If an apiEndpoint is provided, we can simulate or trigger the /api/generate call
+    // Logic for unofficial Suno API (https://github.com/gcui-art/suno-api)
     if (input.apiEndpoint) {
-      console.log(`Triggering music generation at: ${input.apiEndpoint}`);
-      // In a real implementation, you would perform a fetch request here:
-      // const res = await fetch(`${input.apiEndpoint}/api/generate`, {
-      //   method: 'POST',
-      //   body: JSON.stringify({ prompt: output.musicGeneratorPrompt, make_instrumental: true })
-      // });
-      // const data = await res.json();
-      // return { ...output, generationId: data.id };
+      console.log(`Triggering music generation via Suno-API at: ${input.apiEndpoint}`);
+      try {
+        const res = await fetch(`${input.apiEndpoint}/api/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt: output.musicGeneratorPrompt,
+            make_instrumental: true,
+            wait_audio: false
+          })
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          // The gcui-art API usually returns an array of objects or a single task object
+          // Depending on the version, it might return { id: "..." } or similar
+          return { 
+            ...output, 
+            generationId: data.id || (Array.isArray(data) ? data[0]?.id : "triggered"),
+            status: "Success"
+          };
+        } else {
+          console.error('Suno API request failed', await res.text());
+          return { ...output, status: "API Error" };
+        }
+      } catch (e) {
+        console.error('Error connecting to Suno-API', e);
+        return { ...output, status: "Connection Failed" };
+      }
     }
 
     return output;

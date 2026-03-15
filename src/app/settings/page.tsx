@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Key, Shield, Globe, Bell, Save, Eye, EyeOff, Music, Info } from "lucide-react";
+import { Key, Shield, Globe, Bell, Save, Eye, EyeOff, Music, Info, Github, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -139,7 +139,7 @@ export default function SettingsPage() {
                   <Card className="bg-card">
                     <CardHeader>
                       <CardTitle className="font-headline">Suno AI Integration (GitHub)</CardTitle>
-                      <CardDescription>Integrate with unofficial Suno-API/Suno-API services</CardDescription>
+                      <CardDescription>Integrate with unofficial open-source services</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <Alert className="bg-primary/5 border-primary/20">
@@ -151,17 +151,36 @@ export default function SettingsPage() {
                         </AlertDescription>
                       </Alert>
 
-                      <div className="space-y-2">
-                        <Label>API Base URL</Label>
-                        <Input 
-                          placeholder="https://your-suno-api.vercel.app" 
-                          value={sunoEndpoint}
-                          onChange={(e) => setSunoEndpoint(e.target.value)}
-                          className="bg-secondary/30" 
-                        />
-                        <p className="text-[10px] text-muted-foreground">
-                          Leave blank to only generate prompts without triggering music synthesis.
-                        </p>
+                      <div className="flex flex-col gap-4">
+                        <div className="p-4 rounded-xl bg-secondary/20 border border-border flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-black rounded-lg">
+                              <Github className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold">gcui-art / suno-api</p>
+                              <p className="text-[10px] text-muted-foreground">Self-hostable Suno API wrapper</p>
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="sm" asChild>
+                            <a href="https://github.com/gcui-art/suno-api" target="_blank" rel="noreferrer" className="gap-2">
+                              View Repository <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </Button>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>API Base URL</Label>
+                          <Input 
+                            placeholder="https://your-suno-api.vercel.app" 
+                            value={sunoEndpoint}
+                            onChange={(e) => setSunoEndpoint(e.target.value)}
+                            className="bg-secondary/30" 
+                          />
+                          <p className="text-[10px] text-muted-foreground italic">
+                            Expected format: The root URL where your Suno-API is hosted.
+                          </p>
+                        </div>
                       </div>
                     </CardContent>
                     <CardFooter className="border-t border-border/50 pt-6">
