@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { 
   PlusCircle, 
   Layers, 
@@ -28,7 +29,10 @@ import {
   HardDrive,
   Send,
   Youtube,
-  Scissors
+  Scissors,
+  Zap,
+  CheckCircle2,
+  Loader2
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -105,6 +109,9 @@ export default function ProjectsPage() {
   const [projects] = useState(initialProjects);
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
+  const [vectorQuery, setVectorQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
 
   const handleBulkUpload = () => {
     setIsUploading(true);
@@ -115,6 +122,24 @@ export default function ProjectsPage() {
         description: "Ingested 12 new jobs into the Render Grid.",
       });
     }, 2000);
+  };
+
+  const handleVectorSearch = () => {
+    if (!vectorQuery) return;
+    setIsSearching(true);
+    // Simulating all-MiniLM-L6-v2 embedding and Supabase Vector search
+    setTimeout(() => {
+      setIsSearching(false);
+      setSearchResults([
+        { path: "clips/funny_cat_jump_3s.mp4", score: 0.98, type: "video/mp4" },
+        { path: "clips/cat_meow_loop.mp4", score: 0.85, type: "video/mp4" },
+        { path: "thumbnails/cat_viral_variant_A.jpg", score: 0.72, type: "image/jpeg" },
+      ]);
+      toast({
+        title: "Vector DB Results",
+        description: `Found ${3} reusable assets for query: "${vectorQuery}"`,
+      });
+    }, 1500);
   };
 
   const getStatusBadge = (status: string) => {
@@ -255,6 +280,64 @@ export default function ProjectsPage() {
               </TabsContent>
 
               <TabsContent value="storage" className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                  <Card className="bg-card border-primary/30 shadow-lg lg:col-span-2">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
+                        <SearchCode className="w-4 h-4 text-primary" /> Vector Asset Search
+                      </CardTitle>
+                      <CardDescription className="text-[10px] uppercase font-bold text-muted-foreground">Supabase Vector + all-MiniLM-L6-v2 Embeddings</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex gap-2">
+                        <Input 
+                          placeholder="Search semantics (e.g. 'funny cat clips')" 
+                          value={vectorQuery}
+                          onChange={(e) => setVectorQuery(e.target.value)}
+                          className="bg-secondary/30 border-border/50"
+                        />
+                        <Button 
+                          onClick={handleVectorSearch} 
+                          disabled={isSearching} 
+                          className="bg-primary text-primary-foreground font-bold"
+                        >
+                          {isSearching ? <Loader2 className="animate-spin w-4 h-4" /> : <Database className="w-4 h-4" />}
+                        </Button>
+                      </div>
+                      
+                      {searchResults.length > 0 && (
+                        <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Similarity Match Results</p>
+                          <div className="grid gap-2">
+                            {searchResults.map((res, i) => (
+                              <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-primary/5 border border-primary/20">
+                                <div className="flex items-center gap-2">
+                                  <Scissors className="w-3 h-3 text-primary" />
+                                  <span className="text-[10px] font-mono text-primary truncate max-w-[200px]">{res.path}</span>
+                                </div>
+                                <Badge variant="outline" className="text-[8px] font-mono border-primary/20">SCORE: {res.score}</Badge>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  <div className="grid grid-cols-2 gap-4 lg:col-span-2">
+                    <Card className="bg-card border-border/50 flex flex-col justify-center items-center p-4">
+                      <Database className="w-6 h-6 text-primary mb-2" />
+                      <p className="text-[10px] font-bold uppercase">Vector Index</p>
+                      <p className="text-xl font-headline font-bold">12,450</p>
+                    </Card>
+                    <Card className="bg-card border-border/50 flex flex-col justify-center items-center p-4">
+                      <Zap className="w-6 h-6 text-amber-400 mb-2" />
+                      <p className="text-[10px] font-bold uppercase">Reuse Rate</p>
+                      <p className="text-xl font-headline font-bold">42%</p>
+                    </Card>
+                  </div>
+                </div>
+
                 <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
                   {cloudAssets.map((folder) => (
                     <Card key={folder.name} className="bg-card border-border/50 group hover:border-primary/30 transition-all cursor-pointer shadow-sm">

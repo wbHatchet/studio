@@ -66,7 +66,9 @@
         "mimeType": { "type": "string" },
         "size": { "type": "number" },
         "createdAt": { "type": "string", "format": "date-time" },
-        "metadata": { "type": "object" }
+        "metadata": { "type": "object" },
+        "vectorRef": { "type": "string", "description": "Supabase/Pinecone vector record ID" },
+        "embedding": { "type": "boolean", "description": "Flag indicating if vector embedding exists" }
       },
       "required": ["type", "storagePath"]
     },
