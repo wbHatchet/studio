@@ -34,9 +34,9 @@ const AiYoutubeSeoOptimizationOutputSchema = z.object({
   description: z
     .string()
     .describe(
-      'A detailed YouTube video description, including call-to-actions, BPM, key, and licensing info if provided.'
+      'A detailed YouTube video description following the Type Beat template.'
     ),
-  tags: z.array(z.string()).describe('A list of relevant tags and hashtags for YouTube SEO.'),
+  tags: z.array(z.string()).describe('A list of 20-30 relevant tags for the YouTube tags field.'),
 });
 export type AiYoutubeSeoOptimizationOutput = z.infer<typeof AiYoutubeSeoOptimizationOutputSchema>;
 
@@ -50,31 +50,48 @@ const prompt = ai.definePrompt({
   name: 'aiYoutubeSeoOptimizationPrompt',
   input: {schema: AiYoutubeSeoOptimizationInputSchema},
   output: {schema: AiYoutubeSeoOptimizationOutputSchema},
-  prompt: `You are an expert YouTube SEO specialist for Lo-Fi music channels.
-Your goal is to generate comprehensive, micro-niche-optimized YouTube metadata (title, description, tags) for a video.
+  prompt: `You are an expert YouTube SEO specialist for professional Lo-Fi and Type Beat channels.
+Your goal is to generate comprehensive, micro-niche-optimized YouTube metadata (title, description, tags) that follows the EXACT template provided below.
 
-Here is the information about the video:
-Micro-Niche: {{{microNiche}}}
-Video Topic: {{{videoTopic}}}
-Target Keywords: {{#each keywords}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
-{{#if artistName}}Artist: {{{artistName}}}{{/if}}
-{{#if bpm}}BPM: {{{bpm}}}{{/if}}
-{{#if key}}Key: {{{key}}}{{/if}}
-{{#if licensingInfo}}Licensing: {{{licensingInfo}}}{{/if}}
+--- TITLE FORMAT ---
+[FREE] {{{artistName}}} Type Beat - "[Beat Name]" (or similar viral format)
 
-Generate the following:
+--- DESCRIPTION TEMPLATE (Strict adherence required) ---
 
-1. An engaging and optimized YouTube video title (max 70 characters) that includes relevant keywords.
-2. A detailed YouTube video description (minimum 200 words) that includes:
-    - A compelling introduction.
-    - Purchase/License links (placeholder).
-    - BPM and Key info.
-    - Social media links (placeholder).
-    - SEO paragraph stacking keywords naturally.
-    - 5 relevant hashtags.
-3. A list of 20-30 relevant tags for the YouTube tags field.
+💵 Purchase This Beat (Untagged): 
+🔥 BUY 1 - GET 2 FREE! / BUY 2 - GET 5 FREE! 🔥
 
-Use the "FREE {Artist} Type Beat" title format where applicable.`,
+BPM: {{{bpm}}}
+KEY: {{{key}}}
+
+⚡️ SOCIALS:
+Beatstore | [Link]
+Email | [Email]
+Instagram | [Link]
+
+[FREE] {{{artistName}}} Type Beat - "[Beat Name]"
+
+*THIS BEAT IS FREE FOR NON-PROFIT USE ONLY, WHICH MEANS YOU CANNOT MAKE MONEY OFF OF IT UNLESS YOU BUY A LICENSE FROM MY STORE*
+
+--------------------
+
+[An atmospheric SEO-optimized paragraph (150 words) that describes the beat's vibe (e.g., "{{{videoTopic}}}") and naturally stacks keywords like "{{{microNiche}}}", "{{{artistName}}} type beat 2025", and "{{{artistName}}} instrumental". Mention it is perfect for artists looking for high-quality production.]
+
+[A line of 6-10 keywords separated by commas]
+
+[3-5 relevant hashtags]
+
+--------------------
+
+Context for Generation:
+- Micro-Niche: {{{microNiche}}}
+- Video Topic: {{{videoTopic}}}
+- Keywords: {{#each keywords}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
+- Artist: {{{artistName}}}
+- BPM: {{{bpm}}}
+- Key: {{{key}}}
+
+Ensure the description is formatted exactly like the template with the emojis and spacing provided.`,
 });
 
 const aiYoutubeSeoOptimizationFlow = ai.defineFlow(
