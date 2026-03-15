@@ -9,10 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Mic2, Download, Wand2, Copy, Sparkles } from "lucide-react";
+import { Loader2, Mic2, Download, Wand2, Copy, Sparkles, CheckCircle2, AlertCircle, Info } from "lucide-react";
 import { generateVoiceScript, textToSpeech } from "@/ai/flows/ai-voice-generation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 export default function VoiceProductionPage() {
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ export default function VoiceProductionPage() {
       toast({ title: "Synthesis Complete", description: "Voiceover is ready for preview." });
     } catch (error) {
       console.error(error);
-      toast({ variant: "destructive", title: "Error", description: "Synthesis failed. Check API key." });
+      toast({ variant: "destructive", title: "Error", description: "Synthesis failed. Check API key or quota." });
     } finally {
       setIsGeneratingAudio(false);
     }
@@ -76,7 +77,7 @@ export default function VoiceProductionPage() {
                       <Mic2 className="w-5 h-5 text-primary" />
                       Vocal Parameters
                     </CardTitle>
-                    <CardDescription>Configure the script persona and duration</CardDescription>
+                    <CardDescription>Configure script persona for viral Shorts</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
@@ -85,6 +86,7 @@ export default function VoiceProductionPage() {
                         value={formData.topic}
                         onChange={(e) => setFormData({...formData, topic: e.target.value})}
                         className="bg-secondary/30 min-h-[100px]"
+                        placeholder="e.g. Why Lo-Fi girls always study..."
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -118,14 +120,16 @@ export default function VoiceProductionPage() {
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                      Engineer Narrative Script
+                      Engineer Script (script → voice.mp3)
                     </Button>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-card border-orange-500/20">
-                  <CardHeader>
-                    <CardTitle className="text-sm font-bold uppercase text-orange-400">ElevenLabs Integration</CardTitle>
+                <Card className="bg-card border-primary/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
+                      <Info className="w-3 h-3" /> ElevenLabs Free Plan Quota
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/30 border border-border">
@@ -133,19 +137,30 @@ export default function VoiceProductionPage() {
                         <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold">E</div>
                         <div>
                           <p className="text-xs font-bold">Adam (Legacy)</p>
-                          <p className="text-[10px] text-muted-foreground">High stability narrative</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">Free Plan Active</p>
                         </div>
                       </div>
-                      <Badge variant="outline" className="bg-green-500/10 text-green-500">Live</Badge>
+                      <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Ready</Badge>
                     </div>
+
+                    {result && (
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
+                          <span>Characters: {result.characterCount}</span>
+                          <span>Free Limit: 10,000 / mo</span>
+                        </div>
+                        <Progress value={(result.characterCount / 10000) * 100} className="h-1.5" />
+                      </div>
+                    )}
+
                     <Button 
                       variant="outline" 
-                      className="w-full border-primary/20 hover:bg-primary/5 font-bold"
+                      className="w-full border-primary/20 hover:bg-primary/5 font-bold h-12"
                       onClick={handleSynthesize}
                       disabled={!result || isGeneratingAudio}
                     >
                       {isGeneratingAudio ? <Loader2 className="animate-spin mr-2" /> : <Mic2 className="mr-2 h-4 w-4" />}
-                      Synthesize to Audio
+                      Synthesize voice.mp3
                     </Button>
                     
                     {audioUrl && (
@@ -154,7 +169,7 @@ export default function VoiceProductionPage() {
                           <span className="text-[10px] font-bold uppercase text-primary">Vocal Preview</span>
                           <a href={audioUrl} download="voiceover.mp3">
                             <Button size="sm" variant="ghost" className="h-7 text-xs gap-1">
-                              <Download className="w-3 h-3" /> Download MP3
+                              <Download className="w-3 h-3" /> Export mp3
                             </Button>
                           </a>
                         </div>
@@ -170,9 +185,9 @@ export default function VoiceProductionPage() {
               <div className="space-y-6">
                 {!result && !loading && (
                   <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
-                    <Mic2 className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium">Script Engine Idle</p>
-                    <p className="text-sm text-muted-foreground">Input a topic to generate a high-retention script.</p>
+                    <Sparkles className="w-12 h-12 mb-4 text-muted-foreground" />
+                    <p className="text-lg font-medium">Factory Workflow: IDLE</p>
+                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">Input a topic to start the <b>script → voice.mp3</b> transformation.</p>
                   </div>
                 )}
 
@@ -185,33 +200,38 @@ export default function VoiceProductionPage() {
 
                 {result && (
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                    <Card className="bg-card border-primary/20">
+                    <Card className="bg-card border-primary/20 shadow-lg">
                       <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-bold uppercase text-primary">Generated Script</CardTitle>
+                        <CardTitle className="text-sm font-bold uppercase text-primary">Engineered Script</CardTitle>
                         <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText(result.script)}>
                           <Copy className="h-4 w-4" />
                         </Button>
                       </CardHeader>
                       <CardContent>
-                        <pre className="text-xs whitespace-pre-wrap font-sans leading-relaxed h-64 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic">
-                          {result.script}
-                        </pre>
+                        <div className="relative">
+                          <pre className="text-xs whitespace-pre-wrap font-sans leading-relaxed h-72 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic text-muted-foreground">
+                            {result.script}
+                          </pre>
+                          <div className="absolute bottom-4 right-4 bg-background/80 px-2 py-1 rounded text-[10px] font-mono border border-border">
+                            {result.characterCount} chars
+                          </div>
+                        </div>
                         <div className="mt-4 flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase">
                           <span>Words: {result.estimatedWordCount}</span>
-                          <span>Est. Duration: {formData.targetDuration}s</span>
+                          <span>Aesthetic: {formData.tone}</span>
                         </div>
                       </CardContent>
                     </Card>
 
                     <Card className="bg-card">
                       <CardHeader>
-                        <CardTitle className="text-sm font-bold uppercase text-muted-foreground">Retention Triggers</CardTitle>
+                        <CardTitle className="text-sm font-bold uppercase text-muted-foreground">Retention Triggers (Auto-Visuals)</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">
                           {result.retentionTriggers.map((t: string, i: number) => (
                             <div key={i} className="flex items-start gap-2 text-xs p-2 rounded-md bg-secondary/30 border border-border">
-                              <Sparkles className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                              <CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" />
                               {t}
                             </div>
                           ))}

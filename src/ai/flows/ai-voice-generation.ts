@@ -2,6 +2,7 @@
 /**
  * @fileOverview An AI agent that generates scripts and optimizes them for high-retention text-to-speech.
  * Refined for 30-second viral YouTube shorts as per the Ultra-Scale Factory blueprint.
+ * Integrated with ElevenLabs for seamless voiceover production.
  */
 
 import {ai} from '@/ai/genkit';
@@ -17,6 +18,7 @@ const VoiceOutputSchema = z.object({
   script: z.string().describe('The optimized script for ElevenLabs.'),
   retentionTriggers: z.array(z.string()).describe('List of points where visual/audio changes should occur.'),
   estimatedWordCount: z.number(),
+  characterCount: z.number().describe('Total character count for ElevenLabs quota tracking.'),
 });
 
 export async function generateVoiceScript(input: z.infer<typeof VoiceGenerationInputSchema>) {
@@ -49,16 +51,22 @@ const generateVoiceScriptFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    const result = output!;
+    return {
+      ...result,
+      characterCount: result.script.length
+    };
   }
 );
 
 /**
  * Synthesizes text to speech using ElevenLabs.
+ * Optimized for the Free Plan workflow.
  * @param text The script to synthesize.
  * @param voiceId The ID of the voice to use (default: Adam).
  */
 export async function textToSpeech(text: string, voiceId: string = 'pNInz6wQRqcqdc8khIM8') {
+  // Use provided key or environment variable
   const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_2138300d7f185d5d8b40cdbee0c15caa34eec84bdb85f431';
   
   const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
