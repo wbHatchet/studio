@@ -22,22 +22,43 @@ import {
   Cpu,
   Sparkles,
   Repeat,
-  AlertTriangle
+  AlertTriangle,
+  ArrowRight
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
+  const { toast } = useToast();
+  const [logs, setLogs] = useState([
+    { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views → Generating 10 Variants", progress: 100 },
+    { node: "NODE-APIFY-SCAN", status: "Mining 10 Blueprint Niches: 100 Topics Extracted", progress: 85 },
+    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts (30s Twist Structure)", progress: 42 },
+    { node: "NODE-11LABS-VOICE", status: "ElevenLabs: Batch Synthesis (50 Voiceovers)", progress: 100 },
+    { node: "NODE-YT-PUSH", status: "YouTube API: Distributed Bulk Upload", progress: 15 },
+  ]);
 
   useEffect(() => {
     setIsMounted(true);
+    const interval = setInterval(() => {
+      const newNode = ["NODE-FFMPEG-RENDER", "NODE-S3-SYNC", "NODE-REPURPOSE-DIST", "NODE-SEO-OPTIMIZE"][Math.floor(Math.random() * 4)];
+      const newStatus = [
+        "Rendering 4k Asset Node...",
+        "Syncing GCS Bucket: video-assets-factory",
+        "Distributing to TikTok/Reels API...",
+        "Engineering Metadata: Take Care Era"
+      ][Math.floor(Math.random() * 4)];
+      
+      setLogs(prev => [{ node: newNode, status: newStatus, progress: Math.floor(Math.random() * 100) }, ...prev.slice(0, 4)]);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
   const renderCluster = Array.from({ length: 48 }, (_, i) => ({
     id: i + 1,
     status: Math.random() > 0.1 ? "Running" : "Idle",
     load: Math.floor(Math.random() * 100),
-    task: ["FFmpeg", "Suno", "n8n", "Scraper"][Math.floor(Math.random() * 4)]
   }));
 
   const nicheStack = [
@@ -48,6 +69,13 @@ export default function DashboardPage() {
     { name: "Body Facts", status: "20 Channels", growth: "+210%", color: "text-green-400" },
     { name: "Future Tech", status: "5 Channels", growth: "+180%", color: "text-cyan-400" }
   ];
+
+  const handleScaleViral = () => {
+    toast({
+      title: "Viral Multiplication Protocol: ACTIVE",
+      description: "Triggering 10 similar variants for NODE-PSYCH-12. Compute allocated.",
+    });
+  };
 
   if (!isMounted) return null;
 
@@ -117,7 +145,7 @@ export default function DashboardPage() {
                       <div 
                         key={node.id} 
                         className={`aspect-square rounded-sm border flex flex-col items-center justify-center gap-0.5 transition-all ${
-                          node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500" : "bg-secondary border-border text-muted-foreground"
+                          node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500 shadow-[0_0_10px_rgba(34,197,94,0.2)]" : "bg-secondary border-border text-muted-foreground"
                         }`}
                       >
                         <span className="text-[6px] font-bold uppercase">N{node.id}</span>
@@ -152,19 +180,13 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <Terminal className="w-5 h-5 text-primary" />
-                    $1M Pipeline Stream
+                    Agent Logic Stream
                   </CardTitle>
-                  <CardDescription>Director: [Scraper] &rarr; [Script] &rarr; [Voice] &rarr; [Render] &rarr; [Dist]</CardDescription>
+                  <CardDescription>Director: [n8n] &rarr; [Suno] &rarr; [FFmpeg] &rarr; [YT]</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
-                  {[
-                    { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views &rarr; Generating 10 Variants", progress: 100 },
-                    { node: "NODE-APIFY-SCAN", status: "Mining 10 Blueprint Niches: 100 Topics Extracted", progress: 85 },
-                    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts (30s Twist Structure)", progress: 42 },
-                    { node: "NODE-11LABS-VOICE", status: "ElevenLabs: Batch Synthesis (50 Voiceovers)", progress: 100 },
-                    { node: "NODE-YT-PUSH", status: "YouTube API: Distributed Bulk Upload", progress: 15 },
-                  ].map((job, idx) => (
-                    <div key={idx} className="group flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all">
+                  {logs.map((job, idx) => (
+                    <div key={idx} className="group flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all animate-in fade-in slide-in-from-top-2">
                       <div className="space-y-1">
                         <p className="text-[11px] font-bold uppercase tracking-tight">{job.status}</p>
                         <p className="text-[9px] text-muted-foreground font-mono uppercase">{job.node}</p>
@@ -186,10 +208,13 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="font-bold text-lg font-headline tracking-tight">Viral Multiplication Protocol: READY</p>
-                <p className="text-xs opacity-80 italic max-w-lg">"1M View threshold detected. Triggering autonomous generation of 10 variants to dominate the current viral gap."</p>
+                <p className="text-xs opacity-80 italic max-w-lg">&quot;1M View threshold detected. Triggering autonomous generation of 10 variants to dominate the current viral gap.&quot;</p>
               </div>
             </div>
-            <button className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2">
+            <button 
+              onClick={handleScaleViral}
+              className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2"
+            >
               <Sparkles className="w-4 h-4" /> Scale Viral Winning Asset
             </button>
           </div>
