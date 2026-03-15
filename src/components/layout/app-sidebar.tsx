@@ -17,9 +17,11 @@ import {
   TrendingUp,
   Zap,
   MessageSquare,
-  Repeat,
   Mic2,
-  Share2
+  Share2,
+  BrainCircuit,
+  Cpu,
+  Workflow
 } from "lucide-react";
 
 import {
@@ -35,30 +37,33 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-const mainNav = [
-  { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
-  { title: "Niche Strategy", icon: Target, url: "/strategy" },
-  { title: "Production Queue", icon: Layers, url: "/projects" },
+const studioNav = [
+  { title: "Control Center", icon: LayoutDashboard, url: "/dashboard" },
+];
+
+const intelligenceNav = [
+  { title: "Trend Intelligence", icon: TrendingUp, url: "/growth/signals" },
+  { title: "Niche Discovery", icon: Target, url: "/strategy" },
 ];
 
 const productionNav = [
+  { title: "Production Queue", icon: Layers, url: "/projects" },
   { title: "Voice Architect", icon: Mic2, url: "/production/voice" },
   { title: "Music Curator", icon: Music, url: "/production/music" },
   { title: "Visuals Director", icon: Video, url: "/production/visuals" },
   { title: "SEO Optimizer", icon: Search, url: "/seo" },
-  { title: "Review & Approval", icon: CheckCircle2, url: "/review" },
+  { title: "Approval Gate", icon: CheckCircle2, url: "/review" },
 ];
 
 const growthNav = [
-  { title: "Viral Signals", icon: TrendingUp, url: "/growth/signals" },
   { title: "Hook & Title Lab", icon: Zap, url: "/growth/lab" },
-  { title: "Repurposing", icon: Share2, url: "/growth/repurpose" },
+  { title: "Repurposing Engine", icon: Share2, url: "/growth/repurpose" },
   { title: "Engagement Bot", icon: MessageSquare, url: "/growth/engagement" },
 ];
 
 const analyticsNav = [
-  { title: "Performance", icon: BarChart3, url: "/analytics" },
-  { title: "Channels", icon: Radio, url: "/channels" },
+  { title: "Self-Learning Stats", icon: BarChart3, url: "/analytics" },
+  { title: "Channel Network", icon: Radio, url: "/channels" },
 ];
 
 export function AppSidebar() {
@@ -69,24 +74,22 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2 px-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Radio className="h-5 w-5" />
+            <Workflow className="h-5 w-5" />
           </div>
           <span className="font-headline font-bold text-lg group-data-[collapsible=icon]:hidden">
-            Lo-Fi Factory
+            Content Studio
           </span>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold">MAIN</SidebarGroupLabel>
           <SidebarMenu>
-            {mainNav.map((item) => (
+            {studioNav.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
-                  className="hover:bg-sidebar-accent"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -99,7 +102,27 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold">PRODUCTION</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Intelligence</SidebarGroupLabel>
+          <SidebarMenu>
+            {intelligenceNav.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === item.url}
+                  tooltip={item.title}
+                >
+                  <Link href={item.url}>
+                    <item.icon className="h-4 w-4" />
+                    <span className="font-medium">{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Production</SidebarGroupLabel>
           <SidebarMenu>
             {productionNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -107,7 +130,6 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
-                  className="hover:bg-sidebar-accent"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -120,7 +142,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold">GROWTH AGENTS</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Growth</SidebarGroupLabel>
           <SidebarMenu>
             {growthNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -128,7 +150,6 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname.startsWith(item.url)}
                   tooltip={item.title}
-                  className="hover:bg-sidebar-accent"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
@@ -141,7 +162,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-semibold">ANALYTICS</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-semibold text-[10px] tracking-widest uppercase">Analytics</SidebarGroupLabel>
           <SidebarMenu>
             {analyticsNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -149,7 +170,6 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
-                  className="hover:bg-sidebar-accent"
                 >
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
