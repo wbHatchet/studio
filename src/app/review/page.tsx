@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -143,7 +142,7 @@ export default function ReviewPage() {
                           {JSON.stringify(mockRenderConfig, null, 2)}
                         </pre>
                         <div className="mt-4 p-3 rounded-lg bg-secondary/30 border border-border/50 text-[9px] uppercase font-bold text-muted-foreground italic leading-relaxed">
-                          "Logic: [0:v] curves=vintage -> [1:a] showwaves -> overlay -> noise"
+                          &quot;Logic: [0:v] curves=vintage &rarr; [1:a] showwaves &rarr; overlay &rarr; noise&quot;
                         </div>
                       </CardContent>
                     </Card>
