@@ -40,8 +40,11 @@
       "description": "Queue item for AI workers",
       "properties": {
         "type": { "type": "string" },
-        "status": { "type": "string", "enum": ["queued", "leased", "running", "succeeded", "failed"] },
+        "status": { "type": "string", "enum": ["queued", "leased", "running", "succeeded", "failed", "canceled"] },
         "priority": { "type": "number" },
+        "runAfter": { "type": "string", "format": "date-time" },
+        "inputRefs": { "type": "object" },
+        "outputRefs": { "type": "object" },
         "lease": {
           "type": "object",
           "properties": {
@@ -52,21 +55,47 @@
       },
       "required": ["type", "status"]
     },
-    "Idea": {
-      "title": "Idea",
+    "Signal": {
+      "title": "Viral Signal",
       "type": "object",
-      "description": "Viral concept or topic",
+      "description": "Trend prediction data from Growth Agents",
       "properties": {
-        "topic": { "type": "string" },
-        "niche": { "type": "string" },
-        "hook": { "type": "string" },
-        "status": { "type": "string" }
+        "type": { "type": "string" },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "topics": { "type": "array" },
+        "discoveredAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["topic", "niche", "status"]
+      "required": ["type", "discoveredAt"]
+    },
+    "Experiment": {
+      "title": "A/B Experiment",
+      "type": "object",
+      "description": "Thumbnail or Title testing container",
+      "properties": {
+        "type": { "type": "string", "enum": ["thumbnail_ab", "title_ab"] },
+        "publishId": { "type": "string" },
+        "status": { "type": "string", "enum": ["running", "done"] },
+        "variants": { "type": "array" },
+        "winner": { "type": "object" }
+      },
+      "required": ["type", "status"]
+    },
+    "CommentTask": {
+      "title": "Comment Engagement Task",
+      "type": "object",
+      "description": "AI-generated comment draft requiring approval",
+      "properties": {
+        "publishId": { "type": "string" },
+        "action": { "type": "string", "enum": ["reply", "heart", "pin"] },
+        "draftText": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending_approval", "approved", "rejected", "executed"] },
+        "approvedBy": { "type": "string" }
+      },
+      "required": ["action", "status"]
     }
   },
   "auth": {
-    "providers": ["google", "password"]
+    "providers": ["google"]
   },
   "firestore": {
     "structure": [
@@ -99,15 +128,38 @@
         "definition": {
           "entityName": "Job",
           "schema": { "$ref": "#/backend/entities/Job" },
-          "description": "Server-leased job queue"
+          "description": "Worker queue items"
         }
       },
       {
-        "path": "/workspaces/{wsId}/ideas/{ideaId}",
+        "path": "/workspaces/{wsId}/signals/{signalId}",
         "definition": {
-          "entityName": "Idea",
-          "schema": { "$ref": "#/backend/entities/Idea" },
-          "description": "Content ideas and signals"
+          "entityName": "Signal",
+          "schema": { "$ref": "#/backend/entities/Signal" },
+          "description": "Trend prediction signals"
+        }
+      },
+      {
+        "path": "/workspaces/{wsId}/experiments/{expId}",
+        "definition": {
+          "entityName": "Experiment",
+          "schema": { "$ref": "#/backend/entities/Experiment" },
+          "description": "A/B testing experiments"
+        }
+      },
+      {
+        "path": "/workspaces/{wsId}/comments/{commentId}",
+        "definition": {
+          "entityName": "CommentTask",
+          "schema": { "$ref": "#/backend/entities/CommentTask" },
+          "description": "Comment engagement moderation queue"
+        }
+      },
+      {
+        "path": "/workspaces/{wsId}/apiKeyRefs/{keyId}",
+        "definition": {
+          "schema": "object",
+          "description": "Metadata-only secret references"
         }
       }
     ]

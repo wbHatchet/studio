@@ -3,17 +3,22 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // --- HELPERS ---
+    // --- AUTH HELPERS ---
     function isSignedIn() {
       return request.auth != null;
     }
     
-    function getRole(wsId) {
-      return get(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid)).data.role;
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // --- WORKSPACE RBAC HELPERS ---
+    function isWorkspaceMember(wsId) {
+      return exists(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid));
     }
     
-    function isMember(wsId) {
-      return exists(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid));
+    function getRole(wsId) {
+      return get(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid)).data.role;
     }
     
     function isAtLeast(wsId, role) {
@@ -21,38 +26,60 @@ service cloud.firestore {
       return r == 'owner' || r == 'admin' || (role == 'editor' && r == 'editor');
     }
 
-    // --- RULES ---
+    // --- COLLECTION RULES ---
+
     match /users/{userId} {
-      allow read, write: if request.auth.uid == userId;
+      allow read, write: if isOwner(userId);
     }
 
     match /workspaces/{wsId} {
-      allow read: if isMember(wsId);
+      allow read: if isWorkspaceMember(wsId);
       allow create: if isSignedIn();
       allow update, delete: if isAtLeast(wsId, 'admin');
 
       match /members/{userId} {
-        allow read: if isMember(wsId);
+        allow read: if isWorkspaceMember(wsId);
         allow write: if isAtLeast(wsId, 'admin');
       }
 
       match /jobs/{jobId} {
-        allow read: if isMember(wsId);
-        // Clients can only create jobs in 'queued' state and cannot set lease fields
+        allow read: if isWorkspaceMember(wsId);
+        // Clients can create queued jobs, but cannot lease or step them
         allow create: if isAtLeast(wsId, 'editor') 
           && request.resource.data.status == 'queued'
           && !('lease' in request.resource.data);
+        // Only server (Admin SDK) should update lease/status/outputs in production
+        // But for development, admins can manage them
         allow update: if isAtLeast(wsId, 'admin');
       }
 
-      match /ideas/{ideaId} {
-        allow read: if isMember(wsId);
+      match /signals/{signalId} {
+        allow read: if isWorkspaceMember(wsId);
         allow write: if isAtLeast(wsId, 'editor');
       }
-      
+
+      match /experiments/{expId} {
+        allow read: if isWorkspaceMember(wsId);
+        allow write: if isAtLeast(wsId, 'editor');
+      }
+
+      match /comments/{commentId} {
+        allow read: if isWorkspaceMember(wsId);
+        // Editors create drafts, Admins approve
+        allow create: if isAtLeast(wsId, 'editor');
+        allow update: if isAtLeast(wsId, 'admin') 
+          || (isAtLeast(wsId, 'editor') && request.resource.data.status == 'pending_approval');
+      }
+
       match /apiKeyRefs/{keyId} {
-        allow read: if isMember(wsId);
+        allow read: if isWorkspaceMember(wsId);
         allow write: if isAtLeast(wsId, 'admin');
+      }
+      
+      // Generic catch-all for workspace subcollections
+      match /{allSubcollections=**} {
+        allow read: if isWorkspaceMember(wsId);
+        allow write: if isAtLeast(wsId, 'editor');
       }
     }
   }
