@@ -22,7 +22,7 @@ import {
   Cpu,
   Sparkles,
   Repeat,
-  AlertTriangle,
+  TriangleAlert,
   ArrowRight
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
@@ -31,6 +31,9 @@ import { useToast } from "@/hooks/use-toast";
 export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
+  const [renderCluster, setRenderCluster] = useState<{id: number, status: string, load: number}[]>([]);
+  const [clusterLoad, setClusterLoad] = useState(0);
+  
   const [logs, setLogs] = useState([
     { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views → Generating 10 Variants", progress: 100 },
     { node: "NODE-APIFY-SCAN", status: "Mining 10 Blueprint Niches: 100 Topics Extracted", progress: 85 },
@@ -41,6 +44,15 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setIsMounted(true);
+    
+    // Stable cluster data
+    setRenderCluster(Array.from({ length: 48 }, (_, i) => ({
+      id: i + 1,
+      status: Math.random() > 0.1 ? "Running" : "Idle",
+      load: Math.floor(Math.random() * 100),
+    })));
+    setClusterLoad(Math.floor(Math.random() * 40 + 40));
+
     const interval = setInterval(() => {
       const newNode = ["NODE-FFMPEG-RENDER", "NODE-S3-SYNC", "NODE-REPURPOSE-DIST", "NODE-SEO-OPTIMIZE"][Math.floor(Math.random() * 4)];
       const newStatus = [
@@ -54,12 +66,6 @@ export default function DashboardPage() {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
-
-  const renderCluster = Array.from({ length: 48 }, (_, i) => ({
-    id: i + 1,
-    status: Math.random() > 0.1 ? "Running" : "Idle",
-    load: Math.floor(Math.random() * 100),
-  }));
 
   const nicheStack = [
     { name: "AI Tools", status: "15 Channels", growth: "+450%", color: "text-blue-400" },
@@ -97,7 +103,7 @@ export default function DashboardPage() {
             </div>
             <div className="ml-auto flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20">
-                <AlertTriangle className="w-3 h-3 text-red-500 animate-pulse" />
+                <TriangleAlert className="w-3 h-3 text-red-500 animate-pulse" />
                 <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest">VIRAL ALERT: NODE-PSYCH-12</span>
               </div>
               <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">GRID STATUS: OPTIMIZED</Badge>
@@ -153,7 +159,7 @@ export default function DashboardPage() {
                     ))}
                   </div>
                   <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-[10px] uppercase font-bold text-muted-foreground">
-                    <span>Cluster Load: {Math.floor(Math.random() * 40 + 40)}%</span>
+                    <span>Cluster Load: {clusterLoad}%</span>
                     <span className="text-primary font-mono tracking-tighter animate-pulse flex items-center gap-1">
                       <Activity className="w-3 h-3" /> GRID_SYNC_OK
                     </span>
