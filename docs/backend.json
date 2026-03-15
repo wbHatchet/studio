@@ -31,16 +31,16 @@
       "properties": {
         "type": { "type": "string" },
         "status": { "type": "string", "enum": ["queued", "generating", "rendered", "published", "failed", "canceled"] },
+        "pipelineStage": { "type": "string", "enum": ["idea", "script", "voice", "render", "upload", "published"] },
         "priority": { "type": "number" },
-        "workerNodeId": { "type": "string", "description": "ID of the Docker/K8s container running the job" },
+        "workerNodeId": { "type": "string" },
+        "channelId": { "type": "string" },
         "renderConfig": {
           "type": "object",
           "properties": {
-            "ffmpegCommand": { "type": "string" },
-            "filterGraph": { "type": "string" },
-            "fps": { "type": "number", "default": 24 },
-            "resolution": { "type": "string", "default": "1280x720" },
-            "vintageLevel": { "type": "number", "default": 0.5 }
+            "audio_path": { "type": "string" },
+            "image_path": { "type": "string" },
+            "filter_graph": { "type": "string" }
           }
         },
         "metadata": {
@@ -48,82 +48,24 @@
           "properties": {
             "title": { "type": "string" },
             "prompt": { "type": "string" },
-            "aesthetic": { "type": "string", "default": "vintage_60s" }
-          }
-        },
-        "assets": {
-          "type": "object",
-          "properties": {
-            "audioUrl": { "type": "string" },
-            "imageUrl": { "type": "string" },
-            "videoUrl": { "type": "string" }
-          }
-        },
-        "lease": {
-          "type": "object",
-          "properties": {
-            "leasedBy": { "type": "string" },
-            "leasedUntil": { "type": "string", "format": "date-time" }
+            "niche": { "type": "string" }
           }
         }
       },
       "required": ["type", "status"]
     },
-    "Asset": {
-      "title": "Asset",
+    "Channel": {
+      "title": "Channel",
       "type": "object",
-      "description": "Media asset stored in video-assets-factory bucket",
+      "description": "YouTube/TikTok channel managed by the grid",
       "properties": {
-        "type": { "type": "string", "enum": ["scripts", "voice", "clips", "thumbnails", "videos", "music"] },
-        "storagePath": { "type": "string", "description": "The GCS path e.g. videos/video1.mp4" },
-        "bucket": { "type": "string", "default": "video-assets-factory" },
-        "mimeType": { "type": "string" },
-        "size": { "type": "number" },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "metadata": { "type": "object" },
-        "vectorRef": { "type": "string", "description": "Vector record ID" },
-        "embedding": { "type": "boolean", "description": "Flag indicating if vector embedding exists" }
-      },
-      "required": ["type", "storagePath"]
-    },
-    "Publication": {
-      "title": "Publication",
-      "type": "object",
-      "description": "Metadata for YouTube Data API v3 distribution",
-      "properties": {
-        "videoId": { "type": "string" },
-        "platform": { "type": "string", "enum": ["youtube", "tiktok", "instagram", "facebook"], "default": "youtube" },
-        "status": { "type": "string", "enum": ["draft", "scheduled", "published", "failed"] },
-        "apiPayload": {
-          "type": "object",
-          "properties": {
-            "part": { "type": "string", "default": "snippet,status" },
-            "body": {
-              "type": "object",
-              "properties": {
-                "snippet": {
-                  "type": "object",
-                  "properties": {
-                    "title": { "type": "string" },
-                    "description": { "type": "string" },
-                    "tags": { "type": "array", "items": { "type": "string" } }
-                  }
-                },
-                "status": {
-                  "type": "object",
-                  "properties": {
-                    "privacyStatus": { "type": "string", "enum": ["public", "unlisted", "private"], "default": "public" }
-                  }
-                }
-              }
-            },
-            "media_body": { "type": "string", "description": "GCS path to the mp4 file" }
-          }
-        },
-        "scheduledAt": { "type": "string", "format": "date-time" },
-        "externalUrl": { "type": "string" }
-      },
-      "required": ["videoId", "status"]
+        "name": { "type": "string" },
+        "niche": { "type": "string" },
+        "subscribers": { "type": "number" },
+        "views30d": { "type": "number" },
+        "status": { "type": "string" },
+        "health": { "type": "number" }
+      }
     }
   },
   "auth": {
@@ -148,19 +90,11 @@
         }
       },
       {
-        "path": "/workspaces/{wsId}/assets/{assetId}",
+        "path": "/workspaces/{wsId}/channels/{chId}",
         "definition": {
-          "entityName": "Asset",
-          "schema": { "$ref": "#/backend/entities/Asset" },
-          "description": "Metadata for assets stored in video-assets-factory GCS bucket"
-        }
-      },
-      {
-        "path": "/workspaces/{wsId}/publishes/{publishId}",
-        "definition": {
-          "entityName": "Publication",
-          "schema": { "$ref": "#/backend/entities/Publication" },
-          "description": "Automation queue for YouTube Data API v3 uploads"
+          "entityName": "Channel",
+          "schema": { "$ref": "#/backend/entities/Channel" },
+          "description": "Managed YouTube channels"
         }
       },
       {
@@ -168,7 +102,7 @@
         "definition": {
           "entityName": "Job",
           "schema": { "$ref": "#/backend/entities/Job" },
-          "description": "Enterprise job queue for FFmpeg/AI workers"
+          "description": "Production pipeline queue"
         }
       }
     ]

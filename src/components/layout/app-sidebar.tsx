@@ -21,9 +21,7 @@ import {
   Mic2,
   Share2,
   Workflow,
-  Network,
-  Database,
-  SearchCode
+  Network
 } from "lucide-react";
 
 import {
@@ -40,32 +38,31 @@ import {
 } from "@/components/ui/sidebar";
 
 const studioNav = [
-  { title: "Network Control Center", icon: LayoutDashboard, url: "/dashboard" },
+  { title: "Network Command Center", icon: LayoutDashboard, url: "/dashboard" },
 ];
 
 const intelligenceNav = [
-  { title: "Viral Trend Miner (Apify)", icon: TrendingUp, url: "/growth/signals" },
+  { title: "Trend Intelligence (Apify)", icon: TrendingUp, url: "/growth/signals" },
   { title: "Niche Discovery Engine", icon: Target, url: "/strategy" },
 ];
 
 const productionNav = [
-  { title: "Enterprise Grid Queue", icon: Layers, url: "/projects" },
-  { title: "Voice Architect (11Labs)", icon: Mic2, url: "/production/voice" },
-  { title: "Music Curator (Suno)", icon: Music, url: "/production/music" },
+  { title: "Production Pipeline Monitor", icon: Layers, url: "/projects" },
+  { title: "Voice Architect (Batch)", icon: Mic2, url: "/production/voice" },
   { title: "Visuals Director (FFmpeg)", icon: Video, url: "/production/visuals" },
   { title: "SEO Metadata Engine", icon: Search, url: "/seo" },
   { title: "Approval & Publish", icon: CheckCircle2, url: "/review" },
 ];
 
 const growthNav = [
-  { title: "Hook & Title Lab", icon: Zap, url: "/growth/lab" },
-  { title: "Repurposing Grid", icon: Share2, url: "/growth/repurpose" },
+  { title: "Viral Replication Engine", icon: Zap, url: "/growth/lab" },
+  { title: "Multi-Platform Dist", icon: Share2, url: "/growth/repurpose" },
   { title: "Engagement Bot", icon: MessageSquare, url: "/growth/engagement" },
 ];
 
 const analyticsNav = [
-  { title: "Self-Learning Strategy", icon: BarChart3, url: "/analytics" },
-  { title: "Global CH Network", icon: Radio, url: "/channels" },
+  { title: "Network Intelligence Hub", icon: BarChart3, url: "/analytics" },
+  { title: "Managed Channel Grid", icon: Radio, url: "/channels" },
 ];
 
 export function AppSidebar() {
@@ -80,10 +77,10 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-headline font-bold text-base leading-tight">
-              Network Grid
+              Command Grid
             </span>
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-primary">
-              Ultra-Scale v7.0
+              Hyper-Scale v10.0
             </span>
           </div>
         </div>
@@ -131,7 +128,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Media Factory Layer</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Content Factory Layer</SidebarGroupLabel>
           <SidebarMenu>
             {productionNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -173,7 +170,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Self-Learning Layer</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Network Analytics</SidebarGroupLabel>
           <SidebarMenu>
             {analyticsNav.map((item) => (
               <SidebarMenuItem key={item.title}>

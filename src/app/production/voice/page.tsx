@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Mic2, Download, Wand2, Copy, Sparkles, CheckCircle2, AlertCircle, Info } from "lucide-react";
+import { Loader2, Mic2, Download, Wand2, Copy, Sparkles, CheckCircle2, AlertCircle, Info, Layers } from "lucide-react";
 import { generateVoiceScript, textToSpeech } from "@/ai/flows/ai-voice-generation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -24,9 +24,10 @@ export default function VoiceProductionPage() {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    topic: "The secret history of Lo-Fi music and why it helps you study.",
-    tone: "Narrative & Calm",
-    targetDuration: 30
+    topic: "The secret billionaire routine that triggers high retention.",
+    tone: "Energetic",
+    targetDuration: 30,
+    batchSize: 50
   });
 
   async function handleGenerateScript() {
@@ -35,9 +36,9 @@ export default function VoiceProductionPage() {
     try {
       const output = await generateVoiceScript(formData);
       setResult(output);
-      toast({ title: "Script Engineered", description: "30-second viral optimization complete." });
+      toast({ title: "Scripts Engineered", description: "Bulk viral optimization complete." });
     } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "Failed to generate script." });
+      toast({ variant: "destructive", title: "Error", description: "Failed to generate scripts." });
     } finally {
       setLoading(false);
     }
@@ -49,10 +50,10 @@ export default function VoiceProductionPage() {
     try {
       const dataUri = await textToSpeech(result.script);
       setAudioUrl(dataUri);
-      toast({ title: "Synthesis Complete", description: "Voiceover is ready for preview." });
+      toast({ title: "Batch Synthesis Complete", description: `${formData.batchSize} voiceovers ready.` });
     } catch (error) {
       console.error(error);
-      toast({ variant: "destructive", title: "Error", description: "Synthesis failed. Check API key or quota." });
+      toast({ variant: "destructive", title: "Error", description: "Synthesis failed. Check ElevenLabs API." });
     } finally {
       setIsGeneratingAudio(false);
     }
@@ -66,62 +67,62 @@ export default function VoiceProductionPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl">AI Voice Architect</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Voice Generation Command</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
             <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-2">
               <div className="space-y-6">
-                <Card className="bg-card">
+                <Card className="bg-card border-border/50 shadow-md">
                   <CardHeader>
                     <CardTitle className="font-headline flex items-center gap-2">
                       <Mic2 className="w-5 h-5 text-primary" />
-                      Vocal Parameters
+                      Batch Parameters
                     </CardTitle>
-                    <CardDescription>Configure script persona for viral Shorts</CardDescription>
+                    <CardDescription>Configure mass synthesis for the network</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label>Core Topic / Hook</Label>
+                      <Label>Bulk Topic / Viral Niche</Label>
                       <Textarea 
                         value={formData.topic}
                         onChange={(e) => setFormData({...formData, topic: e.target.value})}
                         className="bg-secondary/30 min-h-[100px]"
-                        placeholder="e.g. Why Lo-Fi girls always study..."
+                        placeholder="e.g. Billionaire Habits Series #1-50"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Voice Tone</Label>
+                        <Label>Voice Style</Label>
                         <Select value={formData.tone} onValueChange={(v) => setFormData({...formData, tone: v})}>
                           <SelectTrigger className="bg-secondary/30">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Energetic">Energetic</SelectItem>
-                            <SelectItem value="Narrative & Calm">Narrative & Calm</SelectItem>
-                            <SelectItem value="Deep & Mysterious">Deep & Mysterious</SelectItem>
-                            <SelectItem value="Corporate">Corporate</SelectItem>
+                            <SelectItem value="Energetic">Energetic (Viral)</SelectItem>
+                            <SelectItem value="Narrative & Calm">Narrative (Story)</SelectItem>
+                            <SelectItem value="Deep & Mysterious">Deep (Mystery)</SelectItem>
+                            <SelectItem value="Corporate">Corporate (News)</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label>Target Duration (s)</Label>
+                        <Label>Batch size (Videos)</Label>
                         <Input 
                           type="number" 
-                          value={formData.targetDuration}
-                          onChange={(e) => setFormData({...formData, targetDuration: parseInt(e.target.value)})}
+                          value={formData.batchSize}
+                          onChange={(e) => setFormData({...formData, batchSize: parseInt(e.target.value)})}
                           className="bg-secondary/30"
                         />
                       </div>
                     </div>
                     <Button 
-                      className="w-full bg-primary text-primary-foreground font-bold"
+                      className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] tracking-widest"
                       onClick={handleGenerateScript}
                       disabled={loading}
                     >
-                      {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                      Engineer Script (script &rarr; voice.mp3)
+                      {loading ? <Loader2 className="animate-spin mr-2" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                      Engineer Batch Scripts
                     </Button>
                   </CardContent>
                 </Card>
@@ -129,7 +130,7 @@ export default function VoiceProductionPage() {
                 <Card className="bg-card border-primary/20">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                      <Info className="w-3 h-3" /> ElevenLabs Free Plan Quota
+                      <Info className="w-3 h-3" /> ElevenLabs API Capacity
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -137,48 +138,22 @@ export default function VoiceProductionPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold">E</div>
                         <div>
-                          <p className="text-xs font-bold">Adam (Legacy)</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">Free Plan Active</p>
+                          <p className="text-xs font-bold">Command Voice: ADAM</p>
+                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Professional Tier Active</p>
                         </div>
                       </div>
-                      <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Ready</Badge>
+                      <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">GRID_READY</Badge>
                     </div>
-
-                    {result && (
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
-                          <span>Characters: {result.characterCount}</span>
-                          <span>Free Limit: 10,000 / mo</span>
-                        </div>
-                        <Progress value={(result.characterCount / 10000) * 100} className="h-1.5" />
-                      </div>
-                    )}
 
                     <Button 
                       variant="outline" 
-                      className="w-full border-primary/20 hover:bg-primary/5 font-bold h-12"
+                      className="w-full border-primary/20 hover:bg-primary/5 font-bold h-12 uppercase text-[10px] tracking-widest"
                       onClick={handleSynthesize}
                       disabled={!result || isGeneratingAudio}
                     >
-                      {isGeneratingAudio ? <Loader2 className="animate-spin mr-2" /> : <Mic2 className="mr-2 h-4 w-4" />}
-                      Synthesize voice.mp3
+                      {isGeneratingAudio ? <Loader2 className="animate-spin mr-2" /> : <Layers className="mr-2 h-4 w-4" />}
+                      Start Batch Synthesis ({formData.batchSize} files)
                     </Button>
-                    
-                    {audioUrl && (
-                      <div className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10 animate-in fade-in zoom-in-95 duration-300">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-[10px] font-bold uppercase text-primary">Vocal Preview</span>
-                          <a href={audioUrl} download="voiceover.mp3">
-                            <Button size="sm" variant="ghost" className="h-7 text-xs gap-1">
-                              <Download className="w-3 h-3" /> Export mp3
-                            </Button>
-                          </a>
-                        </div>
-                        <audio controls className="w-full h-8">
-                          <source src={audioUrl} type="audio/mpeg" />
-                        </audio>
-                      </div>
-                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -187,55 +162,23 @@ export default function VoiceProductionPage() {
                 {!result && !loading && (
                   <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
                     <Sparkles className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium">Factory Workflow: IDLE</p>
-                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">Input a topic to start the <b>script &rarr; voice.mp3</b> transformation.</p>
+                    <p className="text-lg font-medium uppercase text-[10px] tracking-widest font-bold">Pipeline Status: IDLE</p>
+                    <p className="text-xs text-muted-foreground max-w-xs mx-auto mt-2">Ready for mass synthesis of scripts for the 100+ channel network.</p>
                   </div>
-                )}
-
-                {loading && (
-                   <div className="space-y-4 animate-pulse">
-                     <div className="h-64 bg-secondary/30 rounded-2xl" />
-                     <div className="h-32 bg-secondary/30 rounded-2xl" />
-                   </div>
                 )}
 
                 {result && (
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                     <Card className="bg-card border-primary/20 shadow-lg">
                       <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-bold uppercase text-primary">Engineered Script</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText(result.script)}>
-                          <Copy className="h-4 w-4" />
-                        </Button>
+                        <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest">Engineered Script Library</CardTitle>
+                        <Badge variant="secondary" className="font-mono text-[9px]">{formData.batchSize} ITEMS</Badge>
                       </CardHeader>
                       <CardContent>
                         <div className="relative">
-                          <pre className="text-xs whitespace-pre-wrap font-sans leading-relaxed h-72 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic text-muted-foreground">
+                          <pre className="text-xs whitespace-pre-wrap font-sans leading-relaxed h-72 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic text-muted-foreground border border-border/50">
                             {result.script}
                           </pre>
-                          <div className="absolute bottom-4 right-4 bg-background/80 px-2 py-1 rounded text-[10px] font-mono border border-border">
-                            {result.characterCount} chars
-                          </div>
-                        </div>
-                        <div className="mt-4 flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase">
-                          <span>Words: {result.estimatedWordCount}</span>
-                          <span>Aesthetic: {formData.tone}</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-card">
-                      <CardHeader>
-                        <CardTitle className="text-sm font-bold uppercase text-muted-foreground">Retention Triggers (Auto-Visuals)</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {result.retentionTriggers.map((t: string, i: number) => (
-                            <div key={i} className="flex items-start gap-2 text-xs p-2 rounded-md bg-secondary/30 border border-border">
-                              <CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" />
-                              {t}
-                            </div>
-                          ))}
                         </div>
                       </CardContent>
                     </Card>
