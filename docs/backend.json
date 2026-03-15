@@ -61,7 +61,7 @@
       "description": "Media asset stored in Google Cloud Storage",
       "properties": {
         "type": { "type": "string", "enum": ["script", "voice", "video", "thumbnail"] },
-        "storagePath": { "type": "string" },
+        "storagePath": { "type": "string", "description": "The GCS path e.g. assets/videos/short.mp4" },
         "mimeType": { "type": "string" },
         "size": { "type": "number" },
         "createdAt": { "type": "string", "format": "date-time" },
@@ -80,32 +80,6 @@
         "discoveredAt": { "type": "string", "format": "date-time" }
       },
       "required": ["type", "discoveredAt"]
-    },
-    "Experiment": {
-      "title": "A/B Experiment",
-      "type": "object",
-      "description": "Thumbnail or Title testing container",
-      "properties": {
-        "type": { "type": "string", "enum": ["thumbnail_ab", "title_ab"] },
-        "publishId": { "type": "string" },
-        "status": { "type": "string", "enum": ["running", "done"] },
-        "variants": { "type": "array" },
-        "winner": { "type": "object" }
-      },
-      "required": ["type", "status"]
-    },
-    "CommentTask": {
-      "title": "Comment Engagement Task",
-      "type": "object",
-      "description": "AI-generated comment draft requiring approval",
-      "properties": {
-        "publishId": { "type": "string" },
-        "action": { "type": "string", "enum": ["reply", "heart", "pin"] },
-        "draftText": { "type": "string" },
-        "status": { "type": "string", "enum": ["pending_approval", "approved", "rejected", "executed"] },
-        "approvedBy": { "type": "string" }
-      },
-      "required": ["action", "status"]
     }
   },
   "auth": {
@@ -130,51 +104,11 @@
         }
       },
       {
-        "path": "/workspaces/{wsId}/members/{userId}",
-        "definition": {
-          "entityName": "Member",
-          "schema": { "$ref": "#/backend/entities/Member" },
-          "description": "Workspace membership and roles"
-        }
-      },
-      {
-        "path": "/workspaces/{wsId}/jobs/{jobId}",
-        "definition": {
-          "entityName": "Job",
-          "schema": { "$ref": "#/backend/entities/Job" },
-          "description": "Worker queue items"
-        }
-      },
-      {
         "path": "/workspaces/{wsId}/assets/{assetId}",
         "definition": {
           "entityName": "Asset",
           "schema": { "$ref": "#/backend/entities/Asset" },
-          "description": "Metadata for GCS stored assets"
-        }
-      },
-      {
-        "path": "/workspaces/{wsId}/signals/{signalId}",
-        "definition": {
-          "entityName": "Signal",
-          "schema": { "$ref": "#/backend/entities/Signal" },
-          "description": "Trend prediction signals"
-        }
-      },
-      {
-        "path": "/workspaces/{wsId}/experiments/{expId}",
-        "definition": {
-          "entityName": "Experiment",
-          "schema": { "$ref": "#/backend/entities/Experiment" },
-          "description": "A/B testing experiments"
-        }
-      },
-      {
-        "path": "/workspaces/{wsId}/comments/{commentId}",
-        "definition": {
-          "entityName": "CommentTask",
-          "schema": { "$ref": "#/backend/entities/CommentTask" },
-          "description": "Comment engagement moderation queue"
+          "description": "Metadata for assets stored in GCS assets/ folder"
         }
       }
     ]

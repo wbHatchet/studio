@@ -13,8 +13,6 @@ import {
   MoreVertical, 
   PlayCircle, 
   Clock, 
-  CheckCircle2, 
-  AlertCircle,
   Music,
   Video,
   Search,
@@ -88,10 +86,10 @@ const initialProjects = [
 ];
 
 const cloudAssets = [
-  { name: "scripts/", icon: FileText, count: 1240, color: "text-blue-400" },
-  { name: "voices/", icon: Mic2, count: 1240, color: "text-purple-400" },
-  { name: "videos/", icon: Video, count: 850, color: "text-red-400" },
-  { name: "thumbnails/", icon: Sparkles, count: 3200, color: "text-amber-400" },
+  { name: "assets/scripts/", icon: FileText, count: 1240, color: "text-blue-400" },
+  { name: "assets/voices/", icon: Mic2, count: 1240, color: "text-purple-400" },
+  { name: "assets/videos/", icon: Video, count: 850, color: "text-red-400" },
+  { name: "assets/thumbnails/", icon: Sparkles, count: 3200, color: "text-amber-400" },
 ];
 
 export default function ProjectsPage() {
@@ -119,7 +117,7 @@ export default function ProjectsPage() {
       case "Streaming":
         return <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20"><PlayCircle className="w-3 h-3 mr-1" /> Live</Badge>;
       case "Review Required":
-        return <Badge variant="outline" className="bg-orange-500/10 text-orange-400 border-orange-500/20"><AlertCircle className="w-3 h-3 mr-1" /> Review</Badge>;
+        return <Badge variant="outline" className="bg-orange-500/10 text-orange-400 border-orange-500/20"><Clock className="w-3 h-3 mr-1" /> Review</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -258,23 +256,23 @@ export default function ProjectsPage() {
                       <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2">
                         <HardDrive className="w-4 h-4 text-primary" /> Google Cloud Storage Live (Free Tier)
                       </CardTitle>
-                      <CardDescription className="text-xs">Recursive scan of factory asset structure</CardDescription>
+                      <CardDescription className="text-xs">Recursive scan of factory asset structure: assets/*</CardDescription>
                     </div>
                     <Badge variant="outline" className="font-mono text-[9px] text-green-500 border-green-500/20">BUCKET_SYNC: OK</Badge>
                   </CardHeader>
                   <CardContent>
                     <div className="rounded-xl border border-border/50 overflow-hidden font-mono text-[11px]">
                       <div className="bg-secondary/30 p-3 border-b border-border/50 flex items-center justify-between text-muted-foreground font-bold uppercase">
-                        <span>Path / Filename</span>
+                        <span>Path / Filename (blob.upload_from_filename)</span>
                         <span>Size / Meta</span>
                       </div>
                       <div className="divide-y divide-border/50">
                         {[
-                          { path: "videos/batch_12_short_001.mp4", size: "4.2 MB", status: "Rendered" },
-                          { path: "voices/adam_script_v2.mp3", size: "1.1 MB", status: "Synthesized" },
-                          { path: "thumbnails/6lack_type_variant_a.jpg", size: "450 KB", status: "Generated" },
-                          { path: "scripts/midnight_rain_mix.json", size: "12 KB", status: "Archived" },
-                          { path: "videos/batch_12_short_002.mp4", size: "3.8 MB", status: "Queue" }
+                          { path: "assets/videos/batch_12_short_001.mp4", size: "4.2 MB", status: "Rendered" },
+                          { path: "assets/voices/adam_script_v2.mp3", size: "1.1 MB", status: "Synthesized" },
+                          { path: "assets/thumbnails/6lack_type_variant_a.jpg", size: "450 KB", status: "Generated" },
+                          { path: "assets/scripts/midnight_rain_mix.json", size: "12 KB", status: "Archived" },
+                          { path: "assets/videos/batch_12_short_002.mp4", size: "3.8 MB", status: "Queue" }
                         ].map((file, i) => (
                           <div key={i} className="p-4 flex items-center justify-between hover:bg-primary/5 transition-colors group">
                             <div className="flex items-center gap-3">
