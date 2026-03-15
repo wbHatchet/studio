@@ -157,7 +157,7 @@ export default function DashboardPage() {
                     <Terminal className="w-5 h-5 text-primary" />
                     Agent Logic Stream
                   </CardTitle>
-                  <CardDescription>Director: [Apify] &rarr; [OpenAI] &rarr; [11Labs] &rarr; [FFmpeg]</CardDescription>
+                  <CardDescription>Director: [n8n] &rarr; [Suno] &rarr; [FFmpeg] &rarr; [YT]</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {[
