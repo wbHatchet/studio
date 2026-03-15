@@ -55,6 +55,20 @@
       },
       "required": ["type", "status"]
     },
+    "Asset": {
+      "title": "Asset",
+      "type": "object",
+      "description": "Media asset stored in Google Cloud Storage",
+      "properties": {
+        "type": { "type": "string", "enum": ["script", "voice", "video", "thumbnail"] },
+        "storagePath": { "type": "string" },
+        "mimeType": { "type": "string" },
+        "size": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "metadata": { "type": "object" }
+      },
+      "required": ["type", "storagePath"]
+    },
     "Signal": {
       "title": "Viral Signal",
       "type": "object",
@@ -132,6 +146,14 @@
         }
       },
       {
+        "path": "/workspaces/{wsId}/assets/{assetId}",
+        "definition": {
+          "entityName": "Asset",
+          "schema": { "$ref": "#/backend/entities/Asset" },
+          "description": "Metadata for GCS stored assets"
+        }
+      },
+      {
         "path": "/workspaces/{wsId}/signals/{signalId}",
         "definition": {
           "entityName": "Signal",
@@ -153,13 +175,6 @@
           "entityName": "CommentTask",
           "schema": { "$ref": "#/backend/entities/CommentTask" },
           "description": "Comment engagement moderation queue"
-        }
-      },
-      {
-        "path": "/workspaces/{wsId}/apiKeyRefs/{keyId}",
-        "definition": {
-          "schema": "object",
-          "description": "Metadata-only secret references"
         }
       }
     ]
