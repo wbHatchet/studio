@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -120,7 +121,7 @@ export default function VoiceProductionPage() {
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                      Engineer Script (script → voice.mp3)
+                      Engineer Script (script &rarr; voice.mp3)
                     </Button>
                   </CardContent>
                 </Card>
@@ -187,7 +188,7 @@ export default function VoiceProductionPage() {
                   <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
                     <Sparkles className="w-12 h-12 mb-4 text-muted-foreground" />
                     <p className="text-lg font-medium">Factory Workflow: IDLE</p>
-                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">Input a topic to start the <b>script → voice.mp3</b> transformation.</p>
+                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">Input a topic to start the <b>script &rarr; voice.mp3</b> transformation.</p>
                   </div>
                 )}
 

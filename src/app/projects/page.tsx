@@ -171,7 +171,7 @@ export default function ProjectsPage() {
                   <DialogHeader>
                     <DialogTitle className="font-headline uppercase tracking-tighter text-2xl">n8n Workflow Ingestion</DialogTitle>
                     <DialogDescription>
-                      Upload a CSV/JSON to trigger the Suno -> FFmpeg visualizer pipeline via n8n.
+                      Upload a CSV/JSON to trigger the Suno &rarr; FFmpeg visualizer pipeline via n8n.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
