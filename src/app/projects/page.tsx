@@ -27,7 +27,8 @@ import {
   Mic2,
   HardDrive,
   Send,
-  Youtube
+  Youtube,
+  Scissors
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -92,10 +93,12 @@ const initialProjects = [
 ];
 
 const cloudAssets = [
-  { name: "assets/scripts/", icon: FileText, count: 1240, color: "text-blue-400" },
-  { name: "assets/voices/", icon: Mic2, count: 1240, color: "text-purple-400" },
-  { name: "assets/videos/", icon: Video, count: 850, color: "text-red-400" },
-  { name: "assets/thumbnails/", icon: Sparkles, count: 3200, color: "text-amber-400" },
+  { name: "scripts/", icon: FileText, count: 1240, color: "text-blue-400" },
+  { name: "voice/", icon: Mic2, count: 1240, color: "text-purple-400" },
+  { name: "clips/", icon: Scissors, count: 4500, color: "text-orange-400" },
+  { name: "thumbnails/", icon: Sparkles, count: 3200, color: "text-amber-400" },
+  { name: "videos/", icon: Video, count: 850, color: "text-red-400" },
+  { name: "music/", icon: Music, count: 980, color: "text-green-400" },
 ];
 
 export default function ProjectsPage() {
@@ -252,16 +255,16 @@ export default function ProjectsPage() {
               </TabsContent>
 
               <TabsContent value="storage" className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
                   {cloudAssets.map((folder) => (
                     <Card key={folder.name} className="bg-card border-border/50 group hover:border-primary/30 transition-all cursor-pointer shadow-sm">
-                      <CardHeader className="pb-2">
-                        <folder.icon className={`w-8 h-8 ${folder.color} mb-3 group-hover:scale-110 transition-transform`} />
-                        <CardTitle className="text-xs font-headline uppercase tracking-widest">{folder.name}</CardTitle>
-                        <CardDescription className="text-[9px] font-mono uppercase font-bold text-muted-foreground mt-1">{folder.count} objects active</CardDescription>
+                      <CardHeader className="p-4 pb-2">
+                        <folder.icon className={`w-6 h-6 ${folder.color} mb-2 group-hover:scale-110 transition-transform`} />
+                        <CardTitle className="text-[10px] font-headline uppercase tracking-widest">{folder.name}</CardTitle>
+                        <CardDescription className="text-[8px] font-mono uppercase font-bold text-muted-foreground mt-0.5">{folder.count} objects</CardDescription>
                       </CardHeader>
-                      <CardContent>
-                        <div className="h-1 w-full bg-secondary/50 rounded-full overflow-hidden">
+                      <CardContent className="p-4 pt-0">
+                        <div className="h-0.5 w-full bg-secondary/50 rounded-full overflow-hidden">
                           <div className="h-full bg-primary/40 w-full animate-pulse" />
                         </div>
                       </CardContent>
@@ -273,11 +276,11 @@ export default function ProjectsPage() {
                   <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 pb-4">
                     <div>
                       <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2">
-                        <HardDrive className="w-4 h-4 text-primary" /> Cloud Storage Factory Log
+                        <HardDrive className="w-4 h-4 text-primary" /> video-assets-factory
                       </CardTitle>
-                      <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Live grid activity: assets/*</CardDescription>
+                      <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Live grid activity (Python Workers)</CardDescription>
                     </div>
-                    <Badge variant="outline" className="font-mono text-[9px] text-green-500 border-green-500/20 bg-green-500/5 px-3 py-1 uppercase tracking-tighter">BUCKET_SYNC: OK</Badge>
+                    <Badge variant="outline" className="font-mono text-[9px] text-green-500 border-green-500/20 bg-green-500/5 px-3 py-1 uppercase tracking-tighter">GCS_BUCKET: READY</Badge>
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="overflow-hidden font-mono text-[11px]">
@@ -287,12 +290,13 @@ export default function ProjectsPage() {
                       </div>
                       <div className="divide-y divide-border/50 max-h-[400px] overflow-y-auto custom-scrollbar">
                         {[
-                          { path: "assets/videos/batch_12_short_001.mp4", size: "4.2 MB", status: "Rendered" },
-                          { path: "assets/voices/elevenlabs_voice_42.mp3", size: "1.1 MB", status: "Synthesized" },
-                          { path: "assets/thumbnails/short_thumb_v1.jpg", size: "450 KB", status: "Generated" },
-                          { path: "assets/scripts/viral_topic_09.json", size: "12 KB", status: "Archived" },
-                          { path: "assets/videos/batch_12_short_002.mp4", size: "3.8 MB", status: "Queue" },
-                          { path: "assets/videos/batch_12_short_003.mp4", size: "4.1 MB", status: "Queue" }
+                          { path: "videos/video1.mp4", size: "4.2 MB", status: "Rendered" },
+                          { path: "voice/voice_42.mp3", size: "1.1 MB", status: "Synthesized" },
+                          { path: "thumbnails/short_thumb_v1.jpg", size: "450 KB", status: "Generated" },
+                          { path: "scripts/script_09.json", size: "12 KB", status: "Archived" },
+                          { path: "music/lofi_loop_82bpm.mp3", size: "2.8 MB", status: "Curated" },
+                          { path: "clips/urban_rain_3s.mp4", size: "1.2 MB", status: "Mined" },
+                          { path: "videos/video2.mp4", size: "3.8 MB", status: "Queue" }
                         ].map((file, i) => (
                           <div key={i} className="p-4 flex items-center justify-between hover:bg-primary/5 transition-colors group">
                             <div className="flex items-center gap-3">

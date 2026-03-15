@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Key, Shield, Globe, Music, Info, Github, ExternalLink, Cpu, Zap, Share2, Video } from "lucide-react";
+import { Music, Info, Cpu, Zap, Video, HardDrive } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 export default function SettingsPage() {
   const { toast } = useToast();
   const [sunoEndpoint, setSunoEndpoint] = useState("");
+  const [gcsBucket, setGcsBucket] = useState("video-assets-factory");
 
   useEffect(() => {
     setSunoEndpoint(localStorage.getItem("suno_api_endpoint") || "");
@@ -25,7 +27,7 @@ export default function SettingsPage() {
     localStorage.setItem("suno_api_endpoint", sunoEndpoint);
     toast({
       title: "Settings Saved",
-      description: "Hidden Stack configuration updated.",
+      description: "Ultra-Scale Factory configuration updated.",
     });
   };
 
@@ -42,9 +44,10 @@ export default function SettingsPage() {
 
           <main className="p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-6">
-              <Tabs defaultValue="media" className="space-y-6">
+              <Tabs defaultValue="storage" className="space-y-6">
                 <TabsList className="bg-secondary/50 p-1">
                   <TabsTrigger value="core" className="gap-2"><Cpu className="w-4 h-4" /> Core Brain</TabsTrigger>
+                  <TabsTrigger value="storage" className="gap-2"><HardDrive className="w-4 h-4" /> Asset Storage</TabsTrigger>
                   <TabsTrigger value="media" className="gap-2"><Video className="w-4 h-4" /> Media Engine</TabsTrigger>
                   <TabsTrigger value="growth" className="gap-2"><Zap className="w-4 h-4" /> Growth Stack</TabsTrigger>
                   <TabsTrigger value="unofficial" className="gap-2"><Music className="w-4 h-4" /> Suno (OSS)</TabsTrigger>
@@ -64,6 +67,35 @@ export default function SettingsPage() {
                       <div className="space-y-2">
                         <Label>Anthropic (Claude) Key</Label>
                         <Input type="password" placeholder="sk-ant-..." className="bg-secondary/30" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="storage" className="space-y-6">
+                  <Card className="bg-card">
+                    <CardHeader>
+                      <CardTitle className="font-headline">GCS Asset Factory</CardTitle>
+                      <CardDescription>Google Cloud Storage Bucket configuration</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>Primary Bucket Name</Label>
+                        <Input 
+                          value={gcsBucket} 
+                          onChange={(e) => setGcsBucket(e.target.value)} 
+                          className="bg-secondary/30 font-mono" 
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-secondary/20 border border-border">
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Upload Method</p>
+                          <p className="text-xs font-mono">blob.upload_from_filename</p>
+                        </div>
+                        <div className="p-4 rounded-xl bg-secondary/20 border border-border">
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Structure Integrity</p>
+                          <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/20 text-[10px]">VERIFIED</Badge>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -91,10 +123,6 @@ export default function SettingsPage() {
                         <Label>Stability AI Key (Thumbs)</Label>
                         <Input type="password" placeholder="Key..." className="bg-secondary/30" />
                       </div>
-                      <div className="space-y-2">
-                        <Label>Pika Labs API</Label>
-                        <Input type="password" placeholder="Coming soon..." className="bg-secondary/30" disabled />
-                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -113,14 +141,6 @@ export default function SettingsPage() {
                       <div className="space-y-2">
                         <Label>Repurpose.io API</Label>
                         <Input type="password" placeholder="Key..." className="bg-secondary/30" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>YouTube Data API v3</Label>
-                        <Input type="password" placeholder="OAuth Client Secret..." className="bg-secondary/30" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>TubeBuddy License</Label>
-                        <Input type="text" placeholder="License Code..." className="bg-secondary/30" />
                       </div>
                     </CardContent>
                   </Card>
@@ -155,7 +175,7 @@ export default function SettingsPage() {
 
               <div className="flex justify-end">
                 <Button onClick={handleSave} className="bg-primary text-primary-foreground font-bold px-8">
-                  Deploy Hidden Stack Config
+                  Deploy Ultra-Scale Config
                 </Button>
               </div>
             </div>

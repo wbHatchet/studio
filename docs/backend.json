@@ -37,7 +37,7 @@
     "Job": {
       "title": "Job",
       "type": "object",
-      "description": "Queue item for AI workers",
+      "description": "Queue item for AI workers (rendering, script gen, etc.)",
       "properties": {
         "type": { "type": "string" },
         "status": { "type": "string", "enum": ["queued", "leased", "running", "succeeded", "failed", "canceled"] },
@@ -58,10 +58,11 @@
     "Asset": {
       "title": "Asset",
       "type": "object",
-      "description": "Media asset stored in Google Cloud Storage",
+      "description": "Media asset stored in GCS video-assets-factory bucket",
       "properties": {
-        "type": { "type": "string", "enum": ["script", "voice", "video", "thumbnail"] },
-        "storagePath": { "type": "string", "description": "The GCS path e.g. assets/videos/short.mp4" },
+        "type": { "type": "string", "enum": ["scripts", "voice", "clips", "thumbnails", "videos", "music"] },
+        "storagePath": { "type": "string", "description": "The GCS path e.g. videos/video1.mp4" },
+        "bucket": { "type": "string", "default": "video-assets-factory" },
         "mimeType": { "type": "string" },
         "size": { "type": "number" },
         "createdAt": { "type": "string", "format": "date-time" },
@@ -117,7 +118,7 @@
         "definition": {
           "entityName": "Asset",
           "schema": { "$ref": "#/backend/entities/Asset" },
-          "description": "Metadata for assets stored in GCS assets/ folder"
+          "description": "Metadata for assets stored in video-assets-factory GCS bucket"
         }
       },
       {

@@ -12,17 +12,14 @@ import {
   XCircle, 
   Play, 
   Pause, 
-  SkipForward, 
   Volume2,
   Youtube,
-  Info,
-  ExternalLink,
   Edit3,
-  Calendar,
   Zap,
   Clock,
   Send,
-  Loader2
+  Loader2,
+  HardDrive
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
@@ -37,11 +34,12 @@ export default function ReviewPage() {
     setIsPublishing(true);
     // Simulate YouTube API insert logic: 
     // youtube.videos().insert({ part: "snippet,status", media_body: "video.mp4" })
+    // and GCS upload: blob.upload_from_filename("video1.mp4")
     setTimeout(() => {
       setIsPublishing(false);
       toast({
-        title: "YouTube API: Success",
-        description: "Video scheduled in the 10-20/day factory slot.",
+        title: "Factory Pipeline: Published",
+        description: "Asset uploaded to video-assets-factory/videos and scheduled on YouTube.",
       });
     }, 2000);
   };
@@ -80,7 +78,7 @@ export default function ReviewPage() {
                     <div className="flex items-center justify-between text-white">
                       <div className="flex items-center gap-4">
                         <Volume2 className="w-4 h-4 opacity-70" />
-                        <span className="text-[10px] font-mono tracking-widest uppercase text-primary">BUFFERING_NODE_04</span>
+                        <span className="text-[10px] font-mono tracking-widest uppercase text-primary">video-assets-factory/videos/video1.mp4</span>
                       </div>
                       <span className="text-[10px] font-mono">00:15 / 00:30 (Shorts Optimized)</span>
                     </div>
@@ -117,20 +115,20 @@ export default function ReviewPage() {
                       <TabsContent value="factory" className="m-0 space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Production Cost</Label>
-                            <p className="text-sm font-bold font-mono">$0.12 (AI Credits)</p>
+                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">GCS Path</Label>
+                            <p className="text-[11px] font-bold font-mono">videos/video1.mp4</p>
                           </div>
                           <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Render Time</Label>
-                            <p className="text-sm font-bold font-mono">14s (Distributed Node)</p>
+                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Render Node</Label>
+                            <p className="text-[11px] font-bold font-mono">GCP_COMPUTE_NODE_42</p>
                           </div>
                           <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
                             <Label className="text-[9px] uppercase font-bold text-muted-foreground">AI Strategy</Label>
                             <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] uppercase">Retention_Focused</Badge>
                           </div>
                           <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Slot Priority</Label>
-                            <p className="text-sm font-bold font-mono">HIGH (P0)</p>
+                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Blob Method</Label>
+                            <p className="text-[11px] font-bold font-mono">upload_from_filename</p>
                           </div>
                         </div>
                       </TabsContent>
@@ -156,15 +154,15 @@ export default function ReviewPage() {
                       <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                       <div>
                         <p className="text-[10px] font-bold uppercase text-green-500">Quality Check: PASS</p>
-                        <p className="text-[10px] text-muted-foreground">Shorts aspect ratio (9:16) and AVD hooks verified.</p>
+                        <p className="text-[10px] text-muted-foreground">Shorts aspect ratio (9:16) and GCS parity verified.</p>
                       </div>
                     </div>
                     
                     <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-3">
-                      <Clock className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                      <HardDrive className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-[10px] font-bold uppercase text-blue-500">Scheduled Slot</p>
-                        <p className="text-[10px] text-muted-foreground">Tomorrow at 14:00 (Global Peak Time)</p>
+                        <p className="text-[10px] font-bold uppercase text-blue-500">video-assets-factory</p>
+                        <p className="text-[10px] text-muted-foreground">Destination bucket mapped for Python workers.</p>
                       </div>
                     </div>
                   </CardContent>
@@ -207,7 +205,7 @@ export default function ReviewPage() {
                     <div className="flex items-center justify-between p-2 rounded-lg bg-secondary/30">
                       <div className="flex items-center gap-2">
                         <Zap className="w-3 h-3 text-primary" />
-                        <span className="text-[10px] font-bold">Repurpose.io Sync</span>
+                        <span className="text-[10px] font-bold">GCS_BLOB_SYNC</span>
                       </div>
                       <Badge variant="outline" className="text-[8px] bg-blue-500/10 text-blue-400 border-blue-500/20">ACTIVE</Badge>
                     </div>
