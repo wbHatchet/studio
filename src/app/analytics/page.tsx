@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold font-headline">14.2%</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">Goal: &lt;20%</p>
+                  <p className="text-[10px] text-muted-foreground mt-1">Goal: <20%</p>
                 </CardContent>
               </Card>
             </div>
