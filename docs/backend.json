@@ -1,110 +1,1566 @@
-
 {
   "entities": {
-    "User": {
-      "title": "User",
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
       "type": "object",
-      "description": "Global user profile",
+      "description": "Represents a user of the AI Lo-Fi Channel Factory application, managing their projects and content.",
       "properties": {
-        "id": { "type": "string" },
-        "email": { "type": "string", "format": "email" },
-        "displayName": { "type": "string" },
-        "avatarUrl": { "type": "string" }
-      },
-      "required": ["id", "email"]
-    },
-    "Workspace": {
-      "title": "Workspace",
-      "type": "object",
-      "description": "Multi-tenant container for production teams",
-      "properties": {
-        "name": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["name", "ownerId"]
-    },
-    "Job": {
-      "title": "Job",
-      "type": "object",
-      "description": "Production Packet for AI workers (rendering, script gen, etc.)",
-      "properties": {
-        "type": { "type": "string" },
-        "status": { "type": "string", "enum": ["queued", "generating", "rendered", "published", "failed", "canceled"] },
-        "pipelineStage": { "type": "string", "enum": ["idea", "script", "voice", "render", "upload", "published"] },
-        "priority": { "type": "number" },
-        "workerNodeId": { "type": "string" },
-        "channelId": { "type": "string" },
-        "renderConfig": {
-          "type": "object",
-          "properties": {
-            "audio_path": { "type": "string" },
-            "image_path": { "type": "string" },
-            "filter_graph": { "type": "string" }
-          }
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
         },
-        "metadata": {
-          "type": "object",
-          "properties": {
-            "title": { "type": "string" },
-            "prompt": { "type": "string" },
-            "niche": { "type": "string" }
-          }
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was created.",
+          "format": "date-time"
         }
       },
-      "required": ["type", "status"]
+      "required": [
+        "id",
+        "email",
+        "name",
+        "createdAt"
+      ]
+    },
+    "Project": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Project",
+      "type": "object",
+      "description": "Organizes multiple Lo-Fi channel initiatives and their associated content, acting as a high-level container for a creator's work.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Project entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the project."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the project's goals and scope."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to the UserProfile who owns this project. (Relationship: UserProfile 1:N Project)"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the project (e.g., 'active', 'archived', 'on-hold')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the project was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the project was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "ownerId",
+        "status",
+        "createdAt"
+      ]
     },
     "Channel": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Channel",
       "type": "object",
-      "description": "YouTube/TikTok channel managed by the grid",
+      "description": "Represents a single YouTube channel managed by the application, used for publishing Lo-Fi content.",
       "properties": {
-        "name": { "type": "string" },
-        "niche": { "type": "string" },
-        "subscribers": { "type": "number" },
-        "views30d": { "type": "number" },
-        "status": { "type": "string" },
-        "health": { "type": "number" }
-      }
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Channel entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this channel belongs to. (Relationship: Project 1:N Channel)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the YouTube channel."
+        },
+        "youtubeChannelId": {
+          "type": "string",
+          "description": "The unique ID assigned by YouTube for this channel."
+        },
+        "niche": {
+          "type": "string",
+          "description": "The specific micro-niche or theme of the channel (e.g., 'Rainy Coffee Shop Lo-Fi')."
+        },
+        "subscribers": {
+          "type": "number",
+          "description": "The current number of subscribers for the channel.",
+          "format": "integer"
+        },
+        "dailyUploadLimit": {
+          "type": "number",
+          "description": "The maximum number of videos allowed to be uploaded to this channel per day.",
+          "format": "integer"
+        },
+        "status": {
+          "type": "string",
+          "description": "The operational status of the channel within the app (e.g., 'active', 'suspended', 'under review')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the channel record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the channel record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "name",
+        "youtubeChannelId",
+        "niche",
+        "subscribers",
+        "dailyUploadLimit",
+        "status",
+        "createdAt"
+      ]
+    },
+    "NicheStrategy": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "NicheStrategy",
+      "type": "object",
+      "description": "Stores insights and recommendations generated by the AI-Driven Micro-Niche Strategy Tool.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the NicheStrategy entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "A descriptive name for the niche strategy."
+        },
+        "strategyDetails": {
+          "type": "string",
+          "description": "A detailed report or summary of the AI's analysis and strategic recommendations."
+        },
+        "identifiedKeywords": {
+          "type": "array",
+          "description": "A list of high-potential keywords identified for this niche.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suggestedArtists": {
+          "type": "array",
+          "description": "A list of artists or styles suggested by the AI for this niche.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "channelIds": {
+          "type": "array",
+          "description": "References to channels that are (or will be) utilizing this niche strategy. (Relationship: NicheStrategy N:N Channel)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the niche strategy was generated.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the niche strategy was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "strategyDetails",
+        "identifiedKeywords",
+        "createdAt"
+      ]
+    },
+    "Script": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Script",
+      "type": "object",
+      "description": "Stores AI-generated textual content, such as narration or thematic descriptions, intended for video production.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Script entity."
+        },
+        "topic": {
+          "type": "string",
+          "description": "The main topic or theme of the script."
+        },
+        "scriptText": {
+          "type": "string",
+          "description": "The full text of the AI-generated script."
+        },
+        "hook": {
+          "type": "string",
+          "description": "An engaging opening line or phrase from the script, often used for video titles or descriptions."
+        },
+        "lengthSeconds": {
+          "type": "number",
+          "description": "The estimated or actual length of the script in seconds, useful for audio generation.",
+          "format": "integer"
+        },
+        "nicheStrategyId": {
+          "type": "string",
+          "description": "Reference to the NicheStrategy that inspired or guided the creation of this script. (Relationship: NicheStrategy 1:N Script)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the script was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "topic",
+        "scriptText",
+        "lengthSeconds",
+        "createdAt"
+      ]
+    },
+    "Asset": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Asset",
+      "type": "object",
+      "description": "Represents a digital media asset (e.g., audio, image, video clip) stored in cloud storage, used in content creation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Asset entity."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of media asset.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fileUrl": {
+          "type": "string",
+          "description": "The URL or path to the asset file in cloud storage.",
+          "format": "uri"
+        },
+        "durationSeconds": {
+          "type": "number",
+          "description": "The duration of the asset in seconds, if applicable (e.g., for audio/video).",
+          "format": "integer"
+        },
+        "metadata": {
+          "type": "string",
+          "description": "Additional unstructured metadata specific to the asset type (e.g., BPM, key for music; resolution for images)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the asset record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "fileUrl",
+        "createdAt"
+      ]
+    },
+    "MusicPrompt": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MusicPrompt",
+      "type": "object",
+      "description": "Stores AI-generated prompts specifically crafted for AI music generation tools.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the MusicPrompt entity."
+        },
+        "promptText": {
+          "type": "string",
+          "description": "The detailed prompt text sent to an AI music generator."
+        },
+        "niche": {
+          "type": "string",
+          "description": "The musical niche or genre targeted by this prompt."
+        },
+        "artistStyle": {
+          "type": "string",
+          "description": "Specific artist or musical style suggested in the prompt."
+        },
+        "generatedAssetIds": {
+          "type": "array",
+          "description": "References to the music assets generated using this prompt. (Relationship: MusicPrompt 1:N Asset)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the music prompt was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "promptText",
+        "niche",
+        "createdAt"
+      ]
+    },
+    "VisualPrompt": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "VisualPrompt",
+      "type": "object",
+      "description": "Stores AI-generated prompts specifically crafted for AI image and animation tools.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the VisualPrompt entity."
+        },
+        "promptText": {
+          "type": "string",
+          "description": "The detailed prompt text sent to an AI image or animation generator."
+        },
+        "niche": {
+          "type": "string",
+          "description": "The visual niche or theme targeted by this prompt."
+        },
+        "artStyle": {
+          "type": "string",
+          "description": "Specific art style or aesthetic requested in the prompt."
+        },
+        "generatedAssetIds": {
+          "type": "array",
+          "description": "References to the visual assets generated using this prompt. (Relationship: VisualPrompt 1:N Asset)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the visual prompt was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "promptText",
+        "niche",
+        "createdAt"
+      ]
+    },
+    "Video": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Video",
+      "type": "object",
+      "description": "The core entity representing a single Lo-Fi video produced by the factory, encompassing all its components and metadata.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Video entity."
+        },
+        "channelId": {
+          "type": "string",
+          "description": "Reference to the Channel where this video is intended to be published. (Relationship: Channel 1:N Video)"
+        },
+        "scriptId": {
+          "type": "string",
+          "description": "Reference to the Script used for this video. (Relationship: Script 1:N Video)"
+        },
+        "voiceAssetId": {
+          "type": "string",
+          "description": "Reference to the voice Asset used for narration in this video. (Relationship: Asset 1:N Video)"
+        },
+        "musicAssetIds": {
+          "type": "array",
+          "description": "References to the music Assets used in this video. (Relationship: Asset N:N Video)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "visualAssetIds": {
+          "type": "array",
+          "description": "References to the visual Assets (images, animations) used in this video. (Relationship: Asset N:N Video)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "thumbnailAssetId": {
+          "type": "string",
+          "description": "Reference to the thumbnail Asset for this video. (Relationship: Asset 1:N Video)"
+        },
+        "finalVideoAssetId": {
+          "type": "string",
+          "description": "Reference to the final rendered video Asset file. (Relationship: Asset 1:N Video)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The AI-generated or user-defined title for the YouTube video."
+        },
+        "description": {
+          "type": "string",
+          "description": "The AI-generated or user-defined detailed description for the YouTube video, including SEO and monetization info."
+        },
+        "tags": {
+          "type": "array",
+          "description": "A list of SEO-optimized tags for the YouTube video.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hashtags": {
+          "type": "array",
+          "description": "A list of hashtags for the YouTube video description.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "The internal production status of the video (e.g., 'draft', 'rendering', 'published')."
+        },
+        "reviewStatus": {
+          "type": "string",
+          "description": "The current review status by a user (e.g., 'pending', 'approved', 'rejected', 'revision_requested')."
+        },
+        "reviewerComment": {
+          "type": "string",
+          "description": "Optional comments from the reviewer regarding the video content."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the video record was created.",
+          "format": "date-time"
+        },
+        "publishedAt": {
+          "type": "string",
+          "description": "Timestamp when the video was successfully published to YouTube.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "channelId",
+        "scriptId",
+        "title",
+        "description",
+        "status",
+        "reviewStatus",
+        "createdAt"
+      ]
+    },
+    "Playlist": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Playlist",
+      "type": "object",
+      "description": "Defines the specific arrangement and sequence of music assets to form a continuous audio experience for a video.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Playlist entity."
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to the Video this playlist is associated with. (Relationship: Video 1:N Playlist)"
+        },
+        "orderedMusicAssetIds": {
+          "type": "array",
+          "description": "An ordered list of music Asset IDs constituting the playlist. (Relationship: Asset N:N Playlist)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description or theme of the playlist."
+        },
+        "durationSeconds": {
+          "type": "number",
+          "description": "The total duration of the playlist in seconds.",
+          "format": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the playlist was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "videoId",
+        "orderedMusicAssetIds",
+        "durationSeconds",
+        "createdAt"
+      ]
+    },
+    "RenderJob": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "RenderJob",
+      "type": "object",
+      "description": "Tracks the status and progress of a video rendering job within the automated production pipeline.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the RenderJob entity."
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to the Video being rendered. (Relationship: Video 1:N RenderJob)"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the rendering job.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "workerId": {
+          "type": "string",
+          "description": "Identifier of the worker instance processing this job."
+        },
+        "logDetails": {
+          "type": "string",
+          "description": "Details from the rendering process, including errors or progress messages."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the render job was created.",
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": "string",
+          "description": "Timestamp when the rendering started.",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "Timestamp when the rendering completed (or failed).",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "videoId",
+        "status",
+        "createdAt"
+      ]
+    },
+    "UploadJob": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UploadJob",
+      "type": "object",
+      "description": "Manages the automated uploading and scheduling of a video to a specific YouTube channel.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UploadJob entity."
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to the Video being uploaded. (Relationship: Video 1:N UploadJob)"
+        },
+        "channelId": {
+          "type": "string",
+          "description": "Reference to the Channel where the video will be uploaded. (Relationship: Channel 1:N UploadJob)"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the upload job.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scheduledAt": {
+          "type": "string",
+          "description": "The planned date and time for the video upload.",
+          "format": "date-time"
+        },
+        "uploadedAt": {
+          "type": "string",
+          "description": "Timestamp when the video was successfully uploaded to YouTube.",
+          "format": "date-time"
+        },
+        "youtubeVideoId": {
+          "type": "string",
+          "description": "The unique ID assigned by YouTube to the uploaded video."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the upload job was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "videoId",
+        "channelId",
+        "status",
+        "scheduledAt",
+        "createdAt"
+      ]
+    },
+    "VideoAnalytic": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "VideoAnalytic",
+      "type": "object",
+      "description": "Stores daily performance metrics collected for a specific video from YouTube and other integrated platforms.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the VideoAnalytic entity."
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to the Video these analytics belong to. (Relationship: Video 1:N VideoAnalytic)"
+        },
+        "date": {
+          "type": "string",
+          "description": "The date for which these analytics were recorded (YYYY-MM-DD).",
+          "format": "date"
+        },
+        "views": {
+          "type": "number",
+          "description": "Number of views recorded for the video on this date.",
+          "format": "integer"
+        },
+        "watchTimeMinutes": {
+          "type": "number",
+          "description": "Total watch time in minutes for the video on this date.",
+          "format": "integer"
+        },
+        "likes": {
+          "type": "number",
+          "description": "Number of likes recorded for the video on this date.",
+          "format": "integer"
+        },
+        "comments": {
+          "type": "number",
+          "description": "Number of comments recorded for the video on this date.",
+          "format": "integer"
+        },
+        "clickThroughRate": {
+          "type": "number",
+          "description": "Click-through rate (CTR) for the video on this date, as a decimal (e.g., 0.05 for 5%)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when this analytic record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "videoId",
+        "date",
+        "views",
+        "watchTimeMinutes",
+        "likes",
+        "comments",
+        "clickThroughRate",
+        "createdAt"
+      ]
+    },
+    "ChannelAnalytic": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChannelAnalytic",
+      "type": "object",
+      "description": "Stores daily or periodic aggregate performance metrics for a specific YouTube channel.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ChannelAnalytic entity."
+        },
+        "channelId": {
+          "type": "string",
+          "description": "Reference to the Channel these analytics belong to. (Relationship: Channel 1:N ChannelAnalytic)"
+        },
+        "date": {
+          "type": "string",
+          "description": "The date for which these aggregate analytics were recorded (YYYY-MM-DD).",
+          "format": "date"
+        },
+        "totalViews": {
+          "type": "number",
+          "description": "Cumulative total views for all videos on the channel up to this date.",
+          "format": "integer"
+        },
+        "totalWatchTimeMinutes": {
+          "type": "number",
+          "description": "Cumulative total watch time in minutes for all videos on the channel up to this date.",
+          "format": "integer"
+        },
+        "totalSubscribers": {
+          "type": "number",
+          "description": "Total subscriber count for the channel on this date.",
+          "format": "integer"
+        },
+        "videosUploaded": {
+          "type": "number",
+          "description": "Total number of videos uploaded to the channel up to this date.",
+          "format": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when this analytic record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "channelId",
+        "date",
+        "totalViews",
+        "totalWatchTimeMinutes",
+        "totalSubscribers",
+        "videosUploaded",
+        "createdAt"
+      ]
+    },
+    "BeatListing": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BeatListing",
+      "type": "object",
+      "description": "Details about an AI-generated music beat listed for sale on an external platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the BeatListing entity."
+        },
+        "musicAssetId": {
+          "type": "string",
+          "description": "Reference to the music Asset being listed for sale. (Relationship: Asset 1:N BeatListing)"
+        },
+        "platform": {
+          "type": "string",
+          "description": "The external platform where the beat is listed (e.g., 'BeatStars', 'Gumroad').",
+          "items": {
+            "type": "string"
+          }
+        },
+        "externalUrl": {
+          "type": "string",
+          "description": "The direct URL to the beat listing on the external platform.",
+          "format": "uri"
+        },
+        "priceUsd": {
+          "type": "number",
+          "description": "The base price of the beat in USD."
+        },
+        "licensingOptions": {
+          "type": "array",
+          "description": "A list of available licensing options for the beat (e.g., 'standard', 'premium', 'exclusive').",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the beat listing (e.g., 'listed', 'draft', 'delisted')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the beat listing record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the beat listing was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "musicAssetId",
+        "platform",
+        "externalUrl",
+        "priceUsd",
+        "status",
+        "createdAt"
+      ]
+    },
+    "BeatSale": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BeatSale",
+      "type": "object",
+      "description": "Records an individual sale of a music beat, tracking monetization efforts.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the BeatSale entity."
+        },
+        "beatListingId": {
+          "type": "string",
+          "description": "Reference to the BeatListing that was sold. (Relationship: BeatListing 1:N BeatSale)"
+        },
+        "saleDate": {
+          "type": "string",
+          "description": "Timestamp when the beat sale occurred.",
+          "format": "date-time"
+        },
+        "amountUsd": {
+          "type": "number",
+          "description": "The total amount of the sale in USD."
+        },
+        "buyerInfo": {
+          "type": "string",
+          "description": "Anonymized information about the buyer (e.g., country, masked identifier)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when this sale record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "beatListingId",
+        "saleDate",
+        "amountUsd",
+        "createdAt"
+      ]
+    },
+    "ViralClone": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ViralClone",
+      "type": "object",
+      "description": "Tracks instances where the system automatically clones successful content for replication, based on viral patterns.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ViralClone entity."
+        },
+        "originalVideoId": {
+          "type": "string",
+          "description": "Reference to the original viral video that triggered the cloning. (Relationship: Video 1:N ViralClone)"
+        },
+        "newScriptId": {
+          "type": "string",
+          "description": "Reference to the new Script generated for the cloned video. (Relationship: Script 1:N ViralClone)"
+        },
+        "clonedVideoId": {
+          "type": "string",
+          "description": "Reference to the newly created video entity that is a clone. (Relationship: Video 1:N ViralClone)"
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "Timestamp when the cloning operation was initiated.",
+          "format": "date-time"
+        },
+        "ruleTriggered": {
+          "type": "string",
+          "description": "A description of the rule or condition that triggered this viral cloning (e.g., 'views > 500k')."
+        }
+      },
+      "required": [
+        "id",
+        "originalVideoId",
+        "newScriptId",
+        "clonedVideoId",
+        "generatedAt",
+        "ruleTriggered"
+      ]
+    },
+    "AssetEmbedding": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AssetEmbedding",
+      "type": "object",
+      "description": "Stores vector embeddings and associated tags for media assets, enabling semantic search and content recommendations.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AssetEmbedding entity."
+        },
+        "assetId": {
+          "type": "string",
+          "description": "Reference to the Asset for which this embedding was generated. (Relationship: Asset 1:N AssetEmbedding)"
+        },
+        "embeddingVector": {
+          "type": "array",
+          "description": "The numerical vector representation (embedding) of the asset's content.",
+          "items": {
+            "type": "number"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "A list of semantic tags associated with the asset for search purposes.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the embedding was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "assetId",
+        "embeddingVector",
+        "createdAt"
+      ]
+    },
+    "JobQueueItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "JobQueueItem",
+      "type": "object",
+      "description": "Represents an item in the system's asynchronous job queue, coordinating various production tasks.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the JobQueueItem entity."
+        },
+        "jobType": {
+          "type": "string",
+          "description": "The type of task this job represents (e.g., 'script_generation', 'video_rendering', 'youtube_upload').",
+          "items": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "type": "string",
+          "description": "A JSON object containing job-specific data and parameters required for processing."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the job in the queue.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priority": {
+          "type": "number",
+          "description": "An optional priority level for the job, affecting processing order (higher number = higher priority).",
+          "format": "integer"
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "Details of any error encountered if the job failed."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the job was added to the queue.",
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": "string",
+          "description": "Timestamp when the job started processing.",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "Timestamp when the job completed (successfully or failed).",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "jobType",
+        "payload",
+        "status",
+        "createdAt"
+      ]
+    },
+    "StrategyInsight": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "StrategyInsight",
+      "type": "object",
+      "description": "Stores actionable insights and recommendations generated by the AI feedback loop to optimize future content strategy.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the StrategyInsight entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "A concise title summarizing the insight."
+        },
+        "insightText": {
+          "type": "string",
+          "description": "Detailed explanation of the AI-identified content pattern or strategy."
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "Timestamp when this insight was generated.",
+          "format": "date-time"
+        },
+        "nicheAffected": {
+          "type": "string",
+          "description": "The specific content niche or theme that this insight pertains to."
+        },
+        "recommendedActions": {
+          "type": "array",
+          "description": "A list of concrete actions recommended by the AI (e.g., 'create more videos about X', 'target keyword Y').",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceDataSummary": {
+          "type": "string",
+          "description": "A summary or reference to the analytics data that informed this insight."
+        },
+        "isActionable": {
+          "type": "boolean",
+          "description": "Indicates if the insight provides clear, implementable actions."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the strategy insight was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "insightText",
+        "generatedAt",
+        "nicheAffected",
+        "recommendedActions",
+        "isActionable",
+        "createdAt"
+      ]
     }
   },
   "auth": {
-    "providers": ["google"]
+    "providers": [
+      "password",
+      "anonymous"
+    ]
   },
   "firestore": {
     "structure": [
       {
-        "path": "/users/{userId}",
+        "path": "/userProfiles/{userId}",
         "definition": {
-          "entityName": "User",
-          "schema": { "$ref": "#/backend/entities/User" },
-          "description": "User profiles"
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Root collection for all user profiles. Each document is owned by the user whose ID matches the document ID. Access is strictly self-service, meaning users can only read/write their own profile.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user, corresponding to `request.auth.uid`."
+            }
+          ]
         }
       },
       {
-        "path": "/workspaces/{wsId}",
+        "path": "/userProfiles/{userId}/projects/{projectId}",
         "definition": {
-          "entityName": "Workspace",
-          "schema": { "$ref": "#/backend/entities/Workspace" },
-          "description": "Production workspaces"
+          "entityName": "Project",
+          "schema": {
+            "$ref": "#/backend/entities/Project"
+          },
+          "description": "Collection of content projects owned by a specific user. Each document includes denormalized 'ownerId' for authorization independence, ensuring only the authenticated user can manage their projects.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns this project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the project."
+            }
+          ]
         }
       },
       {
-        "path": "/workspaces/{wsId}/channels/{chId}",
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}",
         "definition": {
           "entityName": "Channel",
-          "schema": { "$ref": "#/backend/entities/Channel" },
-          "description": "Managed YouTube channels"
+          "schema": {
+            "$ref": "#/backend/entities/Channel"
+          },
+          "description": "Subcollection for YouTube channels associated with a specific project. Each document includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the channel."
+            }
+          ]
         }
       },
       {
-        "path": "/workspaces/{wsId}/jobs/{jobId}",
+        "path": "/userProfiles/{userId}/projects/{projectId}/nicheStrategies/{nicheStrategyId}",
         "definition": {
-          "entityName": "Job",
-          "schema": { "$ref": "#/backend/entities/Job" },
-          "description": "Production pipeline queue"
+          "entityName": "NicheStrategy",
+          "schema": {
+            "$ref": "#/backend/entities/NicheStrategy"
+          },
+          "description": "Collection of AI-generated niche strategies relevant to a specific project. Includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "nicheStrategyId",
+              "description": "The unique ID of the niche strategy."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/scripts/{scriptId}",
+        "definition": {
+          "entityName": "Script",
+          "schema": {
+            "$ref": "#/backend/entities/Script"
+          },
+          "description": "Collection of AI-generated scripts associated with a specific project. Includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "scriptId",
+              "description": "The unique ID of the script."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/assets/{assetId}",
+        "definition": {
+          "entityName": "Asset",
+          "schema": {
+            "$ref": "#/backend/entities/Asset"
+          },
+          "description": "Collection of media assets (audio, visual, etc.) belonging to a specific project. Includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "assetId",
+              "description": "The unique ID of the asset."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/musicPrompts/{musicPromptId}",
+        "definition": {
+          "entityName": "MusicPrompt",
+          "schema": {
+            "$ref": "#/backend/entities/MusicPrompt"
+          },
+          "description": "Collection of AI-generated music prompts for a specific project. Includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "musicPromptId",
+              "description": "The unique ID of the music prompt."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/visualPrompts/{visualPromptId}",
+        "definition": {
+          "entityName": "VisualPrompt",
+          "schema": {
+            "$ref": "#/backend/entities/VisualPrompt"
+          },
+          "description": "Collection of AI-generated visual prompts for a specific project. Includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "visualPromptId",
+              "description": "The unique ID of the visual prompt."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}",
+        "definition": {
+          "entityName": "Video",
+          "schema": {
+            "$ref": "#/backend/entities/Video"
+          },
+          "description": "Collection of videos belonging to a specific channel within a project. Each document includes denormalized 'ownerId', 'projectId', and 'channelId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "videoId",
+              "description": "The unique ID of the video."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}/playlists/{playlistId}",
+        "definition": {
+          "entityName": "Playlist",
+          "schema": {
+            "$ref": "#/backend/entities/Playlist"
+          },
+          "description": "Subcollection of music playlists created for a specific video. Includes denormalized 'ownerId', 'projectId', 'channelId', and 'videoId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "videoId",
+              "description": "The unique ID of the parent video."
+            },
+            {
+              "name": "playlistId",
+              "description": "The unique ID of the playlist."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}/renderJobs/{renderJobId}",
+        "definition": {
+          "entityName": "RenderJob",
+          "schema": {
+            "$ref": "#/backend/entities/RenderJob"
+          },
+          "description": "Subcollection tracking rendering jobs for a specific video. Includes denormalized 'ownerId', 'projectId', 'channelId', and 'videoId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "videoId",
+              "description": "The unique ID of the parent video."
+            },
+            {
+              "name": "renderJobId",
+              "description": "The unique ID of the render job."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}/uploadJobs/{uploadJobId}",
+        "definition": {
+          "entityName": "UploadJob",
+          "schema": {
+            "$ref": "#/backend/entities/UploadJob"
+          },
+          "description": "Subcollection tracking upload jobs for a specific video. Includes denormalized 'ownerId', 'projectId', 'channelId', and 'videoId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "videoId",
+              "description": "The unique ID of the parent video."
+            },
+            {
+              "name": "uploadJobId",
+              "description": "The unique ID of the upload job."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}/analytics/{analyticId}",
+        "definition": {
+          "entityName": "VideoAnalytic",
+          "schema": {
+            "$ref": "#/backend/entities/VideoAnalytic"
+          },
+          "description": "Subcollection storing daily performance analytics for a specific video. Includes denormalized 'ownerId', 'projectId', 'channelId', and 'videoId' for authorization independence. 'analyticId' could be based on the date for easy retrieval.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "videoId",
+              "description": "The unique ID of the parent video."
+            },
+            {
+              "name": "analyticId",
+              "description": "The unique ID for the analytic record (e.g., date-based)."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/analytics/{analyticId}",
+        "definition": {
+          "entityName": "ChannelAnalytic",
+          "schema": {
+            "$ref": "#/backend/entities/ChannelAnalytic"
+          },
+          "description": "Subcollection storing daily performance analytics for a specific channel. Includes denormalized 'ownerId', 'projectId', and 'channelId' for authorization independence. 'analyticId' could be based on the date.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "analyticId",
+              "description": "The unique ID for the analytic record (e.g., date-based)."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/assets/{assetId}/beatListings/{beatListingId}",
+        "definition": {
+          "entityName": "BeatListing",
+          "schema": {
+            "$ref": "#/backend/entities/BeatListing"
+          },
+          "description": "Subcollection detailing beat listings for a specific music asset. Includes denormalized 'ownerId', 'projectId', and 'assetId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "assetId",
+              "description": "The unique ID of the parent asset."
+            },
+            {
+              "name": "beatListingId",
+              "description": "The unique ID of the beat listing."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/assets/{assetId}/beatListings/{beatListingId}/sales/{saleId}",
+        "definition": {
+          "entityName": "BeatSale",
+          "schema": {
+            "$ref": "#/backend/entities/BeatSale"
+          },
+          "description": "Subcollection recording individual sales for a specific beat listing. Includes denormalized 'ownerId', 'projectId', 'assetId', and 'beatListingId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "assetId",
+              "description": "The unique ID of the parent asset."
+            },
+            {
+              "name": "beatListingId",
+              "description": "The unique ID of the parent beat listing."
+            },
+            {
+              "name": "saleId",
+              "description": "The unique ID of the beat sale record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}/viralClones/{cloneId}",
+        "definition": {
+          "entityName": "ViralClone",
+          "schema": {
+            "$ref": "#/backend/entities/ViralClone"
+          },
+          "description": "Subcollection tracking viral cloning events originating from a specific video. Includes denormalized 'ownerId', 'projectId', 'channelId', and 'videoId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "channelId",
+              "description": "The unique ID of the parent channel."
+            },
+            {
+              "name": "videoId",
+              "description": "The unique ID of the original viral video."
+            },
+            {
+              "name": "cloneId",
+              "description": "The unique ID of the viral clone record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/assets/{assetId}/embeddings/{embeddingId}",
+        "definition": {
+          "entityName": "AssetEmbedding",
+          "schema": {
+            "$ref": "#/backend/entities/AssetEmbedding"
+          },
+          "description": "Subcollection storing vector embeddings for a specific asset, used for semantic search. Includes denormalized 'ownerId', 'projectId', and 'assetId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "assetId",
+              "description": "The unique ID of the parent asset."
+            },
+            {
+              "name": "embeddingId",
+              "description": "The unique ID of the asset embedding."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/strategyInsights/{insightId}",
+        "definition": {
+          "entityName": "StrategyInsight",
+          "schema": {
+            "$ref": "#/backend/entities/StrategyInsight"
+          },
+          "description": "Collection of AI-generated strategy insights for a specific project. Includes denormalized 'ownerId' and 'projectId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique ID of the parent project."
+            },
+            {
+              "name": "insightId",
+              "description": "The unique ID of the strategy insight."
+            }
+          ]
         }
       }
-    ]
+    ],
+    "reasoning": "The recommended Firestore data structure follows a strict hierarchical model, starting from the user profile, then branching into projects, channels, and finally, the content creation workflow elements. This design prioritizes **Authorization Independence** by denormalizing key ownership and parentage information into every document. Specifically, each document at a lower level in the hierarchy (e.g., a Channel, Video, or Asset) will contain denormalized fields like `ownerId` (referencing the UserProfile's ID), `projectId`, `channelId`, `videoId`, `assetId`, and `beatListingId` as appropriate. This eliminates the need for `get()` calls in Firestore security rules, ensuring atomic operations and robust, easily debuggable access control. For example, a `Video` document will explicitly store its `ownerId`, `projectId`, and `channelId`, allowing security rules to instantly verify `request.auth.uid == resource.data.ownerId` without fetching parent documents.\n\n**Structural Segregation** is achieved by placing all user-owned data under a `/userProfiles/{userId}` root. Within this, projects, channels, and their associated content (videos, scripts, assets, jobs, analytics) are further segregated. This ensures that all documents within a given subcollection (e.g., `/channels`) share the same security posture: they are owned by the parent project and ultimately the authenticated user. This prevents mixing data with different access requirements and greatly simplifies security rules.\n\n**Querying for Authorization Purposes (QAPs)** is directly supported by this structure. Because all user-specific data is contained within a `/userProfiles/{userId}/...` path, a user can securely `list` all their projects by querying `/userProfiles/{request.auth.uid}/projects`. Similarly, listing all videos for a specific channel is a simple query on `/userProfiles/{request.auth.uid}/projects/{projectId}/channels/{channelId}/videos`. The denormalized fields allow for efficient server-side filtering and rule validation without exposing unauthorized data, adhering to the 'rules are not filters' principle. The system's internal job queue (`JobQueueItem`) is explicitly noted as an external Redis/PubSub system, aligning with the user's PostgreSQL/Cloud Storage/Redis architecture and avoiding placing transient, high-volume operational data in Firestore."
   }
 }
