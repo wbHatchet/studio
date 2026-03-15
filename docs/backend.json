@@ -60,7 +60,7 @@
     "Asset": {
       "title": "Asset",
       "type": "object",
-      "description": "Media asset stored in GCS video-assets-factory bucket",
+      "description": "Media asset stored in video-assets-factory bucket",
       "properties": {
         "type": { "type": "string", "enum": ["scripts", "voice", "clips", "thumbnails", "videos", "music"] },
         "storagePath": { "type": "string", "description": "The GCS path e.g. videos/video1.mp4" },
@@ -69,7 +69,7 @@
         "size": { "type": "number" },
         "createdAt": { "type": "string", "format": "date-time" },
         "metadata": { "type": "object" },
-        "vectorRef": { "type": "string", "description": "Supabase/Pinecone vector record ID" },
+        "vectorRef": { "type": "string", "description": "Vector record ID" },
         "embedding": { "type": "boolean", "description": "Flag indicating if vector embedding exists" }
       },
       "required": ["type", "storagePath"]
@@ -77,23 +77,41 @@
     "Publication": {
       "title": "Publication",
       "type": "object",
-      "description": "Metadata for YouTube/TikTok distribution",
+      "description": "Metadata for YouTube Data API v3 distribution",
       "properties": {
         "videoId": { "type": "string" },
-        "platform": { "type": "string", "enum": ["youtube", "tiktok", "instagram", "facebook"] },
+        "platform": { "type": "string", "enum": ["youtube", "tiktok", "instagram", "facebook"], "default": "youtube" },
         "status": { "type": "string", "enum": ["draft", "scheduled", "published", "failed"] },
-        "scheduledAt": { "type": "string", "format": "date-time" },
-        "externalUrl": { "type": "string" },
-        "metadata": {
+        "apiContext": {
           "type": "object",
           "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" },
-            "tags": { "type": "array", "items": { "type": "string" } }
+            "part": { "type": "string", "default": "snippet,status" },
+            "body": {
+              "type": "object",
+              "properties": {
+                "snippet": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "description": { "type": "string" },
+                    "tags": { "type": "array", "items": { "type": "string" } }
+                  }
+                },
+                "status": {
+                  "type": "object",
+                  "properties": {
+                    "privacyStatus": { "type": "string", "enum": ["public", "unlisted", "private"], "default": "public" }
+                  }
+                }
+              }
+            },
+            "media_body": { "type": "string", "description": "GCS path to the mp4 file" }
           }
-        }
+        },
+        "scheduledAt": { "type": "string", "format": "date-time" },
+        "externalUrl": { "type": "string" }
       },
-      "required": ["videoId", "platform", "status"]
+      "required": ["videoId", "status"]
     }
   },
   "auth": {
@@ -130,7 +148,7 @@
         "definition": {
           "entityName": "Publication",
           "schema": { "$ref": "#/backend/entities/Publication" },
-          "description": "Automation queue for YouTube/TikTok uploads"
+          "description": "Automation queue for YouTube Data API v3 uploads"
         }
       },
       {
