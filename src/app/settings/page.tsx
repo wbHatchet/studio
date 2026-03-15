@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers } from "lucide-react";
+import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers, Terminal } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,8 @@ export default function SettingsPage() {
       description: "Ultra-Scale Factory configuration updated.",
     });
   };
+
+  const estimatedOutput = nodeCount * 20; // Simulated multiplier
 
   return (
     <SidebarProvider>
@@ -76,19 +78,36 @@ export default function SettingsPage() {
                           <Server className="w-4 h-4" /> FFmpeg Render Cluster (K8s)
                         </Label>
                         <div className="grid gap-6 md:grid-cols-2">
-                          <div className="space-y-2">
-                            <Label>Parallel Render Nodes</Label>
-                            <Input 
-                              type="number" 
-                              value={nodeCount} 
-                              onChange={(e) => setNodeCount(parseInt(e.target.value))}
-                              className="bg-secondary/30" 
-                            />
-                            <p className="text-[10px] text-muted-foreground">Target: 1,000+ videos/day</p>
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label>Parallel Render Nodes</Label>
+                              <Input 
+                                type="number" 
+                                value={nodeCount} 
+                                onChange={(e) => setNodeCount(parseInt(e.target.value))}
+                                className="bg-secondary/30" 
+                              />
+                            </div>
+                            <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-between">
+                              <div>
+                                <p className="text-[10px] font-bold uppercase text-muted-foreground">Est. Daily Output</p>
+                                <p className="text-xl font-headline font-bold text-primary">{estimatedOutput}+ Videos</p>
+                              </div>
+                              <Layers className="w-8 h-8 text-primary/20" />
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <Label>Cluster Region</Label>
-                            <Input value="us-central1" className="bg-secondary/30" readOnly />
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label>Cluster Region</Label>
+                              <Input value="us-central1" className="bg-secondary/30" readOnly />
+                            </div>
+                            <div className="p-4 rounded-xl bg-secondary/30 border border-border flex items-center gap-3">
+                              <Terminal className="w-5 h-5 text-muted-foreground" />
+                              <p className="text-[10px] font-mono leading-relaxed">
+                                sudo apt install ffmpeg<br/>
+                                docker-compose up -d --scale worker={nodeCount}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>

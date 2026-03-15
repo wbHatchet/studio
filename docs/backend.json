@@ -42,6 +42,8 @@
         "type": { "type": "string" },
         "status": { "type": "string", "enum": ["queued", "leased", "running", "succeeded", "failed", "canceled"] },
         "priority": { "type": "number" },
+        "workerNodeId": { "type": "string", "description": "ID of the Docker/K8s container running the job" },
+        "renderCommand": { "type": "string", "default": "ffmpeg -i voice.mp3 -i clips.mp4 -vf subtitles=captions.srt -shortest output.mp4" },
         "runAfter": { "type": "string", "format": "date-time" },
         "inputRefs": { "type": "object" },
         "outputRefs": { "type": "object" },
@@ -129,6 +131,14 @@
           "entityName": "Publication",
           "schema": { "$ref": "#/backend/entities/Publication" },
           "description": "Automation queue for YouTube/TikTok uploads"
+        }
+      },
+      {
+        "path": "/workspaces/{wsId}/jobs/{jobId}",
+        "definition": {
+          "entityName": "Job",
+          "schema": { "$ref": "#/backend/entities/Job" },
+          "description": "Enterprise job queue for FFmpeg/AI workers"
         }
       }
     ]

@@ -35,7 +35,7 @@ export default function DashboardPage() {
     setIsMounted(true);
   }, []);
 
-  const renderCluster = Array.from({ length: 12 }, (_, i) => ({
+  const renderCluster = Array.from({ length: 48 }, (_, i) => ({
     id: i + 1,
     status: Math.random() > 0.1 ? "Running" : "Idle",
     load: Math.floor(Math.random() * 100),
@@ -43,10 +43,10 @@ export default function DashboardPage() {
   }));
 
   const activeJobs = [
-    { id: 1, name: "Drake R&B Batch #12", status: "Distributed Rendering", progress: 88, type: "Long Form" },
-    { id: 2, name: "Viral Hook Variants", status: "Runway Gen-3 Cluster", progress: 42, type: "Shorts" },
-    { id: 3, name: "Network Trend Scan", status: "Vector Search Ingest", progress: 100, type: "Intelligence" },
-    { id: 4, name: "Multi-Platform Sync", status: "Repurpose.io API", progress: 15, type: "Distribution" },
+    { id: 1, name: "Drake R&B Batch #12", status: "FFmpeg Render Grid", progress: 88, type: "Long Form", node: "NODE-42" },
+    { id: 2, name: "Viral Hook Variants", status: "Runway Gen-3 Synthesis", progress: 42, type: "Shorts", node: "NODE-08" },
+    { id: 3, name: "Network Trend Scan", status: "Vector Search Ingest", progress: 100, type: "Intelligence", node: "NODE-15" },
+    { id: 4, name: "Multi-Platform Sync", status: "Repurpose.io API", progress: 15, type: "Distribution", node: "NODE-31" },
   ];
 
   if (!isMounted) return null;
@@ -68,7 +68,7 @@ export default function DashboardPage() {
             <div className="ml-auto flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary/50 border border-border/50">
                 <Network className="w-3 h-3 text-green-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Cluster Node: Active</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">K8s Cluster Node: Active</span>
               </div>
               <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">Enterprise Grid Enabled</Badge>
             </div>
@@ -124,23 +124,27 @@ export default function DashboardPage() {
               <Card className="bg-card border-border/50 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
-                    <Server className="w-4 h-4 text-primary" /> Distributed Render Cluster
+                    <Server className="w-4 h-4 text-primary" /> FFmpeg Distributed Render Cluster
                   </CardTitle>
-                  <CardDescription>Live status of 50 parallel FFmpeg nodes (Docker/K8s)</CardDescription>
+                  <CardDescription>Live status of 50 parallel nodes (Docker/K8s)</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-6 gap-1">
                     {renderCluster.map((node) => (
                       <div 
                         key={node.id} 
-                        className={`aspect-square rounded-md border flex flex-col items-center justify-center gap-1 transition-all ${
+                        className={`aspect-square rounded-sm border flex flex-col items-center justify-center gap-0.5 transition-all ${
                           node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500" : "bg-secondary border-border text-muted-foreground"
                         }`}
                       >
-                        <span className="text-[8px] font-bold">NODE {node.id}</span>
-                        {node.status === "Running" && <span className="text-[6px] uppercase font-mono">{node.load}%</span>}
+                        <span className="text-[6px] font-bold uppercase">N{node.id}</span>
+                        {node.status === "Running" && <span className="text-[5px] uppercase font-mono font-bold">{node.load}%</span>}
                       </div>
                     ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-[10px] uppercase font-bold text-muted-foreground">
+                    <span>Active Clusters: 04</span>
+                    <span className="text-primary">1,000+ vids/day target</span>
                   </div>
                 </CardContent>
               </Card>
@@ -166,7 +170,7 @@ export default function DashboardPage() {
                     <Terminal className="w-5 h-5 text-primary" />
                     Agent Orchestration
                   </CardTitle>
-                  <CardDescription>Enterprise Job Queue (Vector DB Integrated)</CardDescription>
+                  <CardDescription>K8s Job Queue (Vector DB Integrated)</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-4 max-h-[350px] pr-2 custom-scrollbar">
                   {activeJobs.map((job) => (
@@ -176,6 +180,7 @@ export default function DashboardPage() {
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-[10px] h-4 bg-primary/10 text-primary border-primary/20 px-1.5">{job.type}</Badge>
                           <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{job.status}</span>
+                          <span className="text-[10px] font-mono text-primary font-bold">{job.node}</span>
                         </div>
                       </div>
                       <div className="text-right">
@@ -197,12 +202,12 @@ export default function DashboardPage() {
                 <Zap className="w-8 h-8 fill-white/20" />
               </div>
               <div>
-                <p className="font-bold text-lg font-headline tracking-tight">Self-Learning Update: Niche Priority Shift</p>
-                <p className="text-xs opacity-80 italic max-w-lg">"Vintage iPhone Aesthetics" views outperformed R&B by 240%. Auto-retraining 12 cluster nodes for focus on visual-first Lo-Fi production.</p>
+                <p className="font-bold text-lg font-headline tracking-tight">Factory Alert: Grid Capacity Scaled</p>
+                <p className="text-xs opacity-80 italic max-w-lg">"50 parallel FFmpeg nodes active. Current throughput: 1,240 videos/day. Cluster health: 99.8%."</p>
               </div>
             </div>
             <button className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2">
-              <BrainCircuit className="w-4 h-4" /> Review Production Strategy
+              <Server className="w-4 h-4" /> Manage Grid Clusters
             </button>
           </div>
         </SidebarInset>
