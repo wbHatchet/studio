@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -18,7 +17,9 @@ import {
   TrendingUp,
   Zap,
   MessageSquare,
-  Repeat
+  Repeat,
+  Mic2,
+  Share2
 } from "lucide-react";
 
 import {
@@ -41,6 +42,7 @@ const mainNav = [
 ];
 
 const productionNav = [
+  { title: "Voice Architect", icon: Mic2, url: "/production/voice" },
   { title: "Music Curator", icon: Music, url: "/production/music" },
   { title: "Visuals Director", icon: Video, url: "/production/visuals" },
   { title: "SEO Optimizer", icon: Search, url: "/seo" },
@@ -50,6 +52,7 @@ const productionNav = [
 const growthNav = [
   { title: "Viral Signals", icon: TrendingUp, url: "/growth/signals" },
   { title: "Hook & Title Lab", icon: Zap, url: "/growth/lab" },
+  { title: "Repurposing", icon: Share2, url: "/growth/repurpose" },
   { title: "Engagement Bot", icon: MessageSquare, url: "/growth/engagement" },
 ];
 
