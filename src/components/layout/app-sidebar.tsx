@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -7,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, 
   Target, 
-  Music, 
   Video, 
   BarChart3, 
   Settings, 
@@ -20,7 +18,6 @@ import {
   MessageSquare,
   Mic2,
   Share2,
-  Workflow,
   Network
 } from "lucide-react";
 
@@ -80,7 +77,7 @@ export function AppSidebar() {
               Command Grid
             </span>
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-primary">
-              Hyper-Scale v10.0
+              Hyper-Scale v12.0
             </span>
           </div>
         </div>

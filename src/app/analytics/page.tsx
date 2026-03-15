@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, TrendingUp, Target, Sparkles, BrainCircuit, DollarSign, LineChart, RefreshCw, Zap, Rocket, Star, BookOpen, Repeat } from "lucide-react";
+import { Loader2, Target, Sparkles, DollarSign, LineChart, RefreshCw, Rocket, BookOpen, Repeat } from "lucide-react";
 import { aiPerformanceFeedback, AiPerformanceFeedbackOutput } from "@/ai/flows/ai-performance-feedback-flow";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -25,12 +24,12 @@ export default function AnalyticsPage() {
   }, []);
 
   const [formData, setFormData] = useState({
-    channelNiche: "Network-Wide Cash-Cow Stack (104 Channels)",
-    currentContentStrategy: "300 videos/day. Viral replication enabled. Serialized compounding active.",
+    channelNiche: "Enterprise Grid (104 Channels)",
+    currentContentStrategy: "312 videos/day. Viral replication (1M threshold). 30s viral structure.",
     performanceData: [
-      { title: "Did You Know #42", views: 1200000, ctr: 14.2, watchTimeMinutes: 450000, beatSales: 0, publicationDate: "2024-06-01" },
-      { title: "Story Series: Dark History", views: 850000, ctr: 11.5, watchTimeMinutes: 320000, beatSales: 0, publicationDate: "2024-06-02" },
-      { title: "Visual Dopamine #8", views: 420000, ctr: 9.8, watchTimeMinutes: 120000, beatSales: 0, publicationDate: "2024-06-03" },
+      { title: "AI Tools #42", views: 1200000, ctr: 14.2, watchTimeMinutes: 450000, beatSales: 0, publicationDate: "2024-06-01" },
+      { title: "Body Facts Series #12", views: 850000, ctr: 11.5, watchTimeMinutes: 320000, beatSales: 0, publicationDate: "2024-06-02" },
+      { title: "Satisfying Loop #8", views: 420000, ctr: 9.8, watchTimeMinutes: 120000, beatSales: 0, publicationDate: "2024-06-03" },
     ],
     totalViewsThisWeek: 84250000,
     totalBeatSalesThisWeek: 0
@@ -41,7 +40,7 @@ export default function AnalyticsPage() {
     try {
       const output = await aiPerformanceFeedback(formData);
       setResult(output);
-      toast({ title: "Command Insight Generated", description: "Network performance optimized for $100K model." });
+      toast({ title: "Command Insight Generated", description: "Network optimized for $100K model." });
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "Failed to process intelligence data." });
     } finally {
@@ -83,7 +82,7 @@ export default function AnalyticsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold font-headline text-blue-400">114.2%</div>
-                  <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-widest">Format: Knowledge Engine</p>
+                  <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-widest">Target Metric: 90-120%</p>
                 </CardContent>
               </Card>
               <Card className="bg-card border-primary/20 shadow-lg">
@@ -123,15 +122,15 @@ export default function AnalyticsPage() {
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-3 gap-4">
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Knowledge Engine</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">AI Tools</p>
                         <p className="text-lg font-bold font-headline text-primary">84.2M Views</p>
                       </div>
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Story Series</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Body Facts</p>
                         <p className="text-lg font-bold font-headline text-green-500">112.4M Views</p>
                       </div>
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Visual Satisfaction</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Psychology Hacks</p>
                         <p className="text-lg font-bold font-headline text-orange-400">124.8M Views</p>
                       </div>
                     </div>
@@ -190,7 +189,7 @@ export default function AnalyticsPage() {
                       <Progress value={15} className="h-1.5 bg-secondary/50" />
                     </div>
                     <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 italic text-[11px] leading-relaxed text-muted-foreground">
-                      "System retraining complete: Optimizing revenue model for $100K monthly velocity. Viral multiplication engine tracking 12 high-velocity gaps."
+                      "System retraining complete: Optimizing revenue model for $100K monthly velocity. Viral multiplication engine tracking 12 high-velocity gaps across AI Tools and Psychology niches."
                     </div>
                   </CardContent>
                 </Card>

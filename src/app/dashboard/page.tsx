@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,16 +16,13 @@ import {
   Server,
   Network,
   DollarSign,
-  Radio,
   Flame,
   Star,
   Activity,
   Cpu,
-  ShieldCheck,
   Sparkles,
   Repeat,
-  AlertTriangle,
-  Play
+  AlertTriangle
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 
@@ -45,11 +41,11 @@ export default function DashboardPage() {
   }));
 
   const nicheStack = [
-    { name: "Knowledge Hub", status: "15 Channels", growth: "+450%", color: "text-blue-400" },
-    { name: "Story Series", status: "12 Channels", growth: "+310%", color: "text-purple-400" },
-    { name: "Visual Dopamine", status: "20 Channels", growth: "+210%", color: "text-green-400" },
+    { name: "AI Tools", status: "15 Channels", growth: "+450%", color: "text-blue-400" },
+    { name: "Psychology", status: "12 Channels", growth: "+310%", color: "text-purple-400" },
+    { name: "Body Facts", status: "20 Channels", growth: "+210%", color: "text-green-400" },
     { name: "Luxury Life", status: "8 Channels", growth: "+124%", color: "text-amber-400" },
-    { name: "Psychology", status: "10 Channels", growth: "+92%", color: "text-pink-400" }
+    { name: "History Stories", status: "10 Channels", growth: "+92%", color: "text-pink-400" }
   ];
 
   if (!isMounted) return null;
@@ -73,7 +69,7 @@ export default function DashboardPage() {
             <div className="ml-auto flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20">
                 <AlertTriangle className="w-3 h-3 text-red-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest">VIRAL ALERT: NODE-KNOWLEDGE-12</span>
+                <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest">VIRAL ALERT: NODE-PSYCH-12</span>
               </div>
               <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">GRID STATUS: OPTIMIZED</Badge>
             </div>
@@ -91,7 +87,7 @@ export default function DashboardPage() {
               <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
                 <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
                   <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                    <Star className="w-3 h-3" /> Mass-Scale Channel Network Status
+                    <Star className="w-3 h-3" /> 7-Niche Master Stack Status
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -142,7 +138,7 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2 text-primary">
                     <Workflow className="w-5 h-5" />
-                    Network Analytics (Network-Wide)
+                    Network Analytics (200M+ Views)
                   </CardTitle>
                   <CardDescription>Views compounding across 104 active channels</CardDescription>
                 </CardHeader>
@@ -161,9 +157,9 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {[
-                    { node: "NODE-VIRAL-CLONE", status: "Trigger: 1M Views &rarr; Cloning 10 Variants", progress: 100 },
-                    { node: "NODE-APIFY-SCAN", status: "Trend Scraper: Mining 100 Viral Topics", progress: 85 },
-                    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts", progress: 42 },
+                    { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views &rarr; Cloning 10 Variants", progress: 100 },
+                    { node: "NODE-APIFY-SCAN", status: "Scraping Top 7 Niches: Mining 100 Viral Topics", progress: 85 },
+                    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts (30s Formula)", progress: 42 },
                     { node: "NODE-11LABS-VOICE", status: "ElevenLabs: Batch Synthesis (50 Voiceovers)", progress: 100 },
                     { node: "NODE-YT-PUSH", status: "YouTube API: Distributed Bulk Upload", progress: 15 },
                   ].map((job, idx) => (
@@ -188,8 +184,8 @@ export default function DashboardPage() {
                 <Repeat className="w-8 h-8 fill-white/20" />
               </div>
               <div>
-                <p className="font-bold text-lg font-headline tracking-tight">Viral Replication Engine: READY</p>
-                <p className="text-xs opacity-80 italic max-w-lg">"1M View detected on 'Knowledge Engine #42'. Triggering 10 similar variants for autonomous serialized compounding."</p>
+                <p className="font-bold text-lg font-headline tracking-tight">Viral Replication Protocol: READY</p>
+                <p className="text-xs opacity-80 italic max-w-lg">"500K View threshold detected on 'Psychology Hacks #12'. Triggering 10 similar variants for autonomous serialized compounding."</p>
               </div>
             </div>
             <button className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2">
