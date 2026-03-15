@@ -21,7 +21,7 @@ import {
   Zap,
   Layers,
   Cpu,
-  Play
+  Rocket
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 
@@ -59,7 +59,6 @@ export default function DashboardPage() {
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8">
-            {/* Top Stats - Scaled for High Volume */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <StatCard label="Factory Output" value="1,240" icon={Layers} trend="12.5%" trendType="positive" />
               <StatCard label="Monthly Profit" value="$14.2K" icon={LineChart} trend="8.4%" trendType="positive" />
@@ -67,7 +66,6 @@ export default function DashboardPage() {
               <StatCard label="Hook Retention" value="84%" icon={Zap} trend="4%" trendType="positive" />
             </div>
 
-            {/* Blueprint Flow Visualization */}
             <Card className="bg-card border-primary/10 overflow-hidden">
               <CardHeader className="bg-primary/5 py-3">
                 <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
@@ -138,7 +136,6 @@ export default function DashboardPage() {
             </div>
           </main>
           
-          {/* Bottom Alert Bar */}
           <div className="sticky bottom-4 mx-6 p-4 bg-primary text-primary-foreground rounded-2xl shadow-xl flex items-center justify-between animate-in slide-in-from-bottom-8 duration-500">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white/20 rounded-full">
