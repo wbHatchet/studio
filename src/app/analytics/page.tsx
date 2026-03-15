@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Loader2, TrendingUp, Target, Sparkles, BrainCircuit, CheckCircle2, DollarSign, LineChart, RefreshCw, Zap } from "lucide-react";
+import { Loader2, TrendingUp, Target, Sparkles, BrainCircuit, DollarSign, LineChart, RefreshCw, Zap, Rocket } from "lucide-react";
 import { aiPerformanceFeedback, AiPerformanceFeedbackOutput } from "@/ai/flows/ai-performance-feedback-flow";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -26,15 +25,15 @@ export default function AnalyticsPage() {
   }, []);
 
   const [formData, setFormData] = useState({
-    channelNiche: "Old Drake R&B Micro-Niche",
-    currentContentStrategy: "Posting daily 3-minute instrumentals with vintage Drake aesthetics. Focused on 80-90 BPM ranges.",
+    channelNiche: "Multi-Channel Cash-Cow Network",
+    currentContentStrategy: "2 videos/day across 10 channels. Niche stacking in Luxury, Facts, and Mystery.",
     performanceData: [
-      { title: "Midnight Confessions", views: 12000, ctr: 8.5, watchTimeMinutes: 45000, beatSales: 4, publicationDate: "2024-05-10" },
-      { title: "Late Night Drive", views: 8000, ctr: 6.2, watchTimeMinutes: 28000, beatSales: 1, publicationDate: "2024-05-12" },
-      { title: "Filtered Memories", views: 15000, ctr: 9.1, watchTimeMinutes: 52000, beatSales: 7, publicationDate: "2024-05-15" },
+      { title: "Billionaire Habit #1", views: 420000, ctr: 12.5, watchTimeMinutes: 125000, beatSales: 0, publicationDate: "2024-05-10" },
+      { title: "Mystery of the Void", views: 82000, ctr: 8.2, watchTimeMinutes: 28000, beatSales: 0, publicationDate: "2024-05-12" },
+      { title: "Unbelievable Fact", views: 150000, ctr: 9.1, watchTimeMinutes: 52000, beatSales: 0, publicationDate: "2024-05-15" },
     ],
-    totalViewsThisWeek: 35000,
-    totalBeatSalesThisWeek: 12
+    totalViewsThisWeek: 850000,
+    totalBeatSalesThisWeek: 0
   });
 
   async function handleAnalyze() {
@@ -59,7 +58,7 @@ export default function AnalyticsPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl">Self-Learning Analytics Engine</h1>
+            <h1 className="font-headline font-bold text-xl">Cash-Cow Intelligence Hub</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
@@ -67,34 +66,34 @@ export default function AnalyticsPage() {
               <Card className="bg-card border-green-500/20">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
-                    <DollarSign className="w-3 h-3 text-green-500" /> Network Revenue
+                    <DollarSign className="w-3 h-3 text-green-500" /> Est. Net Revenue
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">$92,450.00</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">+14% velocity shift</p>
+                  <div className="text-2xl font-bold font-headline">$42,450.00</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">+24% revenue velocity</p>
                 </CardContent>
               </Card>
               <Card className="bg-card border-blue-500/20">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
-                    <LineChart className="w-3 h-3 text-blue-500" /> Retention Avg
+                    <LineChart className="w-3 h-3 text-blue-500" /> Avg View Duration
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">72.1%</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">AVD target: 100%+</p>
+                  <div className="text-2xl font-bold font-headline">92.4%</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Goal: 85-120%</p>
                 </CardContent>
               </Card>
               <Card className="bg-card">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
-                    <BrainCircuit className="w-3 h-3 text-primary" /> Retraining Status
+                    <BrainCircuit className="w-3 h-3 text-primary" /> Learning Engine
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline text-primary">ACTIVE</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">Shift to Visual Hooks: 92%</p>
+                  <div className="text-2xl font-bold font-headline text-primary">SCALING</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Niche Shift: Facts → Luxury</p>
                 </CardContent>
               </Card>
               <Card className="bg-card">
@@ -104,8 +103,8 @@ export default function AnalyticsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">14.2%</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">Goal: <20%</p>
+                  <div className="text-2xl font-bold font-headline">12.1%</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Target: &lt;20%</p>
                 </CardContent>
               </Card>
             </div>
@@ -116,29 +115,23 @@ export default function AnalyticsPage() {
                   <CardHeader>
                     <CardTitle className="font-headline flex items-center gap-2">
                       <Target className="w-5 h-5 text-primary" />
-                      Studio Metrics Ingestion
+                      Revenue Model Tracking
                     </CardTitle>
-                    <CardDescription>Pulsing data into the self-learning loop</CardDescription>
+                    <CardDescription>Monetization layers across the channel stack</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Network Views (30d)</Label>
-                        <Input 
-                          type="number" 
-                          value={formData.totalViewsThisWeek}
-                          onChange={(e) => setFormData({...formData, totalViewsThisWeek: parseInt(e.target.value)})}
-                          className="bg-secondary/30"
-                        />
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Shorts Ads</p>
+                        <p className="text-lg font-bold font-headline text-primary">$12.4K</p>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Monthly Conversions</Label>
-                        <Input 
-                          type="number" 
-                          value={formData.totalBeatSalesThisWeek}
-                          onChange={(e) => setFormData({...formData, totalBeatSalesThisWeek: parseInt(e.target.value)})}
-                          className="bg-secondary/30"
-                        />
+                      <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Affiliates</p>
+                        <p className="text-lg font-bold font-headline text-green-500">$18.2K</p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Brand Deals</p>
+                        <p className="text-lg font-bold font-headline text-orange-400">$11.8K</p>
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -155,7 +148,7 @@ export default function AnalyticsPage() {
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="animate-spin mr-2" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-                      Trigger Autonomous Strategy Retraining
+                      Re-Retrain Viral Scaling Loop
                     </Button>
                   </CardContent>
                 </Card>
@@ -174,26 +167,26 @@ export default function AnalyticsPage() {
                 <Card className="bg-card border-primary/20">
                   <CardHeader>
                     <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
-                      <BrainCircuit className="w-4 h-4 text-primary" /> Strategic Retraining Loop
+                      <Rocket className="w-4 h-4 text-primary" /> Scaling Roadmap
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-3">
                       <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
-                        <span>Cat Content Focus</span>
-                        <span>92%</span>
+                        <span>Month 3 Target (10 CH)</span>
+                        <span>85%</span>
                       </div>
-                      <Progress value={92} className="h-1.5" />
+                      <Progress value={85} className="h-1.5" />
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
-                        <span>Dog Content Focus</span>
-                        <span>12%</span>
+                        <span>Month 6 Target (20 CH)</span>
+                        <span>42%</span>
                       </div>
-                      <Progress value={12} className="h-1.5" />
+                      <Progress value={42} className="h-1.5" />
                     </div>
                     <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 italic text-xs leading-relaxed text-muted-foreground">
-                      "Self-learning system has detected a high correlation between vintage iPhone filters and 100%+ AVD. Shifting production cluster priority."
+                      "System has detected 'Billionaire Morning Routines' as the primary viral multiplier. Initiating 10 variant renders for node cluster 4."
                     </div>
                   </CardContent>
                 </Card>
@@ -204,7 +197,7 @@ export default function AnalyticsPage() {
                       <CardHeader className="bg-primary/5">
                         <CardTitle className="flex items-center gap-2 text-primary font-headline text-sm">
                           <Sparkles className="w-4 h-4" />
-                          Autonomous Insight Summary
+                          Viral Multiplier Insights
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="pt-6">
@@ -214,7 +207,7 @@ export default function AnalyticsPage() {
 
                     <Card className="bg-card">
                       <CardHeader>
-                        <CardTitle className="text-sm font-headline">Strategy Improvements</CardTitle>
+                        <CardTitle className="text-sm font-headline">Niche Stacking Adjustments</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">

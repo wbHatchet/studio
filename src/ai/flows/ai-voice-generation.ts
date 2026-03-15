@@ -1,8 +1,7 @@
 'use server';
 /**
- * @fileOverview An AI agent that generates scripts and optimizes them for high-retention text-to-speech.
- * Refined for 30-second viral YouTube shorts as per the Ultra-Scale Factory blueprint.
- * Integrated with ElevenLabs for seamless voiceover production.
+ * @fileOverview An AI agent that generates scripts optimized for the "Viral Cash-Cow" formula.
+ * Refined for 30-second viral YouTube shorts with specific retention timing.
  */
 
 import {ai} from '@/ai/genkit';
@@ -11,14 +10,20 @@ import {z} from 'genkit';
 const VoiceGenerationInputSchema = z.object({
   topic: z.string().describe('The main topic or niche of the video.'),
   tone: z.string().describe('The personality of the voice (e.g., Energetic, Narrative, Deep).'),
-  targetDuration: z.number().describe('Desired length in seconds.'),
+  targetDuration: z.number().default(30).describe('Desired length in seconds.'),
 });
 
 const VoiceOutputSchema = z.object({
   script: z.string().describe('The optimized script for ElevenLabs.'),
   retentionTriggers: z.array(z.string()).describe('List of points where visual/audio changes should occur.'),
+  structure: z.object({
+    hook: z.string().describe('0-2s Shock Hook'),
+    setup: z.string().describe('2-10s Story Setup'),
+    payoff: z.string().describe('10-25s Value Delivery'),
+    cliffhanger: z.string().describe('25-30s Cliffhanger/CTA'),
+  }),
   estimatedWordCount: z.number(),
-  characterCount: z.number().describe('Total character count for ElevenLabs quota tracking.'),
+  characterCount: z.number(),
 });
 
 export async function generateVoiceScript(input: z.infer<typeof VoiceGenerationInputSchema>) {
@@ -29,18 +34,19 @@ const prompt = ai.definePrompt({
   name: 'voiceGenerationPrompt',
   input: {schema: VoiceGenerationInputSchema},
   output: {schema: VoiceOutputSchema},
-  prompt: `You are a viral YouTube Shorts scriptwriter specializing in high-velocity, faceless content.
-Your goal is to write a high-retention, {{{targetDuration}}}-second script about: {{{topic}}}
+  prompt: `You are a viral YouTube Shorts scriptwriter specializing in the "Cash-Cow" high-velocity formula.
+Your goal is to write a high-retention, 30-second script about: {{{topic}}}
 Tone: {{{tone}}}
 
-STRICT STRUCTURE:
-1. THE HOOK (0-3s): Must be a scroll-stopping sentence that creates a curiosity gap.
-2. THE PAYOFF (3-{{{targetDuration}}}s): Deliver the story or value quickly with zero fluff.
-3. THE LOOP (Final 2s): A seamless transition or quick CTA that encourages a re-watch or subscribe.
+STRICT VIRAL STRUCTURE (30s Total):
+1. SHOCK HOOK (0-2s): A scroll-stopping sentence that creates an immediate curiosity gap (e.g., "You won't believe this billionaire habit...").
+2. STORY SETUP (2-10s): Rapidly set the stage and promise value. No fluff.
+3. THE PAYOFF (10-25s): Deliver the core value or story arc with high velocity.
+4. CLIFFHANGER/LOOP (25-30s): A transition or quick CTA that encourages a re-watch or subscribe.
 
-Retention Triggers: Provide specific moments (in seconds) where the visual editor should cut to a new clip or add an overlay to prevent swiping.
+Retention Triggers: Provide specific timestamps for visual cuts or overlays to prevent swiping.
 
-Estimated Word Count: A 30s script should be approx 70-85 words. A 60s script should be 140-160 words.`
+Estimated Word Count: A 30s script should be approx 70-85 words.`
 });
 
 const generateVoiceScriptFlow = ai.defineFlow(
@@ -62,11 +68,8 @@ const generateVoiceScriptFlow = ai.defineFlow(
 /**
  * Synthesizes text to speech using ElevenLabs.
  * Optimized for the Free Plan workflow.
- * @param text The script to synthesize.
- * @param voiceId The ID of the voice to use (default: Adam).
  */
 export async function textToSpeech(text: string, voiceId: string = 'pNInz6wQRqcqdc8khIM8') {
-  // Use provided key or environment variable
   const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_2138300d7f185d5d8b40cdbee0c15caa34eec84bdb85f431';
   
   const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
