@@ -23,7 +23,9 @@ import {
   Rocket,
   Search,
   MessageSquare,
-  Repeat
+  Repeat,
+  Target,
+  Share2
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 
