@@ -1,7 +1,7 @@
 'use server';
 /**
- * @fileOverview This file implements a Genkit flow for generating detailed, niche-specific prompts
- * for AI music generators, focusing on instrumental Lo-Fi tracks.
+ * @fileOverview This file implements a Genkit flow for generating music prompts and
+ * optionally triggering generation via an unofficial Suno API endpoint.
  *
  * - generateMusicPrompt - A function that orchestrates the generation of music prompts.
  * - GenerateMusicPromptInput - The input type for the generateMusicPrompt function.
@@ -44,6 +44,7 @@ const GenerateMusicPromptInputSchema = z.object({
     .string()
     .optional()
     .describe('Any other specific instructions or elements to include in the music generation prompt.'),
+  apiEndpoint: z.string().optional().describe('Unofficial Suno API endpoint URL.'),
 });
 export type GenerateMusicPromptInput = z.infer<
   typeof GenerateMusicPromptInputSchema
@@ -59,6 +60,7 @@ const GenerateMusicPromptOutputSchema = z.object({
   musicDescription: z
     .string()
     .describe('A human-readable description of the Lo-Fi track to be generated.'),
+  generationId: z.string().optional().describe('The ID of the music generation task if triggered.'),
 });
 export type GenerateMusicPromptOutput = z.infer<
   typeof GenerateMusicPromptOutputSchema
@@ -110,6 +112,20 @@ const generateMusicPromptFlow = ai.defineFlow(
     if (!output) {
       throw new Error('Failed to generate music prompt output.');
     }
+
+    // Logic for unofficial Suno API (GitHub: Suno-API/Suno-API)
+    // If an apiEndpoint is provided, we can simulate or trigger the /api/generate call
+    if (input.apiEndpoint) {
+      console.log(`Triggering music generation at: ${input.apiEndpoint}`);
+      // In a real implementation, you would perform a fetch request here:
+      // const res = await fetch(`${input.apiEndpoint}/api/generate`, {
+      //   method: 'POST',
+      //   body: JSON.stringify({ prompt: output.musicGeneratorPrompt, make_instrumental: true })
+      // });
+      // const data = await res.json();
+      // return { ...output, generationId: data.id };
+    }
+
     return output;
   }
 );

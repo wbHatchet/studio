@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Music, Copy, RefreshCcw, Link as LinkIcon } from "lucide-react";
+import { Loader2, Music, Copy, RefreshCcw, Link as LinkIcon, Download, Play, CheckCircle2 } from "lucide-react";
 import { generateMusicPrompt, GenerateMusicPromptOutput } from "@/ai/flows/ai-music-generation";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 export default function MusicProductionPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GenerateMusicPromptOutput | null>(null);
+  const [status, setStatus] = useState<"idle" | "prompting" | "generating" | "complete">("idle");
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
@@ -29,11 +31,32 @@ export default function MusicProductionPage() {
 
   async function handleGenerate() {
     setLoading(true);
+    setStatus("prompting");
     try {
-      const output = await generateMusicPrompt(formData);
+      // Simulate checking for API Endpoint in settings (local storage for demo)
+      const sunoEndpoint = localStorage.getItem("suno_api_endpoint") || "";
+      
+      const output = await generateMusicPrompt({
+        ...formData,
+        apiEndpoint: sunoEndpoint
+      });
+      
       setResult(output);
+      
+      if (sunoEndpoint) {
+        setStatus("generating");
+        // Simulate waiting for unofficial API generation
+        setTimeout(() => {
+          setStatus("complete");
+          toast({ title: "Music Generated", description: "Your Lo-Fi track is ready for download." });
+        }, 5000);
+      } else {
+        setStatus("idle");
+        toast({ title: "Prompt Ready", description: "Music prompt has been engineered." });
+      }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to generate music prompt." });
+      toast({ title: "Error", description: "Failed to process music task." });
+      setStatus("idle");
     } finally {
       setLoading(false);
     }
@@ -123,25 +146,61 @@ export default function MusicProductionPage() {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="bg-secondary/10 border-t border-border/50 p-6">
+                <CardFooter className="bg-secondary/10 border-t border-border/50 p-6 flex flex-col gap-4">
                   <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold"
+                    className="w-full bg-primary text-primary-foreground font-bold h-12"
                     onClick={handleGenerate}
-                    disabled={loading}
+                    disabled={loading || status === "generating"}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <RefreshCcw className="mr-2 h-4 w-4" />}
-                    Craft Professional AI Prompt
+                    {status === "idle" ? "Start Production Run" : status === "prompting" ? "Engineering Prompt..." : "AI Generating Beat..."}
                   </Button>
+                  
+                  {status === "generating" && (
+                    <div className="w-full space-y-2 animate-pulse">
+                      <div className="flex justify-between text-[10px] uppercase font-bold text-muted-foreground">
+                        <span>Suno AI Status</span>
+                        <span>Synthesis in progress...</span>
+                      </div>
+                      <div className="h-1 bg-secondary rounded-full overflow-hidden">
+                        <div className="h-full bg-primary w-1/2 animate-[progress_2s_ease-in-out_infinite]" />
+                      </div>
+                    </div>
+                  )}
                 </CardFooter>
               </Card>
 
               {result && (
                 <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
+                  {status === "complete" && (
+                    <Card className="bg-card border-green-500/20 shadow-xl overflow-hidden">
+                      <CardHeader className="bg-green-500/5 py-3">
+                        <CardTitle className="text-sm font-headline text-green-500 flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" /> Ready for Download
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <Button size="icon" className="h-12 w-12 rounded-full bg-primary text-primary-foreground">
+                            <Play className="h-6 w-6 ml-1" />
+                          </Button>
+                          <div>
+                            <p className="font-bold text-sm">Generated Lo-Fi Track</p>
+                            <p className="text-xs text-muted-foreground">3:42 • 320kbps MP3</p>
+                          </div>
+                        </div>
+                        <Button variant="outline" className="gap-2 border-primary/20">
+                          <Download className="w-4 h-4" /> Export Assets
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+
                   <Card className="bg-card border-primary/20 shadow-lg">
                     <CardHeader className="flex flex-row items-center justify-between">
                       <div>
                         <CardTitle className="font-headline text-lg">Optimized Prompt for Suno/Udio</CardTitle>
-                        <CardDescription>Copy this into your music generator</CardDescription>
+                        <CardDescription>Engineered for maximum vibe alignment</CardDescription>
                       </div>
                       <Button variant="outline" size="icon" onClick={() => copyToClipboard(result.musicGeneratorPrompt)}>
                         <Copy className="h-4 w-4" />

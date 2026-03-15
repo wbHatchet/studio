@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -9,18 +8,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Key, Shield, Globe, Bell, Save, Eye, EyeOff } from "lucide-react";
+import { Key, Shield, Globe, Bell, Save, Eye, EyeOff, Music, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function SettingsPage() {
   const { toast } = useToast();
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
+  const [sunoEndpoint, setSunoEndpoint] = useState("");
+
+  useEffect(() => {
+    // Load saved settings
+    setSunoEndpoint(localStorage.getItem("suno_api_endpoint") || "");
+  }, []);
 
   const toggleKey = (key: string) => {
     setShowKeys(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleSave = () => {
+    localStorage.setItem("suno_api_endpoint", sunoEndpoint);
     toast({
       title: "Settings Saved",
       description: "Your configuration has been updated successfully.",
@@ -45,11 +52,11 @@ export default function SettingsPage() {
                   <TabsTrigger value="api" className="gap-2">
                     <Key className="w-4 h-4" /> API Keys
                   </TabsTrigger>
+                  <TabsTrigger value="unofficial" className="gap-2">
+                    <Music className="w-4 h-4" /> Suno (Unofficial)
+                  </TabsTrigger>
                   <TabsTrigger value="general" className="gap-2">
                     <Globe className="w-4 h-4" /> General
-                  </TabsTrigger>
-                  <TabsTrigger value="security" className="gap-2">
-                    <Shield className="w-4 h-4" /> Security
                   </TabsTrigger>
                 </TabsList>
 
@@ -107,10 +114,6 @@ export default function SettingsPage() {
                     <CardContent className="space-y-4">
                       <div className="grid gap-4 md:grid-cols-2">
                         <div className="space-y-2">
-                          <Label>Suno AI API</Label>
-                          <Input type="password" placeholder="Key..." className="bg-secondary/30" />
-                        </div>
-                        <div className="space-y-2">
                           <Label>ElevenLabs API</Label>
                           <Input type="password" placeholder="Key..." className="bg-secondary/30" />
                         </div>
@@ -127,6 +130,43 @@ export default function SettingsPage() {
                     <CardFooter className="border-t border-border/50 pt-6">
                       <Button onClick={handleSave} className="ml-auto gap-2 bg-primary text-primary-foreground font-bold">
                         <Save className="w-4 h-4" /> Save Configuration
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="unofficial" className="space-y-6">
+                  <Card className="bg-card">
+                    <CardHeader>
+                      <CardTitle className="font-headline">Suno AI Integration (GitHub)</CardTitle>
+                      <CardDescription>Integrate with unofficial Suno-API/Suno-API services</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <Alert className="bg-primary/5 border-primary/20">
+                        <Info className="h-4 w-4 text-primary" />
+                        <AlertTitle className="text-primary font-bold">Heads up!</AlertTitle>
+                        <AlertDescription className="text-xs">
+                          The official Suno API is not yet available. To enable automatic generation, 
+                          host the <strong>Suno-API</strong> open-source project from GitHub and provide your endpoint URL here.
+                        </AlertDescription>
+                      </Alert>
+
+                      <div className="space-y-2">
+                        <Label>API Base URL</Label>
+                        <Input 
+                          placeholder="https://your-suno-api.vercel.app" 
+                          value={sunoEndpoint}
+                          onChange={(e) => setSunoEndpoint(e.target.value)}
+                          className="bg-secondary/30" 
+                        />
+                        <p className="text-[10px] text-muted-foreground">
+                          Leave blank to only generate prompts without triggering music synthesis.
+                        </p>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="border-t border-border/50 pt-6">
+                      <Button onClick={handleSave} className="ml-auto gap-2 bg-primary text-primary-foreground font-bold">
+                        <Save className="w-4 h-4" /> Connect Service
                       </Button>
                     </CardFooter>
                   </Card>
