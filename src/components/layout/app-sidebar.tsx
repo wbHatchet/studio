@@ -44,7 +44,7 @@ const studioNav = [
 ];
 
 const intelligenceNav = [
-  { title: "Trend Intelligence", icon: TrendingUp, url: "/growth/signals" },
+  { title: "Viral Trend Miner (Apify)", icon: TrendingUp, url: "/growth/signals" },
   { title: "Niche Discovery Engine", icon: Target, url: "/strategy" },
 ];
 
@@ -52,7 +52,7 @@ const productionNav = [
   { title: "Enterprise Grid Queue", icon: Layers, url: "/projects" },
   { title: "Voice Architect (11Labs)", icon: Mic2, url: "/production/voice" },
   { title: "Music Curator (Suno)", icon: Music, url: "/production/music" },
-  { title: "Visuals Director (Runway)", icon: Video, url: "/production/visuals" },
+  { title: "Visuals Director (FFmpeg)", icon: Video, url: "/production/visuals" },
   { title: "SEO Metadata Engine", icon: Search, url: "/seo" },
   { title: "Approval & Publish", icon: CheckCircle2, url: "/review" },
 ];
@@ -83,7 +83,7 @@ export function AppSidebar() {
               Network Grid
             </span>
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-primary">
-              Ultra-Scale v5.0
+              Ultra-Scale v7.0
             </span>
           </div>
         </div>
