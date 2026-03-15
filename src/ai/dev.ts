@@ -1,3 +1,4 @@
+
 import { config } from 'dotenv';
 config();
 
@@ -6,3 +7,5 @@ import '@/ai/flows/ai-youtube-seo-optimization.ts';
 import '@/ai/flows/ai-performance-feedback-flow.ts';
 import '@/ai/flows/ai-music-generation.ts';
 import '@/ai/flows/ai-visuals-and-animation-flow.ts';
+import '@/ai/flows/ai-trend-prediction.ts';
+import '@/ai/flows/ai-hook-optimizer.ts';

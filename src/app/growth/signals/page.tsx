@@ -6,17 +6,31 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Users, Search, Target, ArrowUpRight, Flame } from "lucide-react";
+import { TrendingUp, Target, Search, ArrowUpRight, Flame, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const viralSignals = [
-  { id: 1, type: "Emerging Artist", subject: "Cash Cobain", growth: "+145%", confidence: "High", niche: "Jersey Club Lo-Fi" },
-  { id: 2, type: "Viral Aesthetic", subject: "Vintage iPhone 4 Filter", growth: "+88%", confidence: "Medium", niche: "Nostalgic R&B" },
-  { id: 3, type: "Keyword Spike", subject: "Deep Work Lo-Fi 4K", growth: "+210%", confidence: "High", niche: "Study Beats" },
-  { id: 4, type: "Competitor Move", subject: "Lofi Girl 'Synthwave' Shift", growth: "N/A", confidence: "Strategic", niche: "Retro-Futurism" },
-];
+import { predictTrends } from "@/ai/flows/ai-trend-prediction";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ViralSignalsPage() {
+  const [loading, setLoading] = useState(false);
+  const [signals, setSignals] = useState<any[]>([]);
+  const { toast } = useToast();
+
+  async function handleScan() {
+    setLoading(true);
+    try {
+      const result = await predictTrends({
+        scannedPlatforms: ["TikTok", "YouTube", "Reddit"],
+        currentSignals: "High chatter about vintage iPhone filters and Japanese countryside ambience. Jersey Club beats are leaking into Lo-Fi study playlists."
+      });
+      setSignals(result.detectedSignals);
+    } catch (error) {
+      toast({ title: "Scan Failed", description: "Could not fetch viral signals." });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
@@ -26,6 +40,10 @@ export default function ViralSignalsPage() {
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
             <h1 className="font-headline font-bold text-xl">Viral Signal Monitor</h1>
+            <Button size="sm" className="ml-auto bg-primary text-primary-foreground font-bold" onClick={handleScan} disabled={loading}>
+              {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <Sparkles className="mr-2 h-4 w-4" />}
+              Run Global Trend Scan
+            </Button>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
@@ -86,8 +104,11 @@ export default function ViralSignalsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {viralSignals.map((signal) => (
-                      <div key={signal.id} className="flex items-center justify-between p-4 rounded-xl border border-border bg-secondary/20 group hover:bg-secondary/30 transition-all">
+                    {signals.length === 0 && (
+                      <p className="text-sm text-center py-12 text-muted-foreground italic">Run a scan to detect new viral signals...</p>
+                    )}
+                    {signals.map((signal, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-border bg-secondary/20 group hover:bg-secondary/30 transition-all">
                         <div className="flex items-start gap-4">
                           <div className="p-2 bg-primary/10 rounded-lg">
                             <TrendingUp className="w-5 h-5 text-primary" />
@@ -97,7 +118,7 @@ export default function ViralSignalsPage() {
                               <h4 className="font-bold text-sm">{signal.subject}</h4>
                               <Badge variant="outline" className="text-[10px] h-4 bg-primary/5">{signal.type}</Badge>
                             </div>
-                            <p className="text-xs text-muted-foreground mt-1">Recommended Niche: <span className="text-primary/80 font-medium">{signal.niche}</span></p>
+                            <p className="text-xs text-muted-foreground mt-1">Recommended Niche: <span className="text-primary/80 font-medium">{signal.nicheRecommendation}</span></p>
                           </div>
                         </div>
                         <div className="text-right">
@@ -136,9 +157,6 @@ export default function ViralSignalsPage() {
                     </div>
                     <Badge className="bg-green-500/20 text-green-400">+400% views</Badge>
                   </div>
-                  <Button variant="outline" className="w-full text-xs font-bold">
-                    View Full Analysis
-                  </Button>
                 </CardContent>
               </Card>
             </div>

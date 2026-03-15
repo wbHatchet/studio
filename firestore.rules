@@ -1,170 +1,59 @@
-/**
- * AI YouTube Automation System Security Rules
- *
- * CORE PHILOSOPHY:
- * This ruleset enforces a strict User-Ownership model. Access to any data is strictly limited 
- * to the authenticated owner of that data. The system is designed for high performance and 
- * authorization independence by leveraging path-based security and denormalized ownership fields.
- *
- * DATA STRUCTURE:
- * 1. User-Centric Hierarchy: Most data is organized under `/users/{userId}/...`. This allows 
- *    for efficient path-based authorization.
- * 2. Nested Resources: Resources like Projects, VideoIdeas, and Scripts are nested within 
- *    the user's path, creating a clear chain of custody.
- * 3. Top-Level Analytics: The `analytics` collection is top-level to allow for potential 
- *    cross-channel reporting, but uses a denormalized `ownerId` field to maintain strict 
- *    ownership-based access control.
- *
- * KEY SECURITY DECISIONS:
- * - Ownership Enforcement: All write operations (create, update, delete) require the 
- *   authenticated user's UID to match the designated owner of the document.
- * - Path-Data Consistency: For nested collections, we enforce that internal ownership 
- *   fields (like `userId` or `ownerId`) match the parent path parameters.
- * - Existence Checks: All update and delete operations verify that the document 
- *   exists prior to modification to prevent unauthorized side-effects.
- * - Public Access: No public read or write access is permitted. All operations 
- *   require a verified Firebase Authentication token.
- */
 
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // --- GLOBAL HELPER FUNCTIONS ---
-
-    /** @description Checks if the user is authenticated with a valid UID. */
+    
+    // --- HELPERS ---
     function isSignedIn() {
-      return request.auth != null && request.auth.uid != null;
+      return request.auth != null;
+    }
+    
+    function getRole(wsId) {
+      return get(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid)).data.role;
+    }
+    
+    function isMember(wsId) {
+      return exists(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid));
+    }
+    
+    function isAtLeast(wsId, role) {
+      let r = getRole(wsId);
+      return r == 'owner' || r == 'admin' || (role == 'editor' && r == 'editor');
     }
 
-    /** @description Checks if the provided UID matches the authenticated user. */
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    /** @description Checks if a document exists and is owned by the user. */
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
-
-    /** @description Checks if the incoming data's ownership field matches the path and auth. */
-    function isValidOwnership(field) {
-      return request.resource.data[field] == request.auth.uid;
-    }
-
-    /** @description Ensures a field's value does not change during an update. */
-    function isImmutable(field) {
-      return request.resource.data[field] == resource.data[field];
-    }
-
-    // --- COLLECTION RULES ---
-
-    /**
-     * @description Rules for the User profile entity. Allows users to manage their own profile.
-     * @path /users/{userId}
-     * @allow (get) If auth.uid matches {userId}.
-     * @deny (create) If auth.uid does not match the document ID.
-     * @principle Pattern 4: Self-Creation.
-     */
+    // --- RULES ---
     match /users/{userId} {
-      allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update, delete: if isExistingOwner(userId);
-
-      /**
-       * @description Rules for YouTube Channels managed by a user.
-       * @path /users/{userId}/channels/{channelId}
-       * @allow (create) If userId field matches {userId} and auth.uid.
-       * @deny (list) If trying to list channels belonging to another user.
-       * @principle Path-based ownership with relational field validation.
-       */
-      match /channels/{channelId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && isValidOwnership('userId');
-        allow update: if isExistingOwner(userId) && isImmutable('userId');
-        allow delete: if isExistingOwner(userId);
-      }
-
-      /**
-       * @description Rules for Content Projects. Projects group video ideas and media.
-       * @path /users/{userId}/projects/{projectId}
-       * @allow (update) If user owns the project and does not change the userId.
-       * @deny (delete) If the document does not exist.
-       * @principle Enforces document ownership for writes and path consistency.
-       */
-      match /projects/{projectId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && isValidOwnership('userId');
-        allow update: if isExistingOwner(userId) && isImmutable('userId');
-        allow delete: if isExistingOwner(userId);
-
-        /**
-         * @description Rules for VideoIdeas generated within a project.
-         * @path /users/{userId}/projects/{projectId}/videoIdeas/{videoIdeaId}
-         * @allow (list) Owner can list all ideas in their project.
-         * @deny (create) If the project path belongs to a different user.
-         * @principle Subcollection access secured via parent path ownership.
-         */
-        match /videoIdeas/{videoIdeaId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update, delete: if isExistingOwner(userId);
-
-          /**
-           * @description Rules for generated video scripts.
-           * @path .../videoIdeas/{videoIdeaId}/scripts/{scriptId}
-           * @allow (create) Authenticated owner of the parent path.
-           * @deny (update) If auth.uid is not the userId in the path.
-           * @principle Strict hierarchical access control.
-           */
-          match /scripts/{scriptId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId);
-            allow update, delete: if isExistingOwner(userId);
-          }
-
-          /**
-           * @description Rules for Media Assets (audio, images, video segments).
-           * @path .../videoIdeas/{videoIdeaId}/mediaAssets/{mediaAssetId}
-           * @allow (get) Owner of the parent path.
-           * @deny (create) Mismatched userId in path.
-           * @principle Validates relational integrity between path and ownership.
-           */
-          match /mediaAssets/{mediaAssetId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId);
-            allow update, delete: if isExistingOwner(userId);
-          }
-
-          /**
-           * @description Rules for fully assembled Video artifacts.
-           * @path .../videoIdeas/{videoIdeaId}/videos/{videoId}
-           * @allow (create) Owner can create videos for their own ideas.
-           * @deny (list) Unauthorized access to video metadata.
-           * @principle Authorization independence via path-based scoping.
-           */
-          match /videos/{videoId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId);
-            allow update, delete: if isExistingOwner(userId);
-          }
-        }
-      }
+      allow read, write: if request.auth.uid == userId;
     }
 
-    /**
-     * @description Rules for the top-level Analytics collection.
-     * @path /analytics/{analyticsId}
-     * @allow (create) If ownerId in data matches request.auth.uid.
-     * @deny (list) If query does not filter by ownerId.
-     * @principle Pattern 1: Ownership via denormalized field for top-level collections.
-     */
-    match /analytics/{analyticsId} {
-      allow get: if isSignedIn() && resource.data.ownerId == request.auth.uid;
-      allow list: if isSignedIn() && request.query.limit <= 100 && resource.data.ownerId == request.auth.uid;
-      allow create: if isSignedIn() && isValidOwnership('ownerId');
-      allow update: if isSignedIn() && resource.data.ownerId == request.auth.uid && isImmutable('ownerId');
-      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+    match /workspaces/{wsId} {
+      allow read: if isMember(wsId);
+      allow create: if isSignedIn();
+      allow update, delete: if isAtLeast(wsId, 'admin');
+
+      match /members/{userId} {
+        allow read: if isMember(wsId);
+        allow write: if isAtLeast(wsId, 'admin');
+      }
+
+      match /jobs/{jobId} {
+        allow read: if isMember(wsId);
+        // Clients can only create jobs in 'queued' state and cannot set lease fields
+        allow create: if isAtLeast(wsId, 'editor') 
+          && request.resource.data.status == 'queued'
+          && !('lease' in request.resource.data);
+        allow update: if isAtLeast(wsId, 'admin');
+      }
+
+      match /ideas/{ideaId} {
+        allow read: if isMember(wsId);
+        allow write: if isAtLeast(wsId, 'editor');
+      }
+      
+      match /apiKeyRefs/{keyId} {
+        allow read: if isMember(wsId);
+        allow write: if isAtLeast(wsId, 'admin');
+      }
     }
   }
 }

@@ -1,515 +1,72 @@
+
 {
   "entities": {
     "User": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "User",
       "type": "object",
-      "description": "Represents an authenticated user of the AI Lo-Fi Channel Factory application. Users manage channels, projects, and content.",
+      "description": "Global user profile",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the User entity."
-        },
-        "email": {
-          "type": "string",
-          "description": "The user's email address.",
-          "format": "email"
-        },
-        "displayName": {
-          "type": "string",
-          "description": "The user's display name or chosen username."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the user account was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the user account was last updated.",
-          "format": "date-time"
-        }
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "avatarUrl": { "type": "string" }
       },
-      "required": [
-        "id",
-        "email",
-        "createdAt"
-      ]
+      "required": ["id", "email"]
     },
-    "Channel": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Channel",
+    "Workspace": {
+      "title": "Workspace",
       "type": "object",
-      "description": "Represents a YouTube channel managed within the application, where Lo-Fi content is published.",
+      "description": "Multi-tenant container for production teams",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Channel entity."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Reference to the User who owns or primarily manages this channel. (Relationship: User 1:N Channel)"
-        },
-        "name": {
-          "type": "string",
-          "description": "The display name of the YouTube channel."
-        },
-        "youtubeChannelId": {
-          "type": "string",
-          "description": "The official YouTube channel ID, obtained after connecting to the YouTube Data API."
-        },
-        "status": {
-          "type": "string",
-          "description": "Current status of the channel within the app (e.g., 'Active', 'Pending Setup', 'Disconnected', 'Archived')."
-        },
-        "description": {
-          "type": "string",
-          "description": "A description of the channel's content and niche."
-        },
-        "brandingImageUrl": {
-          "type": "string",
-          "description": "URL to the channel's branding image (e.g., banner or avatar)."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the channel entity was created in the app.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the channel entity was last updated in the app.",
-          "format": "date-time"
-        }
+        "name": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": [
-        "id",
-        "userId",
-        "name",
-        "status",
-        "createdAt"
-      ]
+      "required": ["name", "ownerId"]
     },
-    "Project": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Project",
+    "Member": {
+      "title": "Member",
       "type": "object",
-      "description": "Represents a strategic content initiative or a 'Lo-Fi channel project' focusing on a specific niche or theme, managed by a user.",
+      "description": "User role within a workspace",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Project entity."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Reference to the User who created or owns this project. (Relationship: User 1:N Project)"
-        },
-        "name": {
-          "type": "string",
-          "description": "A descriptive name for the content project (e.g., 'Halloween Lo-Fi Vibes')."
-        },
-        "description": {
-          "type": "string",
-          "description": "Detailed description of the project's goals, niche, and content strategy."
-        },
-        "nicheSuggestions": {
-          "type": "array",
-          "description": "AI-suggested micro-niches for this project.",
-          "items": {
-            "type": "string"
+        "role": { "type": "string", "enum": ["owner", "admin", "editor", "viewer"] },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["role"]
+    },
+    "Job": {
+      "title": "Job",
+      "type": "object",
+      "description": "Queue item for AI workers",
+      "properties": {
+        "type": { "type": "string" },
+        "status": { "type": "string", "enum": ["queued", "leased", "running", "succeeded", "failed"] },
+        "priority": { "type": "number" },
+        "lease": {
+          "type": "object",
+          "properties": {
+            "leasedBy": { "type": "string" },
+            "leasedUntil": { "type": "string", "format": "date-time" }
           }
-        },
-        "artistSuggestions": {
-          "type": "array",
-          "description": "AI-suggested artist styles or specific artists relevant to the project's theme.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "thematicConcepts": {
-          "type": "array",
-          "description": "AI-suggested thematic concepts to explore within the project (e.g., 'Rainy Day', 'Cyberpunk City').",
-          "items": {
-            "type": "string"
-          }
-        },
-        "targetChannelIds": {
-          "type": "array",
-          "description": "References to Channel entities that this project's content is intended for. (Relationship: Project N:N Channel)",
-          "items": {
-            "type": "string"
-          }
-        },
-        "status": {
-          "type": "string",
-          "description": "Current status of the project (e.g., 'Draft', 'Active', 'Paused', 'Completed')."
-        },
-        "contentParameters": {
-          "type": "string",
-          "description": "Structured input or a JSON string containing parameters for content generation, potentially from spreadsheet uploads."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the project was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the project was last updated.",
-          "format": "date-time"
         }
       },
-      "required": [
-        "id",
-        "userId",
-        "name",
-        "status",
-        "createdAt"
-      ]
+      "required": ["type", "status"]
     },
-    "VideoIdea": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "VideoIdea",
+    "Idea": {
+      "title": "Idea",
       "type": "object",
-      "description": "Represents an initial concept or blueprint for a video to be produced, often derived from AI analysis or user input.",
+      "description": "Viral concept or topic",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the VideoIdea entity."
-        },
-        "projectId": {
-          "type": "string",
-          "description": "Reference to the Project under which this video idea was generated. (Relationship: Project 1:N VideoIdea)"
-        },
-        "titleSuggestion": {
-          "type": "string",
-          "description": "An AI-generated or user-provided title suggestion for the video."
-        },
-        "descriptionSuggestion": {
-          "type": "string",
-          "description": "An AI-generated or user-provided description outline for the video."
-        },
-        "keywordsSuggestion": {
-          "type": "array",
-          "description": "AI-generated or user-provided SEO keywords for the video.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "targetAudience": {
-          "type": "string",
-          "description": "Description of the target audience for this video idea."
-        },
-        "moodTone": {
-          "type": "string",
-          "description": "The desired mood or tone of the video (e.g., 'Chill', 'Study', 'Relaxing')."
-        },
-        "durationMinutes": {
-          "type": "number",
-          "description": "The intended duration of the video in minutes (e.g., 30 for long-form, 1 for shorts)."
-        },
-        "status": {
-          "type": "string",
-          "description": "Current production status of the video idea (e.g., 'Pending AI Generation', 'Script Generated', 'Ready for Review', 'Content Generated', 'Completed')."
-        },
-        "scriptId": {
-          "type": "string",
-          "description": "Reference to the Script entity generated for this video idea. (Relationship: VideoIdea 1:1 Script)"
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the video idea was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the video idea was last updated.",
-          "format": "date-time"
-        }
+        "topic": { "type": "string" },
+        "niche": { "type": "string" },
+        "hook": { "type": "string" },
+        "status": { "type": "string" }
       },
-      "required": [
-        "id",
-        "projectId",
-        "titleSuggestion",
-        "status",
-        "createdAt"
-      ]
-    },
-    "Script": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Script",
-      "type": "object",
-      "description": "Stores the textual content of a script generated for a video, often by an AI agent.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Script entity."
-        },
-        "videoIdeaId": {
-          "type": "string",
-          "description": "Reference to the VideoIdea this script belongs to. (Relationship: VideoIdea 1:1 Script)"
-        },
-        "content": {
-          "type": "string",
-          "description": "The full text content of the generated script."
-        },
-        "generatedByAI": {
-          "type": "boolean",
-          "description": "Indicates if the script was generated by an AI."
-        },
-        "aiPrompt": {
-          "type": "string",
-          "description": "The prompt used to instruct the AI to generate this script."
-        },
-        "reviewStatus": {
-          "type": "string",
-          "description": "Status of the script review (e.g., 'Pending Review', 'Approved', 'Rejected', 'Revised')."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the script was generated.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the script was last updated or reviewed.",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "videoIdeaId",
-        "content",
-        "generatedByAI",
-        "createdAt"
-      ]
-    },
-    "MediaAsset": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "MediaAsset",
-      "type": "object",
-      "description": "Represents any media file (audio, image, video segment) generated or used in the content production pipeline, stored in Firebase Storage.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the MediaAsset entity."
-        },
-        "videoIdeaId": {
-          "type": "string",
-          "description": "Reference to the VideoIdea this asset is associated with. (Relationship: VideoIdea 1:N MediaAsset)"
-        },
-        "type": {
-          "type": "string",
-          "description": "The type of media asset (e.g., 'audio_voice', 'audio_beat', 'image_background', 'image_thumbnail', 'video_animation', 'video_final')."
-        },
-        "storagePath": {
-          "type": "string",
-          "description": "The full path to the media file within Firebase Storage."
-        },
-        "fileName": {
-          "type": "string",
-          "description": "The original file name of the media asset."
-        },
-        "mimeType": {
-          "type": "string",
-          "description": "The MIME type of the stored media file (e.g., 'audio/mp3', 'image/png', 'video/mp4')."
-        },
-        "description": {
-          "type": "string",
-          "description": "A brief description of what this media asset represents (e.g., 'AI-generated chill beat', 'Lo-Fi cafe animation')."
-        },
-        "generatedByAI": {
-          "type": "boolean",
-          "description": "Indicates if this media asset was generated by an AI tool."
-        },
-        "aiPrompt": {
-          "type": "string",
-          "description": "The prompt used to instruct the AI for generating this asset, if applicable."
-        },
-        "durationSeconds": {
-          "type": "number",
-          "description": "The duration of the media asset in seconds, if it's audio or video."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the media asset entity was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the media asset entity was last updated.",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "videoIdeaId",
-        "type",
-        "storagePath",
-        "fileName",
-        "mimeType",
-        "generatedByAI",
-        "createdAt"
-      ]
-    },
-    "Video": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Video",
-      "type": "object",
-      "description": "Represents a fully assembled video artifact ready for YouTube publishing, combining generated audio and visuals.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Video entity."
-        },
-        "videoIdeaId": {
-          "type": "string",
-          "description": "Reference to the VideoIdea that led to the creation of this video. (Relationship: VideoIdea 1:1 Video)"
-        },
-        "title": {
-          "type": "string",
-          "description": "The final, SEO-optimized title for the YouTube video."
-        },
-        "description": {
-          "type": "string",
-          "description": "The comprehensive, SEO-optimized description for the YouTube video."
-        },
-        "tags": {
-          "type": "array",
-          "description": "A strategic set of tags and hashtags for YouTube SEO.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "thumbnailAssetId": {
-          "type": "string",
-          "description": "Reference to the MediaAsset entity representing the video's thumbnail. (Relationship: Video 1:1 MediaAsset)"
-        },
-        "videoAssetId": {
-          "type": "string",
-          "description": "Reference to the MediaAsset entity representing the final compiled video file. (Relationship: Video 1:1 MediaAsset)"
-        },
-        "status": {
-          "type": "string",
-          "description": "Current status of the video (e.g., 'Assembling', 'Rendering', 'Ready for Review', 'Approved', 'Scheduled', 'Uploaded', 'Failed')."
-        },
-        "uploadTargetChannelId": {
-          "type": "string",
-          "description": "Reference to the Channel entity where this video is intended to be uploaded. (Relationship: Channel 1:N Video)"
-        },
-        "scheduledUploadDate": {
-          "type": "string",
-          "description": "The planned date and time for the video to be uploaded to YouTube.",
-          "format": "date-time"
-        },
-        "actualUploadDate": {
-          "type": "string",
-          "description": "The actual date and time the video was uploaded to YouTube.",
-          "format": "date-time"
-        },
-        "youtubeVideoId": {
-          "type": "string",
-          "description": "The unique ID assigned by YouTube after a successful upload."
-        },
-        "isShort": {
-          "type": "boolean",
-          "description": "Indicates if the video is formatted as a YouTube Short."
-        },
-        "isLiveStream": {
-          "type": "boolean",
-          "description": "Indicates if this video is a component for a persistent 24/7 live stream."
-        },
-        "beatMonetizationUrl": {
-          "type": "string",
-          "description": "URL to an external beat-selling platform for monetizing the audio track."
-        },
-        "licensingInfo": {
-          "type": "string",
-          "description": "Details regarding the licensing of music or visual assets used in the video."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the video entity was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the video entity was last updated (e.g., status change, metadata update).",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "videoIdeaId",
-        "title",
-        "description",
-        "thumbnailAssetId",
-        "videoAssetId",
-        "status",
-        "uploadTargetChannelId",
-        "createdAt"
-      ]
-    },
-    "Analytics": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Analytics",
-      "type": "object",
-      "description": "Stores performance metrics and sales data for channels and videos, collected from YouTube and external platforms.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Analytics entry."
-        },
-        "videoId": {
-          "type": "string",
-          "description": "Reference to the Video entity this analytic data pertains to. (Relationship: Video 1:N Analytics)"
-        },
-        "channelId": {
-          "type": "string",
-          "description": "Reference to the Channel entity this analytic data pertains to (for channel-level metrics). (Relationship: Channel 1:N Analytics)"
-        },
-        "eventType": {
-          "type": "string",
-          "description": "The type of analytic event or metric (e.g., 'Views', 'CTR', 'WatchTime', 'BeatSale')."
-        },
-        "value": {
-          "type": "number",
-          "description": "The numeric value of the recorded metric."
-        },
-        "date": {
-          "type": "string",
-          "description": "The date for which this analytic data was recorded.",
-          "format": "date"
-        },
-        "source": {
-          "type": "string",
-          "description": "The source platform from which the data was collected (e.g., 'YouTube', 'BeatStars', 'Gumroad')."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the analytic entry was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp when the analytic entry was last updated.",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "eventType",
-        "value",
-        "date",
-        "source",
-        "createdAt"
-      ]
+      "required": ["topic", "niche", "status"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous"
-    ]
+    "providers": ["google", "password"]
   },
   "firestore": {
     "structure": [
@@ -517,177 +74,42 @@
         "path": "/users/{userId}",
         "definition": {
           "entityName": "User",
-          "schema": {
-            "$ref": "#/backend/entities/User"
-          },
-          "description": "Stores individual user profiles. The document ID (`userId`) corresponds to `request.auth.uid` and serves as the owner identifier for this document."
+          "schema": { "$ref": "#/backend/entities/User" },
+          "description": "User profiles"
         }
       },
       {
-        "path": "/users/{userId}/channels/{channelId}",
+        "path": "/workspaces/{wsId}",
         "definition": {
-          "entityName": "Channel",
-          "schema": {
-            "$ref": "#/backend/entities/Channel"
-          },
-          "description": "Represents YouTube channels managed by a specific user. The 'userId' field in the document (as per schema) acts as the ownerId for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the User who owns this channel."
-            },
-            {
-              "name": "channelId",
-              "description": "The unique identifier for the Channel document."
-            }
-          ]
+          "entityName": "Workspace",
+          "schema": { "$ref": "#/backend/entities/Workspace" },
+          "description": "Production workspaces"
         }
       },
       {
-        "path": "/users/{userId}/projects/{projectId}",
+        "path": "/workspaces/{wsId}/members/{userId}",
         "definition": {
-          "entityName": "Project",
-          "schema": {
-            "$ref": "#/backend/entities/Project"
-          },
-          "description": "Stores strategic content projects owned by a specific user. The 'userId' field in the document (as per schema) acts as the ownerId for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the User who owns this project."
-            },
-            {
-              "name": "projectId",
-              "description": "The unique identifier for the Project document."
-            }
-          ]
+          "entityName": "Member",
+          "schema": { "$ref": "#/backend/entities/Member" },
+          "description": "Workspace membership and roles"
         }
       },
       {
-        "path": "/users/{userId}/projects/{projectId}/videoIdeas/{videoIdeaId}",
+        "path": "/workspaces/{wsId}/jobs/{jobId}",
         "definition": {
-          "entityName": "VideoIdea",
-          "schema": {
-            "$ref": "#/backend/entities/VideoIdea"
-          },
-          "description": "Represents conceptual video ideas generated within a project. Includes a denormalized 'ownerId' field (holding the `userId` from the parent path) for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the User who owns the parent project."
-            },
-            {
-              "name": "projectId",
-              "description": "The unique identifier of the parent Project."
-            },
-            {
-              "name": "videoIdeaId",
-              "description": "The unique identifier for the VideoIdea document."
-            }
-          ]
+          "entityName": "Job",
+          "schema": { "$ref": "#/backend/entities/Job" },
+          "description": "Server-leased job queue"
         }
       },
       {
-        "path": "/users/{userId}/projects/{projectId}/videoIdeas/{videoIdeaId}/scripts/{scriptId}",
+        "path": "/workspaces/{wsId}/ideas/{ideaId}",
         "definition": {
-          "entityName": "Script",
-          "schema": {
-            "$ref": "#/backend/entities/Script"
-          },
-          "description": "Stores the textual content of scripts for a specific video idea. Includes a denormalized 'ownerId' field (holding the `userId` from the parent path) for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the User who owns the parent project."
-            },
-            {
-              "name": "projectId",
-              "description": "The unique identifier of the parent Project."
-            },
-            {
-              "name": "videoIdeaId",
-              "description": "The unique identifier of the parent VideoIdea."
-            },
-            {
-              "name": "scriptId",
-              "description": "The unique identifier for the Script document."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/projects/{projectId}/videoIdeas/{videoIdeaId}/mediaAssets/{mediaAssetId}",
-        "definition": {
-          "entityName": "MediaAsset",
-          "schema": {
-            "$ref": "#/backend/entities/MediaAsset"
-          },
-          "description": "Stores metadata for media files (audio, image, video segments) used in a video idea. Includes a denormalized 'ownerId' field (holding the `userId` from the parent path) for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the User who owns the parent project."
-            },
-            {
-              "name": "projectId",
-              "description": "The unique identifier of the parent Project."
-            },
-            {
-              "name": "videoIdeaId",
-              "description": "The unique identifier of the parent VideoIdea."
-            },
-            {
-              "name": "mediaAssetId",
-              "description": "The unique identifier for the MediaAsset document."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/projects/{projectId}/videoIdeas/{videoIdeaId}/videos/{videoId}",
-        "definition": {
-          "entityName": "Video",
-          "schema": {
-            "$ref": "#/backend/entities/Video"
-          },
-          "description": "Represents a fully assembled video artifact ready for YouTube publishing, linked to a video idea. Includes a denormalized 'ownerId' field (holding the `userId` from the parent path) for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the User who owns the parent project."
-            },
-            {
-              "name": "projectId",
-              "description": "The unique identifier of the parent Project."
-            },
-            {
-              "name": "videoIdeaId",
-              "description": "The unique identifier of the parent VideoIdea."
-            },
-            {
-              "name": "videoId",
-              "description": "The unique identifier for the Video document."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/analytics/{analyticsId}",
-        "definition": {
-          "entityName": "Analytics",
-          "schema": {
-            "$ref": "#/backend/entities/Analytics"
-          },
-          "description": "Stores performance metrics for videos and channels. Each document includes a denormalized 'ownerId' field (the User's UID) for direct ownership authorization and secure list queries (QAPs).",
-          "params": [
-            {
-              "name": "analyticsId",
-              "description": "The unique identifier for the Analytics entry."
-            }
-          ]
+          "entityName": "Idea",
+          "schema": { "$ref": "#/backend/entities/Idea" },
+          "description": "Content ideas and signals"
         }
       }
-    ],
-    "reasoning": "The Firestore structure is designed following a hierarchical, user-centric model for user-specific content and a top-level collection with denormalized ownership for aggregate data, prioritizing Authorization Independence and QAPs.  \n\n**Authorization Independence (CRITICAL):**  \nAuthorization independence is achieved by denormalizing the `ownerId` (the user's unique ID, `request.auth.uid`) into every document that belongs to a user's workflow or is part of a subcollection that needs granular, atomic authorization.  \n*   For `User`, `Channel`, and `Project` documents, the `userId` field (present in their respective schemas and part of the document's path for `Channel` and `Project`) explicitly denotes ownership. Security rules for these entities can directly compare `request.auth.uid` with the `userId` in the path (e.g., `/users/{userId}/...` implies `request.auth.uid == userId`) or with the `resource.data.userId` field for `Channel` and `Project`.  \n*   For nested entities like `VideoIdea`, `Script`, `MediaAsset`, and `Video`, which are descendants of a `Project` (and thus indirectly a `User`), an explicit `ownerId` field (holding the `userId` of the project's owner) is denormalized into each document. This eliminates the need for expensive and insecure `get()` calls to parent documents in security rules (e.g., `get(/databases/$(database)/documents/users/$(userId)/projects/$(projectId)).data.ownerId`). Instead, rules can simply use `allow read, write: if request.auth.uid == resource.data.ownerId;`. This strategy ensures atomic operations (transactions, batch writes) are secure and straightforward, as all authorization context is self-contained within the document being accessed.  \n*   The `Analytics` collection, being a top-level collection, also requires an explicit `ownerId` field within each document. This allows a user to access their analytics without relying on any parent document's context.\n\n**QAPs (Rules are not Filters):**  \nThe structure inherently supports secure `list` operations (QAPs) through consistent ownership modeling:\n*   **Hierarchical User-Owned Data:** Collections like `/users/{userId}/channels`, `/users/{userId}/projects`, and their nested subcollections (`videoIdeas`, `scripts`, `mediaAssets`, `videos`) leverage the `userId` in the path and/or a denormalized `ownerId` in the document. A user can only `list` documents within their own `/users/{request.auth.uid}/...` hierarchy, which is inherently secure. The security rules will enforce that `request.auth.uid` matches the `userId` wildcard in the path, ensuring that `list` requests automatically filter to only owned resources.  \n*   **Top-Level Analytics with Denormalized Owner:** For the `/analytics` collection, `list` queries will be secured by requiring `request.auth.uid` to match a query filter on the denormalized `ownerId` field (e.g., `db.collection('analytics').where('ownerId', '==', currentUser.uid).get()`). The Firestore security rule for `list` on `/analytics` would enforce `allow list: if request.auth.uid == request.query.where.ownerId;`, preventing users from listing all analytics entries or those belonging to others.  \n\n**Structural Segregation & Access Modeling:**  \n*   All documents within a given collection or subcollection (e.g., `/users/{userId}/channels`) share the same security posture (owned by `userId`). This simplifies rules by avoiding mixed access requirements within the same collection.  \n*   Path-based ownership (`/users/{userId}/...`) is consistently applied for all user-specific content, making ownership explicit and rules easy to write.  \n\nThis robust design ensures maintainable, scalable, and secure Firestore interactions while adhering to all core principles and mandates."
+    ]
   }
 }
