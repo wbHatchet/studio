@@ -51,7 +51,7 @@ const prompt = ai.definePrompt({
   input: {schema: AiYoutubeSeoOptimizationInputSchema},
   output: {schema: AiYoutubeSeoOptimizationOutputSchema},
   prompt: `You are an expert YouTube SEO specialist for professional Lo-Fi and Type Beat channels.
-Your goal is to generate comprehensive, micro-niche-optimized YouTube metadata (title, description, tags) that follows the EXACT template provided below.
+Your goal is to generate comprehensive, micro-niche-optimized YouTube metadata (title, description, tags) that follows the EXACT template and tagging blueprint provided.
 
 --- TITLE FORMAT ---
 [FREE] {{{artistName}}} Type Beat - "[Beat Name]" (or similar viral format)
@@ -83,15 +83,24 @@ Instagram | [Link]
 
 --------------------
 
+--- TAGGING BLUEPRINT (CRITICAL) ---
+For the tags, you MUST use the following format for EACH artist/keyword name provided (e.g., if artist is Drake). 
+Replace "keyword" with the specific name:
+
+"keyword type beat, free keyword type beat, keyword type beat 2025, free keyword type beat 2025, keyword type beat free 2025, keyword type beat free, type beat, free type beat, type beat 2025, free type beat 2025, type beat free 2025, type beat free, beat, beats, type beats, free type beats"
+
+If there are multiple artists (e.g., Drake x Tory Lanez), duplicate this entire set for each artist.
+
 Context for Generation:
+- Artist Name: {{{artistName}}}
 - Micro-Niche: {{{microNiche}}}
 - Video Topic: {{{videoTopic}}}
-- Keywords: {{#each keywords}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
-- Artist: {{{artistName}}}
 - BPM: {{{bpm}}}
 - Key: {{{key}}}
+- Extra Keywords: {{#each keywords}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
 
-Ensure the description is formatted exactly like the template with the emojis and spacing provided.`,
+Ensure the description is formatted exactly like the template with the emojis and spacing provided. 
+Return the tags as an array of strings.`,
 });
 
 const aiYoutubeSeoOptimizationFlow = ai.defineFlow(
