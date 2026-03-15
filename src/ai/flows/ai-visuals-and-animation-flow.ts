@@ -1,7 +1,8 @@
+
 'use server';
 /**
  * @fileOverview This file provides a Genkit flow for generating prompts for AI image and animation tools.
- * It supports generating multiple variations and processing image-to-prompt requests.
+ * It is optimized for the 'Hidden Stack' (Runway Gen-3, Pika, Hailuo) to ensure maximum retention visual hooks.
  *
  * - aiVisualsAndAnimation - A function that generates prompts for AI image and animation tools.
  */
@@ -31,7 +32,7 @@ export type AiVisualsAndAnimationInput = z.infer<
 
 const PromptPairSchema = z.object({
   imagePrompt: z.string().describe('Detailed prompt for AI image generation (Midjourney/DALL-E/Leonardo).'),
-  animationPrompt: z.string().describe('Detailed prompt for AI animation (Pika/Hailuo).')
+  animationPrompt: z.string().describe('Detailed prompt for AI animation (Runway Gen-3/Pika/Hailuo). Focus on the first 2 seconds hook.')
 });
 
 const AiVisualsAndAnimationOutputSchema = z.object({
@@ -51,18 +52,20 @@ const aiVisualsAndAnimationPrompt = ai.definePrompt({
   name: 'aiVisualsAndAnimationPrompt',
   input: {schema: AiVisualsAndAnimationInputSchema},
   output: {schema: AiVisualsAndAnimationOutputSchema},
-  prompt: `You are an expert AI prompt engineer specializing in Lo-Fi aesthetics.
+  prompt: `You are an expert AI prompt engineer specializing in high-retention Lo-Fi aesthetics for YouTube automation.
 
 {{#if (eq inputType "image")}}
 The user has provided an image description (inspired by a favorite YouTube or Pinterest image). 
 Remove any existing text from your prompt concepts and focus purely on describing the visual scene for Piclumen or Leonardo AI.
 {{else}}
-The user wants to generate fresh Lo-Fi visual concepts.
+The user wants to generate fresh Lo-Fi visual concepts designed to stop the scroll.
 {{/if}}
 
 Your task is to generate {{{variationCount}}} variations of:
-1. An 'imagePrompt' for high-quality Lo-Fi artwork (soft lighting, vintage feel, cozy settings).
-2. An 'animationPrompt' for Hailuo AI or Pika AI to animate that specific static image (focus on subtle, looping effects like flickering candles, falling rain, or swaying hair).
+1. An 'imagePrompt' for high-quality Lo-Fi artwork (soft lighting, vintage feel, cozy settings, 4k detail).
+2. An 'animationPrompt' specifically for Runway Gen-3, Pika AI, or Hailuo AI. 
+   - Focus on SUBTLE but ENGAGING loops for the background.
+   - For the first variation, create a 'Visual Hook' version: Add instructions for a dynamic camera zoom or a sudden light flickering in the first 2 seconds to maximize retention.
 
 Input Context:
 - **Description**: {{{description}}}

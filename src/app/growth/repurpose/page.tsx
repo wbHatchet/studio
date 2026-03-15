@@ -1,3 +1,4 @@
+
 "use client";
 
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
@@ -15,14 +16,15 @@ import {
   CheckCircle2,
   Clock,
   Zap,
-  Share2
+  Share2,
+  Rocket
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 export default function RepurposingPage() {
   const activeTasks = [
-    { id: 1, name: "Midnight Rain", platforms: ["TikTok", "Reels"], progress: 85, status: "Transcoding" },
-    { id: 2, name: "Cyberpunk Night", platforms: ["Shorts", "Snapchat"], progress: 40, status: "AI Reframing" },
+    { id: 1, name: "Drake R&B Batch #12", platforms: ["TikTok", "Reels", "Shorts"], progress: 85, status: "Opus AI Processing" },
+    { id: 2, name: "Midnight Rain Mix", platforms: ["Snapchat", "TikTok"], progress: 40, status: "AI Reframing (Runway)" },
   ];
 
   return (
@@ -33,7 +35,7 @@ export default function RepurposingPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl">Multi-Platform Republisher</h1>
+            <h1 className="font-headline font-bold text-xl">Multi-Platform Republisher v3.0</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
@@ -43,8 +45,8 @@ export default function RepurposingPage() {
                   <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground">Repurpose Velocity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">5.2x</div>
-                  <p className="text-[10px] text-primary mt-1">Posts created per original asset</p>
+                  <div className="text-2xl font-bold font-headline">12.5x</div>
+                  <p className="text-[10px] text-primary mt-1">Shorts created per long-form asset</p>
                 </CardContent>
               </Card>
               <Card className="bg-card">
@@ -52,19 +54,19 @@ export default function RepurposingPage() {
                   <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground">Global Reach</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">142K</div>
-                  <p className="text-[10px] text-green-500 mt-1">+18% cross-platform traffic</p>
+                  <div className="text-2xl font-bold font-headline">1.4M</div>
+                  <p className="text-[10px] text-green-500 mt-1">+45% cross-platform traffic</p>
                 </CardContent>
               </Card>
               <Card className="bg-card border-primary/20">
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-primary/10 rounded-xl">
-                      <Zap className="w-6 h-6 text-primary" />
+                      <Rocket className="w-6 h-6 text-primary" />
                     </div>
                     <div>
                       <p className="text-lg font-bold font-headline">Opus AI</p>
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Automation active</p>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Mining viral moments</p>
                     </div>
                   </div>
                 </CardContent>
@@ -77,7 +79,7 @@ export default function RepurposingPage() {
                     </div>
                     <div>
                       <p className="text-lg font-bold font-headline">Repurpose.io</p>
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Syncing active</p>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Distribution Sync: ACTIVE</p>
                     </div>
                   </div>
                 </CardContent>
@@ -92,7 +94,7 @@ export default function RepurposingPage() {
                       <ArrowRightLeft className="w-5 h-5 text-primary" />
                       Active Republish Tasks
                     </CardTitle>
-                    <CardDescription>Converting long-form to short-form loops</CardDescription>
+                    <CardDescription>Converting long-form to short-form loops using Hidden Stack</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {activeTasks.map(task => (
@@ -124,29 +126,29 @@ export default function RepurposingPage() {
               <div className="space-y-6">
                 <Card className="bg-card">
                   <CardHeader>
-                    <CardTitle className="font-headline">Platform Sync</CardTitle>
+                    <CardTitle className="font-headline">Distribution API</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/30">
                       <div className="flex items-center gap-3">
                         <Smartphone className="w-4 h-4 text-pink-500" />
-                        <span className="text-xs font-bold">TikTok API</span>
+                        <span className="text-xs font-bold">TikTok Business API</span>
                       </div>
                       <div className="w-2 h-2 rounded-full bg-green-500" />
                     </div>
                     <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/30">
                       <div className="flex items-center gap-3">
                         <Instagram className="w-4 h-4 text-purple-500" />
-                        <span className="text-xs font-bold">IG Graph API</span>
+                        <span className="text-xs font-bold">Meta Graph API</span>
                       </div>
                       <div className="w-2 h-2 rounded-full bg-green-500" />
                     </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/30 opacity-50">
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/30">
                       <div className="flex items-center gap-3">
                         <Layers className="w-4 h-4 text-blue-400" />
-                        <span className="text-xs font-bold">Snapchat Ads API</span>
+                        <span className="text-xs font-bold">Snapchat Lens API</span>
                       </div>
-                      <div className="w-2 h-2 rounded-full bg-muted" />
+                      <div className="w-2 h-2 rounded-full bg-green-500" />
                     </div>
                     <Button className="w-full bg-primary text-primary-foreground font-bold mt-4">
                       Connect New Platform
