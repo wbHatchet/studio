@@ -13,57 +13,71 @@
       },
       "required": ["uid", "email"]
     },
-    "Project": {
-      "title": "Project",
-      "description": "High-level container for a Lo-Fi channel initiative (e.g., 'Halloween Lofi').",
+    "VideoIdea": {
+      "title": "VideoIdea",
+      "description": "Concept and niche strategy for a specific video.",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "name": { "type": "string" },
-        "status": { "type": "string", "enum": ["active", "archived"] },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "ownerId", "name"]
-    },
-    "Job": {
-      "title": "Job",
-      "description": "An AI agent task in the automation pipeline.",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "projectId": { "type": "string" },
-        "job_type": { "type": "string", "enum": ["generate_music", "generate_image", "render_video", "metadata_gen", "youtube_upload"] },
-        "status": { "type": "string", "enum": ["pending", "processing", "completed", "failed"] },
-        "payload": { "type": "object" },
-        "resultUrl": { "type": "string" }
-      },
-      "required": ["id", "projectId", "job_type", "status"]
-    },
-    "Asset": {
-      "title": "Asset",
-      "description": "Media files stored in Firebase Storage (songs, images, etc.).",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["audio", "image", "video", "thumbnail"] },
-        "storagePath": { "type": "string", "description": "e.g., /audio/song1.mp3" },
-        "metadata": { "type": "object" }
-      },
-      "required": ["id", "type", "storagePath"]
-    },
-    "Video": {
-      "title": "Video",
-      "description": "Final video metadata and YouTube publication status.",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "channelId": { "type": "string" },
         "title": { "type": "string" },
-        "status": { "type": "string", "enum": ["draft", "scheduled", "published"] },
-        "youtubeId": { "type": "string" }
+        "niche": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "processed"] },
+        "duration": { "type": "string", "description": "e.g., 3h" },
+        "scene_concept": { "type": "string" }
       },
-      "required": ["id", "channelId", "title", "status"]
+      "required": ["id", "title", "status"]
+    },
+    "MusicTrack": {
+      "title": "MusicTrack",
+      "description": "AI-generated Lo-Fi music assets (Suno AI).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "suno_id": { "type": "string" },
+        "file_url": { "type": "string" },
+        "duration_sec": { "type": "number" },
+        "loop_count": { "type": "number" }
+      },
+      "required": ["id", "file_url"]
+    },
+    "BackgroundScene": {
+      "title": "BackgroundScene",
+      "description": "Midjourney/Playground AI generated visual scenes.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "prompt": { "type": "string" },
+        "image_url": { "type": "string" },
+        "upscaled": { "type": "boolean" }
+      },
+      "required": ["id", "image_url"]
+    },
+    "VideoQueue": {
+      "title": "VideoQueue",
+      "description": "FFmpeg rendering jobs for video assembly.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "status": { "type": "string", "enum": ["queued", "rendering", "completed", "failed"] },
+        "output_url": { "type": "string" },
+        "worker_id": { "type": "string" }
+      },
+      "required": ["id", "status"]
+    },
+    "PublishedVideo": {
+      "title": "PublishedVideo",
+      "description": "Final uploads scheduled via YouTube Data API.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "youtube_id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "stats": { "type": "object" }
+      },
+      "required": ["id", "youtube_id", "title"]
     }
   },
   "firestore": {
@@ -73,20 +87,24 @@
         "definition": { "entityName": "UserProfile", "schema": { "$ref": "#/backend/entities/UserProfile" }, "description": "Root user nodes." }
       },
       {
-        "path": "/userProfiles/{userId}/projects/{projectId}",
-        "definition": { "entityName": "Project", "schema": { "$ref": "#/backend/entities/Project" }, "description": "User projects." }
+        "path": "/userProfiles/{userId}/videoIdeas/{ideaId}",
+        "definition": { "entityName": "VideoIdea", "schema": { "$ref": "#/backend/entities/VideoIdea" }, "description": "Content queue for ideas." }
       },
       {
-        "path": "/userProfiles/{userId}/projects/{projectId}/jobs/{jobId}",
-        "definition": { "entityName": "Job", "schema": { "$ref": "#/backend/entities/Job" }, "description": "AI Agent tasks." }
+        "path": "/userProfiles/{userId}/musicTracks/{trackId}",
+        "definition": { "entityName": "MusicTrack", "schema": { "$ref": "#/backend/entities/MusicTrack" }, "description": "Suno generated music tracks." }
       },
       {
-        "path": "/userProfiles/{userId}/projects/{projectId}/assets/{assetId}",
-        "definition": { "entityName": "Asset", "schema": { "$ref": "#/backend/entities/Asset" }, "description": "Media asset library." }
+        "path": "/userProfiles/{userId}/backgroundScenes/{sceneId}",
+        "definition": { "entityName": "BackgroundScene", "schema": { "$ref": "#/backend/entities/BackgroundScene" }, "description": "Midjourney generated visuals." }
       },
       {
-        "path": "/userProfiles/{userId}/projects/{projectId}/videos/{videoId}",
-        "definition": { "entityName": "Video", "schema": { "$ref": "#/backend/entities/Video" }, "description": "Final video records." }
+        "path": "/userProfiles/{userId}/videoQueue/{jobId}",
+        "definition": { "entityName": "VideoQueue", "schema": { "$ref": "#/backend/entities/VideoQueue" }, "description": "FFmpeg assembly queue." }
+      },
+      {
+        "path": "/userProfiles/{userId}/publishedVideos/{videoId}",
+        "definition": { "entityName": "PublishedVideo", "schema": { "$ref": "#/backend/entities/PublishedVideo" }, "description": "YouTube publication records." }
       }
     ]
   }

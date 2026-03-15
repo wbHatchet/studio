@@ -24,7 +24,11 @@ import {
   Sparkles,
   Repeat,
   TriangleAlert,
-  ArrowRight
+  Youtube,
+  Music,
+  ImageIcon,
+  Video,
+  BarChart3
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -33,38 +37,33 @@ export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
   const [renderCluster, setRenderCluster] = useState<{id: number, status: string, load: number}[]>([]);
-  const [clusterLoad, setClusterLoad] = useState(0);
   
   const [logs, setLogs] = useState([
-    { node: "UPLOAD-AGENT", status: "YouTube API: Inserting Video Metadata", progress: 15 },
-    { node: "METADATA-AGENT", status: "SEO Engine: Keywords & Hashtags Complete", progress: 100 },
-    { node: "VIDEO-AGENT", status: "FFmpeg Cluster: Rendering Node-42 (Vintage)", progress: 42 },
-    { node: "IMAGE-AGENT", status: "Generative AI: Lo-Fi Scene Synthesis", progress: 85 },
-    { node: "MUSIC-AGENT", status: "Suno API: Synthesis Complete (ID: lo-fi-42)", progress: 100 },
-    { node: "PROMPT-AGENT", status: "Claude AI: Engineering Batch Hooks", progress: 100 },
-    { node: "EXCEL-INGEST", status: "n8n Trigger: Processing spreadsheet data", progress: 100 },
+    { node: "UPLOAD-AGENT", status: "YouTube Data API: Scheduling Scheduled Post", progress: 15 },
+    { node: "FFMPEG-AGENT", status: "Looping 2min Suno track to 3 hours...", progress: 42 },
+    { node: "IMAGE-AGENT", status: "Midjourney: Upscaling rainy cafe scene", progress: 85 },
+    { node: "MUSIC-AGENT", status: "Suno AI: Synthesis Complete (Deep Focus)", progress: 100 },
+    { node: "METADATA-AI", status: "Claude: Generating SEO Metadata Block", progress: 100 },
+    { node: "IDEA-SCRAPER", status: "VidIQ: Extracting content gaps", progress: 100 },
   ]);
 
   useEffect(() => {
     setIsMounted(true);
-    
-    // Stable cluster data generated only on client
     setRenderCluster(Array.from({ length: 48 }, (_, i) => ({
       id: i + 1,
       status: Math.random() > 0.1 ? "Running" : "Idle",
       load: Math.floor(Math.random() * 100),
     })));
-    setClusterLoad(Math.floor(Math.random() * 40 + 40));
 
     const interval = setInterval(() => {
-      const agents = ["PROMPT-AGENT", "MUSIC-AGENT", "IMAGE-AGENT", "VIDEO-AGENT", "METADATA-AGENT", "UPLOAD-AGENT"];
+      const agents = ["IDEA-SCRAPER", "MUSIC-AGENT", "IMAGE-AGENT", "FFMPEG-AGENT", "METADATA-AI", "UPLOAD-AGENT"];
       const statuses = [
-        "Engineering Prompt Payloads...",
-        "Requesting Synthesis from Suno...",
-        "Synthesizing Visual Aesthetic...",
-        "Rendering FFmpeg filter_complex...",
-        "Optimizing SEO Metadata...",
-        "Syncing GCS to YouTube API..."
+        "Mining YouTube Gaps...",
+        "Calling Suno API...",
+        "Generating Midjourney Scene...",
+        "Merging 3h Lo-Fi Loop...",
+        "Optimizing Titles/Tags...",
+        "Syncing to YouTube API..."
       ];
       const randomIdx = Math.floor(Math.random() * agents.length);
       
@@ -76,21 +75,14 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const nicheStack = [
-    { name: "AI Tools", status: "15 Channels", growth: "+450%", color: "text-blue-400" },
-    { name: "Psychology", status: "12 Channels", growth: "+310%", color: "text-purple-400" },
-    { name: "Luxury Life", status: "8 Channels", growth: "+124%", color: "text-amber-400" },
-    { name: "Weird History", status: "10 Channels", growth: "+92%", color: "text-pink-400" },
-    { name: "Body Facts", status: "20 Channels", growth: "+210%", color: "text-green-400" },
-    { name: "Future Tech", status: "5 Channels", growth: "+180%", color: "text-cyan-400" }
+  const toolStack = [
+    { name: "Suno AI", icon: Music, status: "Active", color: "text-blue-400" },
+    { name: "Midjourney", icon: ImageIcon, status: "Active", color: "text-purple-400" },
+    { name: "FFmpeg", icon: Video, status: "Active", color: "text-amber-400" },
+    { name: "YouTube API", icon: Youtube, status: "Active", color: "text-red-400" },
+    { name: "Claude AI", icon: Sparkles, status: "Active", color: "text-green-400" },
+    { name: "VidIQ", icon: BarChart3, status: "Active", color: "text-cyan-400" }
   ];
-
-  const handleScaleViral = () => {
-    toast({
-      title: "Viral Multiplication Protocol: ACTIVE",
-      description: "Triggering 10 similar variants for NODE-PSYCH-12. Compute allocated.",
-    });
-  };
 
   if (!isMounted) return null;
 
@@ -103,44 +95,37 @@ export default function DashboardPage() {
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
             <div className="flex flex-col">
-              <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2 text-primary">
-                $1M Network Blueprint Control <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">Phase 3</span>
+              <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2 text-primary uppercase">
+                AI Lo-Fi Automation Factory <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v12.0</span>
               </h1>
               <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest text-primary flex items-center gap-2">
-                <Flame className="w-3 h-3 text-orange-500" /> ACTIVE CHANNELS: 104 | 1,080 VIDEOS/MO TARGET
+                <Flame className="w-3 h-3 text-orange-500" /> PRODUCTION SCALE: 450 VIDEOS/MO | 5 CHANNELS
               </span>
-            </div>
-            <div className="ml-auto flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20">
-                <TriangleAlert className="w-3 h-3 text-red-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest">VIRAL ALERT: NODE-PSYCH-12</span>
-              </div>
-              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">GRID STATUS: OPTIMIZED</Badge>
             </div>
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Monthly Video Output" value="9,450" icon={Layers} trend="12%" trendType="positive" />
-              <StatCard label="Network Reach (30d)" value="214.8M" icon={TrendingUp} trend="420%" trendType="positive" />
-              <StatCard label="Est. Net Revenue" value="$84,250" icon={DollarSign} trend="15%" trendType="positive" />
-              <StatCard label="Active Nodes" value="50" icon={Cpu} />
+              <StatCard label="Videos Produced (30d)" value="450" icon={Layers} trend="15%" trendType="positive" />
+              <StatCard label="Total Views (30d)" value="42.8M" icon={TrendingUp} trend="420%" trendType="positive" />
+              <StatCard label="Active Production Channels" value="5" icon={Network} />
+              <StatCard label="Parallel FFmpeg Nodes" value="50" icon={Cpu} />
             </div>
 
             <div className="grid gap-6 lg:grid-cols-3">
               <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
                 <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
                   <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                    <Star className="w-3 h-3" /> $1M Network Blueprint Stack
+                    <Star className="w-3 h-3" /> Hidden YouTube Automation Stack (7 Tools)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {nicheStack.map((niche) => (
-                      <div key={niche.name} className="p-4 rounded-2xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-center space-y-1">
-                        <p className={cn("text-xs font-bold uppercase tracking-tighter", niche.color)}>{niche.name}</p>
-                        <p className="text-[10px] text-muted-foreground font-mono">{niche.status}</p>
-                        <p className="text-[10px] font-bold text-green-500">{niche.growth}</p>
+                    {toolStack.map((tool) => (
+                      <div key={tool.name} className="p-4 rounded-2xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-center space-y-2">
+                        <tool.icon className={cn("w-6 h-6 mx-auto", tool.color)} />
+                        <p className={cn("text-[10px] font-bold uppercase tracking-tighter", tool.color)}>{tool.name}</p>
+                        <p className="text-[8px] text-muted-foreground font-mono">{tool.status}</p>
                       </div>
                     ))}
                   </div>
@@ -150,9 +135,9 @@ export default function DashboardPage() {
               <Card className="bg-card border-border/50 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
-                    <Server className="w-4 h-4 text-primary" /> FFmpeg Cluster (50 Nodes)
+                    <Server className="w-4 h-4 text-primary" /> FFmpeg Cluster Load
                   </CardTitle>
-                  <CardDescription>Industrial Scale: 300+ videos/day</CardDescription>
+                  <CardDescription>Merging Image + 3h Music Loop</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-6 gap-1">
@@ -160,18 +145,12 @@ export default function DashboardPage() {
                       <div 
                         key={node.id} 
                         className={`aspect-square rounded-sm border flex flex-col items-center justify-center gap-0.5 transition-all ${
-                          node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500 shadow-[0_0_10px_rgba(34,197,94,0.2)]" : "bg-secondary border-border text-muted-foreground"
+                          node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500" : "bg-secondary border-border text-muted-foreground"
                         }`}
                       >
-                        <span className="text-[6px] font-bold uppercase">N{node.id}</span>
+                        <span className="text-[6px] font-bold">N{node.id}</span>
                       </div>
                     ))}
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-[10px] uppercase font-bold text-muted-foreground">
-                    <span>Cluster Load: {clusterLoad}%</span>
-                    <span className="text-primary font-mono tracking-tighter animate-pulse flex items-center gap-1">
-                      <Activity className="w-3 h-3" /> GRID_SYNC_OK
-                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -182,9 +161,9 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2 text-primary">
                     <Workflow className="w-5 h-5" />
-                    Network View Velocity (100M+ Target)
+                    Production Sequence (Idea &rarr; Upload)
                   </CardTitle>
-                  <CardDescription>Views compounding across 104 media assets</CardDescription>
+                  <CardDescription>Autonomous content queue tracking</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <PerformanceChart />
@@ -195,13 +174,13 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <Terminal className="w-5 h-5 text-primary" />
-                    Automation Sequence (Firebase Logic)
+                    Automation Logs (Firebase Logic)
                   </CardTitle>
-                  <CardDescription>Workflow: Excel &rarr; AI Agents &rarr; YT Upload</CardDescription>
+                  <CardDescription>Cloud Functions triggering now</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {logs.map((job, idx) => (
-                    <div key={idx} className="group flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all animate-in fade-in slide-in-from-top-2">
+                    <div key={idx} className="group flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all">
                       <div className="space-y-1">
                         <p className="text-[11px] font-bold uppercase tracking-tight">{job.status}</p>
                         <p className="text-[9px] text-muted-foreground font-mono uppercase">{job.node}</p>
@@ -215,24 +194,6 @@ export default function DashboardPage() {
               </Card>
             </div>
           </main>
-          
-          <div className="sticky bottom-6 mx-6 md:mx-12 p-6 bg-primary text-primary-foreground rounded-3xl shadow-3xl flex flex-col md:flex-row items-center justify-between animate-in slide-in-from-bottom-12 duration-1000 border border-white/20 backdrop-blur-lg">
-            <div className="flex items-center gap-5 mb-4 md:mb-0">
-              <div className="p-4 bg-white/10 rounded-2xl border border-white/20 shadow-inner">
-                <Repeat className="w-8 h-8 fill-white/20" />
-              </div>
-              <div>
-                <p className="font-bold text-lg font-headline tracking-tight">Viral Multiplication Protocol: READY</p>
-                <p className="text-xs opacity-80 italic max-w-lg">&quot;1M View threshold detected. Triggering autonomous generation of 10 variants to dominate the current viral gap.&quot;</p>
-              </div>
-            </div>
-            <button 
-              onClick={handleScaleViral}
-              className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2"
-            >
-              <Sparkles className="w-4 h-4" /> Scale Viral Winning Asset
-            </button>
-          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>

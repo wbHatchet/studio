@@ -1,253 +1,31 @@
-/**
- * AI Lo-Fi Channel Factory Security Rules
- * 
- * Core Philosophy:
- * This ruleset enforces a strict user-ownership model where all data is hierarchically nested 
- * under a user's unique profile. The security model relies on the principle of "Authorization 
- * Independence," using denormalized ownership IDs (like ownerId) within documents to perform 
- * fast, efficient authorization checks without the need for cross-document lookups (get() calls).
- * 
- * Data Structure:
- * All application data is organized under the root path /userProfiles/{userId}. This includes:
- * - Projects: High-level containers for creator initiatives.
- * - Channels: YouTube channel metadata and management settings.
- * - Content Components: Scripts, Assets, Prompts, and Strategies.
- * - Production Pipeline: Videos, Playlists, Render Jobs, and Upload Jobs.
- * - Analytics: Performance metrics for both videos and channels.
- * 
- * Key Security Decisions:
- * 1. Strict Ownership: Access is restricted to the authenticated user whose UID matches 
- *    the root {userId} path parameter.
- * 2. Path-Data Consistency: For every create operation, the rules enforce that internal 
- *    ownership fields (e.g., ownerId) match the authenticated user's ID.
- * 3. Immutability: Relational links and ownership fields are made immutable upon update 
- *    to prevent data hijacking or accidental orphaning of records.
- * 4. Prototyping Flexibility: While authorization is strictly enforced, the specific 
- *    schema and data types of content fields are not validated to allow for rapid iteration.
- * 5. Job & Analytics Isolation: Even transient data like render jobs or daily analytics 
- *    are protected under the same ownership umbrella to ensure end-to-end data privacy.
- */
 
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // --- GLOBAL HELPER FUNCTIONS ---
-
-    /**
-     * @description Checks if the request is from a signed-in user.
-     */
     function isSignedIn() {
       return request.auth != null;
     }
-
-    /**
-     * @description Checks if the authenticated user matches the provided userId.
-     * @param userId The ID to compare against the auth UID.
-     */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    /**
-     * @description Combines ownership check with a check for document existence.
-     * Useful for update and delete operations.
-     */
-    function isExistingOwner(userId) {
-      return resource != null && isOwner(userId);
-    }
-
-    /**
-     * @description Validates that the ownerId in the incoming data matches the path userId.
-     * Used during creation to establish the relational link.
-     */
-    function isValidOwnership(userId) {
-      return request.resource.data.ownerId == userId;
-    }
-
-    /**
-     * @description Ensures the ownerId field cannot be changed after creation.
-     */
-    function isOwnershipImmutable() {
-      return request.resource.data.ownerId == resource.data.ownerId;
-    }
-
-    // --- COLLECTION RULES ---
-
-    /**
-     * @description Root user profile. Access is strictly limited to the user themselves.
-     * @path /userProfiles/{userId}
-     * @allow (get) request.auth.uid == "user_123"
-     * @deny (list) if user is not authenticated.
-     * @principle Self-service access and identity verification.
-     */
     match /userProfiles/{userId} {
-      allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId);
-      allow update, delete: if isExistingOwner(userId);
+      allow get, list, create, update, delete: if isOwner(userId);
 
-      /**
-       * @description Projects owned by the user.
-       * @path /userProfiles/{userId}/projects/{projectId}
-       * @allow (create) if ownerId in data matches the URL userId.
-       * @deny (update) if trying to change the ownerId.
-       * @principle Enforces path-based ownership and relational integrity.
-       */
-      match /projects/{projectId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && isValidOwnership(userId);
-        allow update: if isExistingOwner(userId) && isOwnershipImmutable();
-        allow delete: if isExistingOwner(userId);
-
-        /**
-         * @description AI-generated niche strategies associated with a project.
-         * @path /userProfiles/{userId}/projects/{projectId}/nicheStrategies/{nicheStrategyId}
-         */
-        match /nicheStrategies/{nicheStrategyId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update, delete: if isExistingOwner(userId);
-        }
-
-        /**
-         * @description AI-generated scripts for video production.
-         * @path /userProfiles/{userId}/projects/{projectId}/scripts/{scriptId}
-         */
-        match /scripts/{scriptId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update, delete: if isExistingOwner(userId);
-        }
-
-        /**
-         * @description Media assets (audio, visual) for content creation.
-         * @path /userProfiles/{userId}/projects/{projectId}/assets/{assetId}
-         */
-        match /assets/{assetId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update, delete: if isExistingOwner(userId);
-
-          /**
-           * @description External market listings for music beats.
-           * @path /userProfiles/{userId}/projects/{projectId}/assets/{assetId}/beatListings/{beatListingId}
-           */
-          match /beatListings/{beatListingId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId);
-            allow update, delete: if isExistingOwner(userId);
-
-            /**
-             * @description Individual sales records for a beat.
-             * @path /userProfiles/{userId}/projects/{projectId}/assets/{assetId}/beatListings/{beatListingId}/sales/{saleId}
-             */
-            match /sales/{saleId} {
-              allow get, list: if isOwner(userId);
-              allow create: if isOwner(userId);
-              allow update, delete: if isExistingOwner(userId);
-            }
-          }
-
-          /**
-           * @description Vector embeddings for semantic asset search.
-           * @path /userProfiles/{userId}/projects/{projectId}/assets/{assetId}/embeddings/{embeddingId}
-           */
-          match /embeddings/{embeddingId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId);
-            allow update, delete: if isExistingOwner(userId);
-          }
-        }
-
-        /**
-         * @description AI prompts for music and visual generation.
-         */
-        match /musicPrompts/{musicPromptId} {
-          allow get, list: if isOwner(userId);
-          allow create, update, delete: if isOwner(userId);
-        }
-        match /visualPrompts/{visualPromptId} {
-          allow get, list: if isOwner(userId);
-          allow create, update, delete: if isOwner(userId);
-        }
-
-        /**
-         * @description AI-generated strategy insights and optimization tips.
-         * @path /userProfiles/{userId}/projects/{projectId}/strategyInsights/{insightId}
-         */
-        match /strategyInsights/{insightId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update, delete: if isExistingOwner(userId);
-        }
-
-        /**
-         * @description YouTube channels managed under a project.
-         * @path /userProfiles/{userId}/projects/{projectId}/channels/{channelId}
-         */
-        match /channels/{channelId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update, delete: if isExistingOwner(userId);
-
-          /**
-           * @description Aggregated channel performance analytics.
-           */
-          match /analytics/{analyticId} {
-            allow get, list: if isOwner(userId);
-            allow create, update, delete: if isOwner(userId);
-          }
-
-          /**
-           * @description Videos produced and scheduled for the channel.
-           * @path /userProfiles/{userId}/projects/{projectId}/channels/{channelId}/videos/{videoId}
-           */
-          match /videos/{videoId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId);
-            allow update, delete: if isExistingOwner(userId);
-
-            /**
-             * @description Sequence of music assets for the video.
-             */
-            match /playlists/{playlistId} {
-              allow get, list: if isOwner(userId);
-              allow create, update, delete: if isOwner(userId);
-            }
-
-            /**
-             * @description Tracking for automated render pipeline tasks.
-             */
-            match /renderJobs/{renderJobId} {
-              allow get, list: if isOwner(userId);
-              allow create, update, delete: if isOwner(userId);
-            }
-
-            /**
-             * @description Tracking for YouTube upload automation.
-             */
-            match /uploadJobs/{uploadJobId} {
-              allow get, list: if isOwner(userId);
-              allow create, update, delete: if isOwner(userId);
-            }
-
-            /**
-             * @description Specific video performance metrics.
-             */
-            match /analytics/{analyticId} {
-              allow get, list: if isOwner(userId);
-              allow create, update, delete: if isOwner(userId);
-            }
-
-            /**
-             * @description Records of content replication based on viral success.
-             */
-            match /viralClones/{cloneId} {
-              allow get, list: if isOwner(userId);
-              allow create, update, delete: if isOwner(userId);
-            }
-          }
-        }
+      match /videoIdeas/{ideaId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /musicTracks/{trackId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /backgroundScenes/{sceneId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /videoQueue/{jobId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /publishedVideos/{videoId} {
+        allow read, write: if isOwner(userId);
       }
     }
   }
