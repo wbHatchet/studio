@@ -1,112 +1,92 @@
 
 {
   "entities": {
-    "Organization": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Organization",
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Global user account and profile settings.",
       "type": "object",
-      "description": "The root of the multi-tenant system, managing teams and billing.",
       "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "billingStatus": { "type": "string", "enum": ["active", "past_due", "suspended"] },
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "name", "billingStatus"]
+      "required": ["uid", "email"]
     },
-    "NicheTaxonomy": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "NicheTaxonomy",
+    "Project": {
+      "title": "Project",
+      "description": "High-level container for a Lo-Fi channel initiative (e.g., 'Halloween Lofi').",
       "type": "object",
-      "description": "Hierarchical classification for the AI Director to estimate profit.",
       "properties": {
         "id": { "type": "string" },
+        "ownerId": { "type": "string" },
         "name": { "type": "string" },
-        "baseCpmEstimate": { "type": "number" },
-        "slug": { "type": "string" }
+        "status": { "type": "string", "enum": ["active", "archived"] },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "name", "slug"]
+      "required": ["id", "ownerId", "name"]
     },
-    "Channel": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Channel",
+    "Job": {
+      "title": "Job",
+      "description": "An AI agent task in the automation pipeline.",
       "type": "object",
-      "description": "Managing a YouTube ID within the network grid.",
       "properties": {
         "id": { "type": "string" },
-        "orgId": { "type": "string" },
-        "ytChannelId": { "type": "string" },
-        "nicheId": { "type": "string" },
-        "name": { "type": "string" },
-        "subscriberCount": { "type": "number" },
-        "isActive": { "type": "boolean" },
-        "secretManagerRef": { "type": "string", "description": "Pointer to Vault for OAuth tokens." }
+        "projectId": { "type": "string" },
+        "job_type": { "type": "string", "enum": ["generate_music", "generate_image", "render_video", "metadata_gen", "youtube_upload"] },
+        "status": { "type": "string", "enum": ["pending", "processing", "completed", "failed"] },
+        "payload": { "type": "object" },
+        "resultUrl": { "type": "string" }
       },
-      "required": ["id", "orgId", "ytChannelId", "secretManagerRef"]
+      "required": ["id", "projectId", "job_type", "status"]
+    },
+    "Asset": {
+      "title": "Asset",
+      "description": "Media files stored in Firebase Storage (songs, images, etc.).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["audio", "image", "video", "thumbnail"] },
+        "storagePath": { "type": "string", "description": "e.g., /audio/song1.mp3" },
+        "metadata": { "type": "object" }
+      },
+      "required": ["id", "type", "storagePath"]
     },
     "Video": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Video",
+      "description": "Final video metadata and YouTube publication status.",
       "type": "object",
-      "description": "Massive metadata engine for 1M+ videos.",
       "properties": {
         "id": { "type": "string" },
         "channelId": { "type": "string" },
-        "status": { "type": "string" },
-        "metadata": {
-          "type": "object",
-          "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" },
-            "tags": { "type": "array", "items": { "type": "string" } },
-            "aiScore": { "type": "number" }
-          }
-        },
-        "files": {
-          "type": "object",
-          "properties": {
-            "masterMp4": { "type": "string" },
-            "thumbnail": { "type": "string" }
-          }
-        },
-        "ytSpecifics": {
-          "type": "object",
-          "properties": {
-            "youtubeVideoId": { "type": "string" },
-            "privacyStatus": { "type": "string" }
-          }
-        }
+        "title": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "scheduled", "published"] },
+        "youtubeId": { "type": "string" }
       },
-      "required": ["id", "channelId", "status"]
-    },
-    "Asset": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Asset",
-      "type": "object",
-      "description": "Lineage tracking for every stock clip or beat.",
-      "properties": {
-        "id": { "type": "string" },
-        "s3Key": { "type": "string" },
-        "type": { "type": "string" },
-        "licenseType": { "type": "string" },
-        "embeddingId": { "type": "string" }
-      },
-      "required": ["id", "s3Key", "type"]
+      "required": ["id", "channelId", "title", "status"]
     }
   },
   "firestore": {
     "structure": [
       {
-        "path": "/organizations/{orgId}",
-        "definition": { "entityName": "Organization", "schema": { "$ref": "#/backend/entities/Organization" }, "description": "Root tenants." }
+        "path": "/userProfiles/{userId}",
+        "definition": { "entityName": "UserProfile", "schema": { "$ref": "#/backend/entities/UserProfile" }, "description": "Root user nodes." }
       },
       {
-        "path": "/organizations/{orgId}/channels/{channelId}",
-        "definition": { "entityName": "Channel", "schema": { "$ref": "#/backend/entities/Channel" }, "description": "Managed channels." }
+        "path": "/userProfiles/{userId}/projects/{projectId}",
+        "definition": { "entityName": "Project", "schema": { "$ref": "#/backend/entities/Project" }, "description": "User projects." }
       },
       {
-        "path": "/organizations/{orgId}/channels/{channelId}/videos/{videoId}",
-        "definition": { "entityName": "Video", "schema": { "$ref": "#/backend/entities/Video" }, "description": "Video metadata engine." }
+        "path": "/userProfiles/{userId}/projects/{projectId}/jobs/{jobId}",
+        "definition": { "entityName": "Job", "schema": { "$ref": "#/backend/entities/Job" }, "description": "AI Agent tasks." }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/assets/{assetId}",
+        "definition": { "entityName": "Asset", "schema": { "$ref": "#/backend/entities/Asset" }, "description": "Media asset library." }
+      },
+      {
+        "path": "/userProfiles/{userId}/projects/{projectId}/videos/{videoId}",
+        "definition": { "entityName": "Video", "schema": { "$ref": "#/backend/entities/Video" }, "description": "Final video records." }
       }
     ]
   }

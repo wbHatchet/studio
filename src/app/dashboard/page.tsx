@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -35,17 +36,19 @@ export default function DashboardPage() {
   const [clusterLoad, setClusterLoad] = useState(0);
   
   const [logs, setLogs] = useState([
-    { node: "NODE-VIRAL-CLONE", status: "Trigger: 500K Views → Generating 10 Variants", progress: 100 },
-    { node: "NODE-APIFY-SCAN", status: "Mining 10 Blueprint Niches: 100 Topics Extracted", progress: 85 },
-    { node: "NODE-OPENAI-GEN", status: "GPT-4o: Writing 50 Viral Scripts (30s Twist Structure)", progress: 42 },
-    { node: "NODE-11LABS-VOICE", status: "ElevenLabs: Batch Synthesis (50 Voiceovers)", progress: 100 },
-    { node: "NODE-YT-PUSH", status: "YouTube API: Distributed Bulk Upload", progress: 15 },
+    { node: "UPLOAD-AGENT", status: "YouTube API: Inserting Video Metadata", progress: 15 },
+    { node: "METADATA-AGENT", status: "SEO Engine: Keywords & Hashtags Complete", progress: 100 },
+    { node: "VIDEO-AGENT", status: "FFmpeg Cluster: Rendering Node-42 (Vintage)", progress: 42 },
+    { node: "IMAGE-AGENT", status: "Generative AI: Lo-Fi Scene Synthesis", progress: 85 },
+    { node: "MUSIC-AGENT", status: "Suno API: Synthesis Complete (ID: lo-fi-42)", progress: 100 },
+    { node: "PROMPT-AGENT", status: "Claude AI: Engineering Batch Hooks", progress: 100 },
+    { node: "EXCEL-INGEST", status: "n8n Trigger: Processing spreadsheet data", progress: 100 },
   ]);
 
   useEffect(() => {
     setIsMounted(true);
     
-    // Stable cluster data
+    // Stable cluster data generated only on client
     setRenderCluster(Array.from({ length: 48 }, (_, i) => ({
       id: i + 1,
       status: Math.random() > 0.1 ? "Running" : "Idle",
@@ -54,15 +57,21 @@ export default function DashboardPage() {
     setClusterLoad(Math.floor(Math.random() * 40 + 40));
 
     const interval = setInterval(() => {
-      const newNode = ["NODE-FFMPEG-RENDER", "NODE-S3-SYNC", "NODE-REPURPOSE-DIST", "NODE-SEO-OPTIMIZE"][Math.floor(Math.random() * 4)];
-      const newStatus = [
-        "Rendering 4k Asset Node...",
-        "Syncing GCS Bucket: video-assets-factory",
-        "Distributing to TikTok/Reels API...",
-        "Engineering Metadata: Take Care Era"
-      ][Math.floor(Math.random() * 4)];
+      const agents = ["PROMPT-AGENT", "MUSIC-AGENT", "IMAGE-AGENT", "VIDEO-AGENT", "METADATA-AGENT", "UPLOAD-AGENT"];
+      const statuses = [
+        "Engineering Prompt Payloads...",
+        "Requesting Synthesis from Suno...",
+        "Synthesizing Visual Aesthetic...",
+        "Rendering FFmpeg filter_complex...",
+        "Optimizing SEO Metadata...",
+        "Syncing GCS to YouTube API..."
+      ];
+      const randomIdx = Math.floor(Math.random() * agents.length);
       
-      setLogs(prev => [{ node: newNode, status: newStatus, progress: Math.floor(Math.random() * 100) }, ...prev.slice(0, 4)]);
+      setLogs(prev => [
+        { node: agents[randomIdx], status: statuses[randomIdx], progress: Math.floor(Math.random() * 100) },
+        ...prev.slice(0, 6)
+      ]);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -186,9 +195,9 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <Terminal className="w-5 h-5 text-primary" />
-                    Agent Logic Stream
+                    Automation Sequence (Firebase Logic)
                   </CardTitle>
-                  <CardDescription>Director: [n8n] &rarr; [Suno] &rarr; [FFmpeg] &rarr; [YT]</CardDescription>
+                  <CardDescription>Workflow: Excel &rarr; AI Agents &rarr; YT Upload</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {logs.map((job, idx) => (
