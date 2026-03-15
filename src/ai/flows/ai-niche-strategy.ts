@@ -2,6 +2,7 @@
 /**
  * @fileOverview An AI agent that analyzes YouTube trends and identifies profitable "Cash-Cow" micro-niches.
  * Optimized for the 2026 "7-Channel Stack" strategy and Serialized Content formula.
+ * Updated to prioritize the 3 formats that reach 1M subscribers fastest.
  */
 
 import {ai} from '@/ai/genkit';
@@ -11,7 +12,7 @@ const AiNicheStrategyInputSchema = z.object({
   youtubeTrends: z.string().describe('A description of current YouTube trends.'),
   competitionAnalysis: z.string().describe('An analysis of the competitive landscape.'),
   keywordData: z.string().describe('Relevant keyword data and insights.'),
-  includeFastest2026Niches: z.boolean().default(true).describe('Whether to force include the top 7 growth niches for 2026.'),
+  includeFastestTo1M: z.boolean().default(true).describe('Whether to force include the top 3 growth formats that hit 1M subs fast.'),
 });
 
 const AiNicheStrategyOutputSchema = z.object({
@@ -23,11 +24,13 @@ const AiNicheStrategyOutputSchema = z.object({
     stackingPotential: z.string().describe('Ability to replicate across multiple channels'),
     competitionLevel: z.enum(['Low', 'Medium', 'High']),
     cpmEstimate: z.string().describe('Estimated CPM for this niche.'),
+    growthFormat: z.string().describe('Format (e.g., Knowledge Engine, Story Series, Visual Satisfaction)'),
   })),
   serializedSeriesIdeas: z.array(z.object({
     seriesTitle: z.string().describe('Title for a serialized content series (e.g. Rich Habits #1-20).'),
     concept: z.string(),
     targetAudience: z.string(),
+    viralMultiplier: z.string().describe('How to clone this if it hits 1M views.'),
   })),
   suggestedMonetization: z.object({
     adRevenueEst: z.string(),
@@ -52,18 +55,16 @@ YouTube Trends: {{{youtubeTrends}}}
 Competition Analysis: {{{competitionAnalysis}}}
 Keyword Data: {{{keywordData}}}
 
-{{#if includeFastest2026Niches}}
-PRIORITIZE EVALUATION OF THESE 7 TOP 2026 NICHES:
-1. AI Tools & Automation (High CPM)
-2. Body Explainers ("Inside Your Body")
-3. Luxury & Billionaire Lifestyle
-4. Micro-Learning / Psychology Facts
-5. Transformation (Before -> After)
-6. Satisfying Food & Cooking (Language Agnostic)
-7. Mystery & History Stories (High Retention)
+{{#if includeFastestTo1M}}
+PRIORITIZE EVALUATION OF THESE 3 FORMATS THAT HIT 1M SUBS FASTEST:
+1. "Did You Know?" Knowledge Engine (Rapid-fire facts, high curiosity, 30-40s).
+2. Story Series Channels (Serialized storytelling, Reddits/Wiki mining, high binge-watch potential).
+3. "Visual Satisfaction" Channels (Visual dopamine, factory processes, food builds, language-agnostic).
 {{/if}}
 
 STRICT INSTRUCTION: Focus on "Serialized Content" (Series formats like #1-20) as it compounds views 400x faster than one-offs.
+
+Identify "Viral Multiplication" triggers: If a video hits 1M views, suggest how to generate 10 similar clones.
 
 Evaluate each niche for:
 1. Trend Velocity (Growth speed)

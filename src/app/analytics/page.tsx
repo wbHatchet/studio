@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Loader2, TrendingUp, Target, Sparkles, BrainCircuit, DollarSign, LineChart, RefreshCw, Zap, Rocket, Star, BookOpen } from "lucide-react";
+import { Loader2, TrendingUp, Target, Sparkles, BrainCircuit, DollarSign, LineChart, RefreshCw, Zap, Rocket, Star, BookOpen, Repeat } from "lucide-react";
 import { aiPerformanceFeedback, AiPerformanceFeedbackOutput } from "@/ai/flows/ai-performance-feedback-flow";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -25,14 +25,14 @@ export default function AnalyticsPage() {
   }, []);
 
   const [formData, setFormData] = useState({
-    channelNiche: "Multi-Channel Cash-Cow Grid (7 Niches)",
-    currentContentStrategy: "2 videos/day per channel. Serialized 'Habits' and 'Explainers' formula. Target AVD: 100%+",
+    channelNiche: "Multi-Channel Cash-Cow Grid (Knowledge + Stories + Visuals)",
+    currentContentStrategy: "3 videos/day per channel. Viral Multiplication triggered on 1M views. target AVD: 110%",
     performanceData: [
-      { title: "Rich Habits #12", views: 1200000, ctr: 14.2, watchTimeMinutes: 450000, beatSales: 0, publicationDate: "2024-06-01" },
-      { title: "Body Explain: Stop Sleep", views: 850000, ctr: 11.5, watchTimeMinutes: 320000, beatSales: 0, publicationDate: "2024-06-02" },
-      { title: "AI Replacement #3", views: 420000, ctr: 9.8, watchTimeMinutes: 120000, beatSales: 0, publicationDate: "2024-06-03" },
+      { title: "Knowledge Engine #12", views: 1200000, ctr: 14.2, watchTimeMinutes: 450000, beatSales: 0, publicationDate: "2024-06-01" },
+      { title: "Story Series: Dark History", views: 850000, ctr: 11.5, watchTimeMinutes: 320000, beatSales: 0, publicationDate: "2024-06-02" },
+      { title: "Visual Satisfaction: Restoration", views: 420000, ctr: 9.8, watchTimeMinutes: 120000, beatSales: 0, publicationDate: "2024-06-03" },
     ],
-    totalViewsThisWeek: 8250000,
+    totalViewsThisWeek: 12250000,
     totalBeatSalesThisWeek: 0
   });
 
@@ -41,7 +41,7 @@ export default function AnalyticsPage() {
     try {
       const output = await aiPerformanceFeedback(formData);
       setResult(output);
-      toast({ title: "Analysis Complete", description: "Strategic retraining loop optimized." });
+      toast({ title: "Analysis Complete", description: "Viral logic optimized for $40K revenue model." });
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "Failed to process performance data." });
     } finally {
@@ -71,19 +71,19 @@ export default function AnalyticsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">$42,850.00</div>
-                  <p className="text-[10px] text-green-500 mt-1">Goal: $100K/mo target</p>
+                  <div className="text-2xl font-bold font-headline">$38,850.00</div>
+                  <p className="text-[10px] text-green-500 mt-1">Target: $40K/mo model</p>
                 </CardContent>
               </Card>
               <Card className="bg-card border-blue-500/20 shadow-lg">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
-                    <LineChart className="w-3 h-3 text-blue-500" /> Compounding AVD
+                    <LineChart className="w-3 h-3 text-blue-500" /> Average Retention
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline text-blue-400">102.4%</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">+14% vs. non-serialized</p>
+                  <div className="text-2xl font-bold font-headline text-blue-400">112.4%</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Format: Knowledge Engine</p>
                 </CardContent>
               </Card>
               <Card className="bg-card border-primary/20 shadow-lg">
@@ -94,18 +94,18 @@ export default function AnalyticsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold font-headline text-primary">400x</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">Serialized view compound</p>
+                  <p className="text-[10px] text-muted-foreground mt-1">Serialized view compounding</p>
                 </CardContent>
               </Card>
               <Card className="bg-card shadow-lg">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
-                    <Zap className="w-3 h-3 text-orange-400" /> Swipe Rate
+                    <Repeat className="w-3 h-3 text-orange-400" /> Viral Clones
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-headline">11.2%</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">Benchmark: &lt;20%</p>
+                  <div className="text-2xl font-bold font-headline">124</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Active multiplication loops</p>
                 </CardContent>
               </Card>
             </div>
@@ -116,22 +116,22 @@ export default function AnalyticsPage() {
                   <CardHeader>
                     <CardTitle className="font-headline flex items-center gap-2">
                       <Target className="w-5 h-5 text-primary" />
-                      Serialized Performance Matrix
+                      1M+ Sub Growth Analysis
                     </CardTitle>
-                    <CardDescription>Compounding retention across 7 niche series</CardDescription>
+                    <CardDescription>Performance across Knowledge, Stories, and Visual Satisfaction</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-3 gap-4">
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">AI Tools Series</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Knowledge Hub</p>
                         <p className="text-lg font-bold font-headline text-primary">12.4M Views</p>
                       </div>
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Body Hacks</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Story Series</p>
                         <p className="text-lg font-bold font-headline text-green-500">18.2M Views</p>
                       </div>
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Billionaire Life</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1">Visual Satisfaction</p>
                         <p className="text-lg font-bold font-headline text-orange-400">22.8M Views</p>
                       </div>
                     </div>
@@ -149,14 +149,14 @@ export default function AnalyticsPage() {
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="animate-spin mr-2" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-                      Run Strategic Optimization Loop
+                      Optimize Viral Multiplication Loop
                     </Button>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-card">
                   <CardHeader>
-                    <CardTitle className="font-headline text-primary">Network Retention Compounding</CardTitle>
+                    <CardTitle className="font-headline text-primary">Multi-Platform Compounding</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <PerformanceChart />
@@ -177,20 +177,20 @@ export default function AnalyticsPage() {
                   <CardContent className="space-y-6">
                     <div className="space-y-3">
                       <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
-                        <span>Month 3 (10 CH Grid)</span>
+                        <span>Phase 1 (5 CH Grid)</span>
                         <span className="text-primary">85% COMPLETE</span>
                       </div>
                       <Progress value={85} className="h-1.5" />
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
-                        <span>Month 6 (20 CH Grid)</span>
+                        <span>Phase 2 (10 CH Grid)</span>
                         <span className="text-primary">42% TARGET</span>
                       </div>
                       <Progress value={42} className="h-1.5" />
                     </div>
                     <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 italic text-[11px] leading-relaxed text-muted-foreground">
-                      "System retraining: Shifting node cluster #4 from History to Food Hacks. Retention delta: +42%. Serialized compounding triggered for '60 Second Knowledge' stack."
+                      "System retraining: Scaling 'Knowledge Engine' Node clusters. Revenue model calibrated for $10K-$40K monthly velocity. Serialized compounding active."
                     </div>
                   </CardContent>
                 </Card>
@@ -201,7 +201,7 @@ export default function AnalyticsPage() {
                       <CardHeader className="bg-primary/5 py-3">
                         <CardTitle className="flex items-center gap-2 text-primary font-headline text-xs uppercase tracking-widest">
                           <Sparkles className="w-4 h-4" />
-                          Viral Intelligence Update
+                          Viral Multiplier Update
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="pt-6">
@@ -211,7 +211,7 @@ export default function AnalyticsPage() {
 
                     <Card className="bg-card shadow-lg">
                       <CardHeader className="py-3">
-                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Retraining Adjustments</CardTitle>
+                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Strategic Adjustments</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">

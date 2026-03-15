@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, Target, Zap, TrendingUp, BarChart3, Layers, BookOpen, DollarSign } from "lucide-react";
+import { Loader2, Sparkles, Target, Zap, TrendingUp, BarChart3, Layers, BookOpen, DollarSign, Repeat } from "lucide-react";
 import { aiNicheStrategy } from "@/ai/flows/ai-niche-strategy";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -19,10 +19,10 @@ export default function StrategyPage() {
   const [result, setResult] = useState<any>(null);
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    youtubeTrends: "High interest in AI tools, curiosity-driven medical explainers, and serialized 'Rich Habits' content.",
-    competitionAnalysis: "Generic niches are saturated; micro-learning and mystery storytelling show high growth with low production friction.",
+    youtubeTrends: "High interest in AI tools, rapid-fire 'Did You Know?' facts, and serialized Story Series content.",
+    competitionAnalysis: "Generic niches are saturated; micro-learning and 'Visual Satisfaction' formats show highest global growth potential.",
     keywordData: "Searches for 'AI tools to replace job' and 'body hack psychology' up 55% month-over-month.",
-    includeFastest2026Niches: true
+    includeFastestTo1M: true
   });
 
   async function handleAnalyze() {
@@ -30,7 +30,7 @@ export default function StrategyPage() {
     try {
       const output = await aiNicheStrategy(formData);
       setResult(output);
-      toast({ title: "Analysis Complete", description: "Identified 2026 growth opportunities." });
+      toast({ title: "Analysis Complete", description: "Identified 1M+ subscriber growth formats." });
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "Niche analysis failed." });
     } finally {
@@ -56,9 +56,9 @@ export default function StrategyPage() {
                   <CardHeader>
                     <CardTitle className="font-headline text-lg flex items-center gap-2">
                       <TrendingUp className="w-5 h-5 text-primary" />
-                      2026 Market Intelligence
+                      1M+ Subscriber Intelligence
                     </CardTitle>
-                    <CardDescription>Input data to identify 400x view compounding gaps</CardDescription>
+                    <CardDescription>Input data to identify formats that hit 1M subs fast</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
@@ -96,12 +96,12 @@ export default function StrategyPage() {
                       {loading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Analyzing Compound Gaps...
+                          Analyzing Growth Gaps...
                         </>
                       ) : (
                         <>
                           <Sparkles className="mr-2 h-4 w-4" />
-                          Evaluate 7-Niche Stack
+                          Evaluate 1M+ Growth Stack
                         </>
                       )}
                     </Button>
@@ -110,11 +110,13 @@ export default function StrategyPage() {
 
                 <Card className="bg-primary/5 border-primary/20">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xs font-bold uppercase text-primary">Strategy Idea: 60 Second Knowledge</CardTitle>
+                    <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
+                      <Repeat className="w-3 h-3" /> Viral Multiplication Logic
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-xs italic text-muted-foreground leading-relaxed">
-                      "A multi-topic hybrid channel stacking Body Facts, Psychology, Money habits, and AI tools. Upload frequency: 3 Shorts/day. Compound velocity: EXTREME."
+                      "When one video hits 1M views, the system triggers the 10-clone multiplication protocol. Focus on 'Knowledge Engine' and 'Visual Satisfaction' for highest replay value."
                     </p>
                   </CardContent>
                 </Card>
@@ -143,15 +145,18 @@ export default function StrategyPage() {
                       <CardHeader className="bg-primary/5 flex flex-row items-center justify-between">
                         <CardTitle className="flex items-center gap-2 text-primary font-headline text-lg">
                           <Layers className="w-5 h-5" />
-                          Niche Opportunity Scoring
+                          Growth Format Scoring
                         </CardTitle>
-                        <Badge variant="outline" className="border-primary/20 text-primary">v2026.5</Badge>
+                        <Badge variant="outline" className="border-primary/20 text-primary">v2026.8</Badge>
                       </CardHeader>
                       <CardContent className="pt-6 space-y-6">
                         {result.suggestedMicroNiches.map((niche: any, idx: number) => (
                           <div key={idx} className="space-y-2 p-4 rounded-xl bg-secondary/20 border border-border">
                             <div className="flex justify-between items-center">
-                              <h4 className="font-bold text-sm">{niche.name}</h4>
+                              <div>
+                                <h4 className="font-bold text-sm">{niche.name}</h4>
+                                <p className="text-[10px] text-primary font-bold uppercase">{niche.growthFormat}</p>
+                              </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] font-mono font-bold text-green-500">{niche.cpmEstimate} CPM</span>
                                 <Badge className="bg-primary text-primary-foreground text-[9px] uppercase">
@@ -173,15 +178,19 @@ export default function StrategyPage() {
                       <CardHeader className="bg-blue-500/5">
                         <CardTitle className="flex items-center gap-2 text-blue-400 font-headline text-lg">
                           <BookOpen className="w-5 h-5" />
-                          Serialized Series Formula
+                          Serialized Compounding Formula
                         </CardTitle>
-                        <CardDescription>Series compound 400x faster than one-offs</CardDescription>
+                        <CardDescription>Story Series compound 400x faster than one-offs</CardDescription>
                       </CardHeader>
                       <CardContent className="pt-6 space-y-4">
                         {result.serializedSeriesIdeas.map((series: any, idx: number) => (
                           <div key={idx} className="p-3 rounded-lg border border-blue-500/10 bg-blue-500/5">
-                            <p className="text-xs font-bold text-blue-400 mb-1">{series.seriesTitle}</p>
-                            <p className="text-[11px] text-muted-foreground italic leading-relaxed">"{series.concept}"</p>
+                            <div className="flex justify-between items-start mb-1">
+                              <p className="text-xs font-bold text-blue-400">{series.seriesTitle}</p>
+                              <Badge variant="outline" className="text-[8px] border-blue-500/30">1M CLONE ENABLED</Badge>
+                            </div>
+                            <p className="text-[11px] text-muted-foreground italic leading-relaxed mb-2">"{series.concept}"</p>
+                            <p className="text-[9px] text-blue-500/80 font-bold uppercase">Clone Strategy: {series.viralMultiplier}</p>
                           </div>
                         ))}
                       </CardContent>
@@ -190,35 +199,22 @@ export default function StrategyPage() {
                     <Card className="bg-card">
                       <CardHeader>
                         <CardTitle className="font-headline text-lg flex items-center gap-2">
-                          <DollarSign className="w-5 h-5 text-green-500" /> Monetization Forecast
+                          <DollarSign className="w-5 h-5 text-green-500" /> Revenue Forecast ($10K-$40K Model)
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="grid grid-cols-3 gap-4">
                         <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Ad Revenue</p>
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Ad Rev (Partner)</p>
                           <p className="text-sm font-bold text-primary mt-1">{result.suggestedMonetization.adRevenueEst}</p>
                         </div>
                         <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Affiliate</p>
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Affiliate (Amazon)</p>
                           <p className="text-sm font-bold text-green-500 mt-1">{result.suggestedMonetization.affiliateNiche}</p>
                         </div>
                         <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Brand Deals</p>
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Micro-Sponsors</p>
                           <p className="text-sm font-bold text-orange-400 mt-1">{result.suggestedMonetization.brandDealPotential}</p>
                         </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-card">
-                      <CardHeader>
-                        <CardTitle className="font-headline text-lg flex items-center gap-2">
-                          <Sparkles className="w-5 h-5 text-primary" /> Actionable Insights
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-xs leading-relaxed text-muted-foreground whitespace-pre-wrap italic bg-secondary/20 p-4 rounded-xl">
-                          "{result.actionableInsights}"
-                        </p>
                       </CardContent>
                     </Card>
                   </div>
