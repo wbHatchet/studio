@@ -160,7 +160,7 @@ export default function VisualsProductionPage() {
                             </div>
                             <div className="p-3 rounded-lg bg-black/90 text-[10px] font-mono leading-relaxed text-blue-400">
                               {/* Using animationPrompt field to simulate the complex filter string generator */}
-                              [0:v]scale=1280x720,curves=vintage,vignette[bg];[1:a]showwaves=s=1280x720:colors=white@0.3[waves];[bg][waves]overlay,noise[out]
+                              [0:v]scale=1280x720,curves=vintage,vignette[bg];[1:a]showwaves=s=1280x720:colors=white@0.3[waves];[bg][waves]overlay,noise[outv]
                             </div>
                           </div>
                         </CardContent>
