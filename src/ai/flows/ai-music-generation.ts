@@ -13,6 +13,10 @@ import {z} from 'genkit';
 
 // Input Schema
 const GenerateMusicPromptInputSchema = z.object({
+  referenceUrl: z
+    .string()
+    .optional()
+    .describe('A link to a trendy Lo-Fi song (e.g. from LoFi Girl) to inspire the generation.'),
   nicheConcept: z
     .string()
     .describe(
@@ -50,7 +54,7 @@ const GenerateMusicPromptOutputSchema = z.object({
   musicGeneratorPrompt: z
     .string()
     .describe(
-      'A detailed prompt string optimized for an AI music generator, describing the Lo-Fi track to be created.'
+      'A detailed prompt string optimized for an AI music generator (like Suno AI), describing the Lo-Fi track to be created.'
     ),
   musicDescription: z
     .string()
@@ -70,11 +74,13 @@ const musicPromptGenerator = ai.definePrompt({
   name: 'musicPromptGenerator',
   input: {schema: GenerateMusicPromptInputSchema},
   output: {schema: GenerateMusicPromptOutputSchema},
-  prompt: `You are an expert music producer specializing in creating detailed prompts for AI music generators to produce high-quality instrumental Lo-Fi tracks. Your goal is to craft a comprehensive prompt that an AI like Suno AI could use to synthesize music matching the user's specifications.
+  prompt: `You are an expert music producer specializing in creating detailed prompts for AI music generators to produce high-quality instrumental Lo-Fi tracks. 
 
-Based on the following inputs, generate two things:
-1. A detailed 'musicGeneratorPrompt' that includes genre, sub-genre, mood, instrumentation, tempo, and any specific effects or characteristics. Be descriptive and precise.
-2. A 'musicDescription' that is a human-readable summary of the Lo-Fi track to be generated.
+{{#if referenceUrl}}
+Inspired by this trendy Lo-Fi reference: {{{referenceUrl}}}
+{{/if}}
+
+Your goal is to craft a comprehensive prompt that an AI like Suno AI could use to synthesize music matching the user's specifications.
 
 Micro-Niche Concept: {{{nicheConcept}}}
 Desired Mood: {{{mood}}}
@@ -83,11 +89,12 @@ Tempo Description: {{{tempoDescription}}}
 Target Duration/Loop: {{{targetDuration}}}
 Additional Instructions: {{{additionalInstructions}}}
 
-Example 'musicGeneratorPrompt' format:
-"Genre: Lo-fi Hip Hop. Sub-genre: Chillhop. Mood: Calm, Reflective. Instrumentation: Warm Rhodes piano chords, gentle boom-bap drums with subtle vinyl crackle, smooth upright bass, distant atmospheric synth pad. Tempo: Slow, 78 BPM. Structure: Smooth, continuous loop suitable for background music. Effects: Light reverb, tape saturation. Duration: Approximately 5 minutes, designed for looping."
+Generate:
+1. A detailed 'musicGeneratorPrompt' that includes genre, sub-genre, mood, instrumentation, tempo, and effects. It should be optimized for Suno AI.
+2. A 'musicDescription' that is a human-readable summary.
 
-Example 'musicDescription' format:
-"A calm and reflective chillhop track featuring warm Rhodes piano, gentle boom-bap drums, upright bass, and atmospheric synths, perfect for a rainy city night ambiance."
+Example 'musicGeneratorPrompt' format:
+"Genre: Lo-fi Hip Hop. Sub-genre: Chillhop. Mood: Calm, Reflective. Instrumentation: Warm Rhodes piano chords, gentle boom-bap drums with subtle vinyl crackle, smooth upright bass, distant atmospheric synth pad. Tempo: Slow, 78 BPM. Structure: Smooth, continuous loop suitable for background music. Effects: Light reverb, tape saturation."
 
 Now, generate the output based on the provided inputs.`,
 });

@@ -1,45 +1,41 @@
 'use server';
 /**
  * @fileOverview This file provides a Genkit flow for generating prompts for AI image and animation tools.
+ * It supports generating multiple variations and processing image-to-prompt requests.
  *
- * - aiVisualsAndAnimation - A function that generates prompts for AI image and animation tools based on user input.
- * - AiVisualsAndAnimationInput - The input type for the aiVisualsAndAnimation function.
- * - AiVisualsAndAnimationOutput - The return type for the aiVisualsAndAnimation function.
+ * - aiVisualsAndAnimation - A function that generates prompts for AI image and animation tools.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const AiVisualsAndAnimationInputSchema = z.object({
+  inputType: z.enum(['text', 'image']).describe('Whether to generate from a description or an existing image.'),
   description: z
     .string()
-    .describe('A detailed description of the desired lo-fi artwork and animation scene.'),
+    .optional()
+    .describe('A detailed description or an image reference description.'),
   mood: z
     .string()
     .optional()
-    .describe('The overall mood or atmosphere of the scene (e.g., "calm", "melancholic", "dreamy").'),
+    .describe('The overall mood or atmosphere (e.g., "calm", "dreamy").'),
   style: z
     .string()
     .optional()
-    .describe('The artistic style for the image (e.g., "anime style", "pixel art", "vaporwave art").'),
-  animationEffect: z
-    .string()
-    .optional()
-    .describe(
-      'Describe the desired animation effect on the image (e.g., "subtle rain falling", "steam rising from a cup", "leaves rustling").'
-    )
+    .describe('The artistic style (e.g., "anime style", "pixel art").'),
+  variationCount: z.number().optional().default(1).describe('How many prompt variations to generate (up to 10).')
 });
 export type AiVisualsAndAnimationInput = z.infer<
   typeof AiVisualsAndAnimationInputSchema
 >;
 
+const PromptPairSchema = z.object({
+  imagePrompt: z.string().describe('Detailed prompt for AI image generation (Midjourney/DALL-E/Leonardo).'),
+  animationPrompt: z.string().describe('Detailed prompt for AI animation (Pika/Hailuo).')
+});
+
 const AiVisualsAndAnimationOutputSchema = z.object({
-  imagePrompt: z
-    .string()
-    .describe('A detailed prompt for an AI image generation tool to create the lo-fi artwork.'),
-  animationPrompt: z
-    .string()
-    .describe('A detailed prompt for an AI animation tool to animate the generated image.')
+  variations: z.array(PromptPairSchema).describe('A list of image and animation prompt pairs.')
 });
 export type AiVisualsAndAnimationOutput = z.infer<
   typeof AiVisualsAndAnimationOutputSchema
@@ -55,22 +51,25 @@ const aiVisualsAndAnimationPrompt = ai.definePrompt({
   name: 'aiVisualsAndAnimationPrompt',
   input: {schema: AiVisualsAndAnimationInputSchema},
   output: {schema: AiVisualsAndAnimationOutputSchema},
-  prompt: `You are an expert AI prompt engineer specializing in creating Lo-Fi aesthetics for visual and animation tools.
-Your task is to generate two distinct prompts:
-1. A detailed prompt for an AI image generation tool (e.g., DALL-E, Midjourney) to produce a high-quality Lo-Fi artwork.
-2. A detailed prompt for an AI animation tool (e.g., Pika AI, Hailuo AI) to animate the static image generated from the first prompt.
+  prompt: `You are an expert AI prompt engineer specializing in Lo-Fi aesthetics.
 
-Consider the user's description and preferences:
-- **Core Scene Description**: {{{description}}}
-{{#if mood}}- **Overall Mood/Atmosphere**: {{{mood}}}{{/if}}
-{{#if style}}- **Artistic Style**: {{{style}}}{{/if}}
-{{#if animationEffect}}- **Desired Animation Effect**: {{{animationEffect}}}{{/if}}
+{{#if (eq inputType "image")}}
+The user has provided an image description (inspired by a favorite YouTube or Pinterest image). 
+Remove any existing text from your prompt concepts and focus purely on describing the visual scene for Piclumen or Leonardo AI.
+{{else}}
+The user wants to generate fresh Lo-Fi visual concepts.
+{{/if}}
 
-For the image prompt, ensure it includes elements typical of Lo-Fi aesthetics, such as soft lighting, vintage feel, cozy settings, atmospheric effects, and a sense of calm or introspection.
-For the animation prompt, focus on subtle, looping animations that enhance the Lo-Fi atmosphere described in the image prompt, building directly upon the visual elements.
+Your task is to generate {{{variationCount}}} variations of:
+1. An 'imagePrompt' for high-quality Lo-Fi artwork (soft lighting, vintage feel, cozy settings).
+2. An 'animationPrompt' for Hailuo AI or Pika AI to animate that specific static image (focus on subtle, looping effects like flickering candles, falling rain, or swaying hair).
 
-Generate the output in JSON format, strictly adhering to the following schema:
-{{jsonSchema AiVisualsAndAnimationOutputSchema}}`
+Input Context:
+- **Description**: {{{description}}}
+- **Mood**: {{{mood}}}
+- **Style**: {{{style}}}
+
+Generate exactly {{{variationCount}}} variations in JSON format.`
 });
 
 const aiVisualsAndAnimationFlow = ai.defineFlow(

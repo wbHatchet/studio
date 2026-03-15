@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -9,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Music, Copy, RefreshCcw, Send } from "lucide-react";
+import { Loader2, Music, Copy, RefreshCcw, Link as LinkIcon } from "lucide-react";
 import { generateMusicPrompt, GenerateMusicPromptOutput } from "@/ai/flows/ai-music-generation";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,6 +18,7 @@ export default function MusicProductionPage() {
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
+    referenceUrl: "",
     nicheConcept: "Rainy cyberpunk coffee shop at 2am",
     mood: "Chill, melancholic, nostalgic",
     keyInstruments: "Muffled piano, smooth sub bass, vinyl crackle",
@@ -66,46 +65,62 @@ export default function MusicProductionPage() {
                   </CardTitle>
                   <CardDescription>Configure the mood and style for your AI music generation</CardDescription>
                 </CardHeader>
-                <CardContent className="grid gap-6 md:grid-cols-2">
+                <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label>Micro-Niche Concept</Label>
+                    <Label className="flex items-center gap-2">
+                      <LinkIcon className="w-3 h-3" />
+                      Reference Lo-Fi URL (Optional)
+                    </Label>
                     <Input 
-                      value={formData.nicheConcept}
-                      onChange={(e) => setFormData({...formData, nicheConcept: e.target.value})}
+                      placeholder="Paste link from Lofi Girl or other trendy channel"
+                      value={formData.referenceUrl}
+                      onChange={(e) => setFormData({...formData, referenceUrl: e.target.value})}
                       className="bg-secondary/30"
                     />
+                    <p className="text-[10px] text-muted-foreground italic">AI will analyze the vibe of the song at this link.</p>
                   </div>
-                  <div className="space-y-2">
-                    <Label>Desired Mood</Label>
-                    <Input 
-                      value={formData.mood}
-                      onChange={(e) => setFormData({...formData, mood: e.target.value})}
-                      className="bg-secondary/30"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Key Instruments</Label>
-                    <Input 
-                      value={formData.keyInstruments}
-                      onChange={(e) => setFormData({...formData, keyInstruments: e.target.value})}
-                      className="bg-secondary/30"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Tempo & Rhythm</Label>
-                    <Input 
-                      value={formData.tempoDescription}
-                      onChange={(e) => setFormData({...formData, tempoDescription: e.target.value})}
-                      className="bg-secondary/30"
-                    />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <Label>Additional Instructions</Label>
-                    <Textarea 
-                      value={formData.additionalInstructions}
-                      onChange={(e) => setFormData({...formData, additionalInstructions: e.target.value})}
-                      className="bg-secondary/30 min-h-[80px]"
-                    />
+
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label>Micro-Niche Concept</Label>
+                      <Input 
+                        value={formData.nicheConcept}
+                        onChange={(e) => setFormData({...formData, nicheConcept: e.target.value})}
+                        className="bg-secondary/30"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Desired Mood</Label>
+                      <Input 
+                        value={formData.mood}
+                        onChange={(e) => setFormData({...formData, mood: e.target.value})}
+                        className="bg-secondary/30"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Key Instruments</Label>
+                      <Input 
+                        value={formData.keyInstruments}
+                        onChange={(e) => setFormData({...formData, keyInstruments: e.target.value})}
+                        className="bg-secondary/30"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Tempo & Rhythm</Label>
+                      <Input 
+                        value={formData.tempoDescription}
+                        onChange={(e) => setFormData({...formData, tempoDescription: e.target.value})}
+                        className="bg-secondary/30"
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <Label>Additional Instructions</Label>
+                      <Textarea 
+                        value={formData.additionalInstructions}
+                        onChange={(e) => setFormData({...formData, additionalInstructions: e.target.value})}
+                        className="bg-secondary/30 min-h-[80px]"
+                      />
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter className="bg-secondary/10 border-t border-border/50 p-6">
