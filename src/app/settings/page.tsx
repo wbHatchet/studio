@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Music, Info, Cpu, Zap, Video, HardDrive } from "lucide-react";
+import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [sunoEndpoint, setSunoEndpoint] = useState("");
   const [gcsBucket, setGcsBucket] = useState("video-assets-factory");
+  const [nodeCount, setNodeCount] = useState(50);
 
   useEffect(() => {
     setSunoEndpoint(localStorage.getItem("suno_api_endpoint") || "");
@@ -44,29 +45,52 @@ export default function SettingsPage() {
 
           <main className="p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-6">
-              <Tabs defaultValue="storage" className="space-y-6">
+              <Tabs defaultValue="core" className="space-y-6">
                 <TabsList className="bg-secondary/50 p-1">
                   <TabsTrigger value="core" className="gap-2"><Cpu className="w-4 h-4" /> Core Brain</TabsTrigger>
                   <TabsTrigger value="storage" className="gap-2"><HardDrive className="w-4 h-4" /> Asset Storage</TabsTrigger>
                   <TabsTrigger value="media" className="gap-2"><Video className="w-4 h-4" /> Media Engine</TabsTrigger>
                   <TabsTrigger value="growth" className="gap-2"><Zap className="w-4 h-4" /> Growth Stack</TabsTrigger>
-                  <TabsTrigger value="unofficial" className="gap-2"><Music className="w-4 h-4" /> Suno (OSS)</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="core" className="space-y-6">
                   <Card className="bg-card">
                     <CardHeader>
                       <CardTitle className="font-headline">Intelligence Layer</CardTitle>
-                      <CardDescription>Primary LLMs for strategy and scripting</CardDescription>
+                      <CardDescription>Primary LLMs and Render Grid Orchestration</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid gap-6 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label>OpenAI API Key</Label>
-                        <Input type="password" placeholder="sk-..." className="bg-secondary/30" />
+                    <CardContent className="space-y-6">
+                      <div className="grid gap-6 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label>OpenAI API Key</Label>
+                          <Input type="password" placeholder="sk-..." className="bg-secondary/30" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Anthropic (Claude) Key</Label>
+                          <Input type="password" placeholder="sk-ant-..." className="bg-secondary/30" />
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Anthropic (Claude) Key</Label>
-                        <Input type="password" placeholder="sk-ant-..." className="bg-secondary/30" />
+
+                      <div className="pt-6 border-t border-border/50">
+                        <Label className="text-sm font-bold uppercase text-primary flex items-center gap-2 mb-4">
+                          <Server className="w-4 h-4" /> FFmpeg Render Cluster (K8s)
+                        </Label>
+                        <div className="grid gap-6 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label>Parallel Render Nodes</Label>
+                            <Input 
+                              type="number" 
+                              value={nodeCount} 
+                              onChange={(e) => setNodeCount(parseInt(e.target.value))}
+                              className="bg-secondary/30" 
+                            />
+                            <p className="text-[10px] text-muted-foreground">Target: 1,000+ videos/day</p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Cluster Region</Label>
+                            <Input value="us-central1" className="bg-secondary/30" readOnly />
+                          </div>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -141,32 +165,6 @@ export default function SettingsPage() {
                       <div className="space-y-2">
                         <Label>Repurpose.io API</Label>
                         <Input type="password" placeholder="Key..." className="bg-secondary/30" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="unofficial">
-                  <Card className="bg-card">
-                    <CardHeader>
-                      <CardTitle className="font-headline">Suno-API (Self-Hosted)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <Alert className="bg-primary/5 border-primary/20">
-                        <Info className="h-4 w-4 text-primary" />
-                        <AlertTitle className="text-primary font-bold">Integration Required</AlertTitle>
-                        <AlertDescription className="text-xs">
-                          Connect to your self-hosted <strong>gcui-art/suno-api</strong> instance for automated beat synthesis.
-                        </AlertDescription>
-                      </Alert>
-                      <div className="space-y-2">
-                        <Label>API Base URL</Label>
-                        <Input 
-                          placeholder="https://your-suno-api.vercel.app" 
-                          value={sunoEndpoint}
-                          onChange={(e) => setSunoEndpoint(e.target.value)}
-                          className="bg-secondary/30" 
-                        />
                       </div>
                     </CardContent>
                   </Card>

@@ -126,7 +126,7 @@ export default function DashboardPage() {
                   <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
                     <Server className="w-4 h-4 text-primary" /> Distributed Render Cluster
                   </CardTitle>
-                  <CardDescription>Live status of 50 parallel FFmpeg nodes</CardDescription>
+                  <CardDescription>Live status of 50 parallel FFmpeg nodes (Docker/K8s)</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-4 gap-2">
