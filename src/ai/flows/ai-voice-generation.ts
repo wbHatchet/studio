@@ -1,69 +1,84 @@
 'use server';
 /**
- * @fileOverview An AI agent that generates scripts optimized for the "$1M AI YouTube Network Blueprint".
- * Refined for 30-second viral YouTube shorts with strict 4-stage retention timing and pattern-interrupt hooks.
+ * @fileOverview An AI agent that generates batches of scripts optimized for the "$1M AI YouTube Network Blueprint".
+ * Refined for 30-second viral YouTube shorts with strict 4-stage retention timing and the "Master Prompt" logic.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const VoiceGenerationInputSchema = z.object({
-  topic: z.string().describe('The main topic or niche of the video.'),
-  tone: z.string().describe('The personality of the voice (e.g., Energetic, Dark Psychology, Narrative).'),
-  targetDuration: z.number().default(30).describe('Desired length in seconds.'),
+  niche: z.enum([
+    'AI tools',
+    'Psychology tricks',
+    'Weird history',
+    'Human body facts',
+    'Luxury lifestyle',
+    'Money habits',
+    'Tech discoveries'
+  ]).describe('The high-viral niche for the scripts.'),
+  topicDetail: z.string().optional().describe('Specific details or keywords to focus on.'),
+  batchSize: z.number().min(1).max(10).default(3).describe('Number of scripts to generate in this run.'),
 });
 
-const VoiceOutputSchema = z.object({
-  script: z.string().describe('The optimized script for ElevenLabs.'),
-  retentionTriggers: z.array(z.string()).describe('List of points where visual/audio changes should occur.'),
+const ScriptItemSchema = z.object({
+  title: z.string().describe('Catchy internal title for the script.'),
   structure: z.object({
     hook: z.string().describe('0-2s Pattern-Interrupt Hook'),
     curiosity: z.string().describe('2-10s Curiosity Gap'),
-    value: z.string().describe('10-20s Rapid Value (3 Facts)'),
+    facts: z.array(z.string()).describe('3 rapid facts (10-20s)'),
     twist: z.string().describe('20-30s Twist + Loop'),
   }),
+  fullScript: z.string().describe('The optimized full script text (max 80 words).'),
   estimatedWordCount: z.number(),
-  characterCount: z.number(),
 });
 
-export async function generateVoiceScript(input: z.infer<typeof VoiceGenerationInputSchema>) {
-  return generateVoiceScriptFlow(input);
+const VoiceOutputSchema = z.object({
+  scripts: z.array(ScriptItemSchema),
+  nicheMetadata: z.object({
+    cpmEstimate: z.string(),
+    targetRetention: z.string(),
+  }),
+});
+
+export async function generateVoiceScripts(input: z.infer<typeof VoiceGenerationInputSchema>) {
+  return generateVoiceScriptsFlow(input);
 }
 
 const prompt = ai.definePrompt({
   name: 'voiceGenerationPrompt',
   input: {schema: VoiceGenerationInputSchema},
   output: {schema: VoiceOutputSchema},
-  prompt: `You are a viral YouTube Shorts scriptwriter for a $1M/year automation network.
-Your goal is to write a high-retention, 30-second script using the 4-Part Viral Structure.
+  prompt: `You are a viral YouTube Shorts script writer. 
+Your goal is to generate {{{batchSize}}} short-form video scripts optimized for high retention for the NICHE: {{{niche}}}.
 
-Topic: {{{topic}}}
-Tone: {{{tone}}}
+{{#if topicDetail}}
+CONTEXT/TOPIC: {{{topicDetail}}}
+{{/if}}
 
 STRICT 4-PART VIRAL STRUCTURE (30s Total):
-1. 0–2s: PATTERN-INTERRUPT HOOK. Shock the brain immediately. Use a scroll-stopping shock or curiosity hook. (e.g., "You're using your brain WRONG.")
-2. 2–10s: CURIOSITY GAP. Reveal something strange but incomplete. Force the viewer to stay. (e.g., "Scientists discovered X... but nobody talks about WHY.")
-3. 10–20s: RAPID VALUE. Give 3 quick facts or rapid dopamine hits. Use the "3-Sentence Script Hack" style—short, punchy, no fluff.
-4. 20–30s: TWIST + LOOP. End with a surprise that loops seamlessly back to the beginning to increase replay rate. (e.g., "So the real question is—what memory are you losing tonight?")
+1. HOOK (0-2 sec): Pattern-Interrupt. Shock the brain immediately. (e.g., "This AI just replaced an entire marketing team.")
+2. CURIOSITY (2-10 sec): Reveal something strange but incomplete. (e.g., "Most companies still haven't discovered it.")
+3. 3 RAPID FACTS (10-20 sec): Fast dopamine hits. Simple language.
+4. TWIST ENDING (20-30 sec): End with a surprise that loops the viewer back to the beginning.
 
-REPLAY LOGIC: The last sentence must lead perfectly into the first sentence.
+RULES:
+- Maximum 80 words per script.
+- Fast pacing, simple language, NO filler words.
+- High curiosity and "Pattern-Interrupt" logic.
 
-Estimated Word Count: A 30s script should be approx 70-85 words. Structure your output JSON to match the VoiceOutputSchema.`
+Return exactly {{{batchSize}}} scripts in the specified JSON format.`
 });
 
-const generateVoiceScriptFlow = ai.defineFlow(
+const generateVoiceScriptsFlow = ai.defineFlow(
   {
-    name: 'generateVoiceScriptFlow',
+    name: 'generateVoiceScriptsFlow',
     inputSchema: VoiceGenerationInputSchema,
     outputSchema: VoiceOutputSchema,
   },
   async input => {
     const {output} = await prompt(input);
-    const result = output!;
-    return {
-      ...result,
-      characterCount: result.script.length
-    };
+    return output!;
   }
 );
 
