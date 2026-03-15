@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -10,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Mic2, Download, Wand2, Copy, Sparkles, CheckCircle2, AlertCircle, Info, Layers } from "lucide-react";
+import { Loader2, Mic2, Download, Wand2, Copy, Sparkles, CheckCircle2, AlertCircle, Info, Layers, Zap, Clock } from "lucide-react";
 import { generateVoiceScript, textToSpeech } from "@/ai/flows/ai-voice-generation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -174,11 +173,35 @@ export default function VoiceProductionPage() {
                         <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest">Engineered Script Library</CardTitle>
                         <Badge variant="secondary" className="font-mono text-[9px]">{formData.batchSize} ITEMS</Badge>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="p-3 rounded-lg bg-primary/5 border border-primary/10">
+                            <p className="text-[8px] uppercase font-bold text-primary mb-1">0-2s Hook</p>
+                            <p className="text-[10px] line-clamp-2 italic">{result.structure.hook}</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-secondary/30 border border-border">
+                            <p className="text-[8px] uppercase font-bold text-muted-foreground mb-1">2-10s Curiosity</p>
+                            <p className="text-[10px] line-clamp-2 italic">{result.structure.curiosity}</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-secondary/30 border border-border">
+                            <p className="text-[8px] uppercase font-bold text-muted-foreground mb-1">10-20s Value</p>
+                            <p className="text-[10px] line-clamp-2 italic">{result.structure.value}</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-primary/5 border border-primary/10">
+                            <p className="text-[8px] uppercase font-bold text-primary mb-1">20-30s Loop</p>
+                            <p className="text-[10px] line-clamp-2 italic">{result.structure.twist}</p>
+                          </div>
+                        </div>
                         <div className="relative">
-                          <pre className="text-xs whitespace-pre-wrap font-sans leading-relaxed h-72 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic text-muted-foreground border border-border/50">
+                          <pre className="text-xs whitespace-pre-wrap font-sans leading-relaxed h-64 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic text-muted-foreground border border-border/50">
                             {result.script}
                           </pre>
+                        </div>
+                        <div className="pt-4 border-t border-border/50 flex items-center justify-between">
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-2">
+                            <Clock className="w-3 h-3" /> Target: 30s | Word Count: {result.estimatedWordCount}
+                          </p>
+                          <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 uppercase text-[8px]">Retention Optimized</Badge>
                         </div>
                       </CardContent>
                     </Card>

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, Target, TrendingUp, Layers, BookOpen, DollarSign, Repeat, Zap } from "lucide-react";
+import { Loader2, Sparkles, Target, TrendingUp, Layers, BookOpen, DollarSign, Repeat, Zap, Brain } from "lucide-react";
 import { aiNicheStrategy } from "@/ai/flows/ai-niche-strategy";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -108,22 +108,51 @@ export default function StrategyPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-primary/5 border-primary/20">
+                <Card className="bg-primary/5 border-primary/20 shadow-xl overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                      <Zap className="w-3 h-3" /> Viral Formula (30s Blueprint)
+                      <Zap className="w-3 h-3" /> 4-Part Viral Formula (30s Blueprint)
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="grid grid-cols-2 gap-2 text-[10px] uppercase font-bold text-muted-foreground">
-                      <div className="p-2 border border-border/50 rounded bg-secondary/30">0-2s: Shock Hook</div>
-                      <div className="p-2 border border-border/50 rounded bg-secondary/30">2-10s: Curiosity Gap</div>
-                      <div className="p-2 border border-border/50 rounded bg-secondary/30">10-20s: Value Reveal</div>
-                      <div className="p-2 border border-border/50 rounded bg-secondary/30">20-30s: Twist / Loop</div>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-3 border border-primary/20 rounded-xl bg-background/50 space-y-1">
+                        <p className="text-[10px] font-bold text-primary uppercase">0-2s: Pattern Hook</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Shock the brain immediately."</p>
+                      </div>
+                      <div className="p-3 border border-border/50 rounded-xl bg-secondary/30 space-y-1">
+                        <p className="text-[10px] font-bold text-foreground uppercase">2-10s: Curiosity Gap</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Force viewer to stay."</p>
+                      </div>
+                      <div className="p-3 border border-border/50 rounded-xl bg-secondary/30 space-y-1">
+                        <p className="text-[10px] font-bold text-foreground uppercase">10-20s: Rapid Value</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"3 quick facts. Fast dopamine."</p>
+                      </div>
+                      <div className="p-3 border border-primary/20 rounded-xl bg-background/50 space-y-1">
+                        <p className="text-[10px] font-bold text-primary uppercase">20-30s: Twist + Loop</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Surprise ending. Auto-replay."</p>
+                      </div>
                     </div>
-                    <p className="text-[10px] italic text-muted-foreground leading-relaxed pt-2">
-                      "Success Metric: Average view duration > 95% | Target: 3 Shorts per channel daily."
-                    </p>
+                    
+                    <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 space-y-2">
+                      <p className="text-[10px] font-bold uppercase flex items-center gap-2 text-primary">
+                        <Brain className="w-3 h-3" /> Algorithm Signal Optimization
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="text-center">
+                          <p className="text-[10px] font-bold">95%+</p>
+                          <p className="text-[8px] text-muted-foreground uppercase">Retention</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-[10px] font-bold">20%+</p>
+                          <p className="text-[8px] text-muted-foreground uppercase">Replays</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-[10px] font-bold">8%+</p>
+                          <p className="text-[8px] text-muted-foreground uppercase">Like Ratio</p>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
