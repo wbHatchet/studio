@@ -20,7 +20,10 @@ import {
   MessageSquare,
   Mic2,
   Share2,
-  Workflow
+  Workflow,
+  Network,
+  Database,
+  SearchCode
 } from "lucide-react";
 
 import {
@@ -37,32 +40,32 @@ import {
 } from "@/components/ui/sidebar";
 
 const studioNav = [
-  { title: "Control Center", icon: LayoutDashboard, url: "/dashboard" },
+  { title: "Network Control Center", icon: LayoutDashboard, url: "/dashboard" },
 ];
 
 const intelligenceNav = [
   { title: "Trend Intelligence", icon: TrendingUp, url: "/growth/signals" },
-  { title: "Niche Discovery", icon: Target, url: "/strategy" },
+  { title: "Niche Discovery Engine", icon: Target, url: "/strategy" },
 ];
 
 const productionNav = [
-  { title: "Production Queue", icon: Layers, url: "/projects" },
-  { title: "Voice Architect", icon: Mic2, url: "/production/voice" },
-  { title: "Music Curator", icon: Music, url: "/production/music" },
-  { title: "Visuals Director", icon: Video, url: "/production/visuals" },
-  { title: "SEO Optimizer", icon: Search, url: "/seo" },
-  { title: "Approval Gate", icon: CheckCircle2, url: "/review" },
+  { title: "Enterprise Grid Queue", icon: Layers, url: "/projects" },
+  { title: "Voice Architect (11Labs)", icon: Mic2, url: "/production/voice" },
+  { title: "Music Curator (Suno)", icon: Music, url: "/production/music" },
+  { title: "Visuals Director (Runway)", icon: Video, url: "/production/visuals" },
+  { title: "SEO Metadata Engine", icon: Search, url: "/seo" },
+  { title: "Approval & Publish", icon: CheckCircle2, url: "/review" },
 ];
 
 const growthNav = [
   { title: "Hook & Title Lab", icon: Zap, url: "/growth/lab" },
-  { title: "Repurposing Engine", icon: Share2, url: "/growth/repurpose" },
+  { title: "Repurposing Grid", icon: Share2, url: "/growth/repurpose" },
   { title: "Engagement Bot", icon: MessageSquare, url: "/growth/engagement" },
 ];
 
 const analyticsNav = [
-  { title: "Self-Learning Stats", icon: BarChart3, url: "/analytics" },
-  { title: "Channel Network", icon: Radio, url: "/channels" },
+  { title: "Self-Learning Strategy", icon: BarChart3, url: "/analytics" },
+  { title: "Global CH Network", icon: Radio, url: "/channels" },
 ];
 
 export function AppSidebar() {
@@ -73,14 +76,14 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-3 px-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 border border-primary/30">
-            <Workflow className="h-6 w-6" />
+            <Network className="h-6 w-6" />
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-headline font-bold text-base leading-tight">
-              Studio Factory
+              Network Grid
             </span>
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-              Autonomous v4.0
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-primary">
+              Ultra-Scale v5.0
             </span>
           </div>
         </div>
@@ -107,7 +110,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Intelligence</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Intelligence Layer</SidebarGroupLabel>
           <SidebarMenu>
             {intelligenceNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -128,7 +131,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Production</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Media Factory Layer</SidebarGroupLabel>
           <SidebarMenu>
             {productionNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -149,7 +152,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Growth</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Growth Engine Layer</SidebarGroupLabel>
           <SidebarMenu>
             {growthNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -170,7 +173,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Analytics</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Self-Learning Layer</SidebarGroupLabel>
           <SidebarMenu>
             {analyticsNav.map((item) => (
               <SidebarMenuItem key={item.title}>

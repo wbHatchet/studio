@@ -19,9 +19,12 @@ import {
   Target,
   Share2,
   Zap,
-  Layers,
   Activity,
-  Terminal
+  Terminal,
+  Layers,
+  Server,
+  Network,
+  Database
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 
@@ -32,11 +35,18 @@ export default function DashboardPage() {
     setIsMounted(true);
   }, []);
 
+  const renderCluster = Array.from({ length: 12 }, (_, i) => ({
+    id: i + 1,
+    status: Math.random() > 0.1 ? "Running" : "Idle",
+    load: Math.floor(Math.random() * 100),
+    task: ["FFmpeg", "Runway", "ElevenLabs", "Scraper"][Math.floor(Math.random() * 4)]
+  }));
+
   const activeJobs = [
-    { id: 1, name: "Drake R&B Batch #12", status: "FFmpeg Rendering", progress: 88, type: "Long Form" },
-    { id: 2, name: "Viral Hook Variants", status: "Runway Gen-3", progress: 42, type: "Shorts" },
-    { id: 3, name: "Niche Discovery Scan", status: "Scoring Trends", progress: 100, type: "Intelligence" },
-    { id: 4, name: "Caption Synthesis", status: "Descript AI", progress: 15, type: "Assembly" },
+    { id: 1, name: "Drake R&B Batch #12", status: "Distributed Rendering", progress: 88, type: "Long Form" },
+    { id: 2, name: "Viral Hook Variants", status: "Runway Gen-3 Cluster", progress: 42, type: "Shorts" },
+    { id: 3, name: "Network Trend Scan", status: "Vector Search Ingest", progress: 100, type: "Intelligence" },
+    { id: 4, name: "Multi-Platform Sync", status: "Repurpose.io API", progress: 15, type: "Distribution" },
   ];
 
   if (!isMounted) return null;
@@ -51,76 +61,99 @@ export default function DashboardPage() {
             <div className="h-4 w-px bg-border/50 mx-2" />
             <div className="flex flex-col">
               <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2">
-                Autonomous Studio <span className="text-primary text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v4.0.2</span>
+                Ultra-Scale Factory <span className="text-primary text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v5.0.0</span>
               </h1>
-              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Revenue Scaling Loop: ACTIVE</span>
+              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest text-primary">Global Network Scale: 124 CHANNELS ACTIVE</span>
             </div>
             <div className="ml-auto flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary/50 border border-border/50">
-                <Activity className="w-3 h-3 text-green-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Self-Learning: 92% Efficiency</span>
+                <Network className="w-3 h-3 text-green-500 animate-pulse" />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Cluster Node: Active</span>
               </div>
-              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">Studio Network Enabled</Badge>
+              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">Enterprise Grid Enabled</Badge>
             </div>
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Network Views" value="12.8M" icon={TrendingUp} trend="24.2%" trendType="positive" />
-              <StatCard label="Monthly Profit" value="$92.4K" icon={LineChart} trend="18.1%" trendType="positive" />
-              <StatCard label="Niches Scanned" value="1,450" icon={Search} />
-              <StatCard label="Automation Rate" value="99.6%" icon={Cpu} />
+              <StatCard label="Daily Factory Output" value="1,240" icon={Layers} trend="12.5%" trendType="positive" />
+              <StatCard label="Global Network Views" value="84.2M" icon={TrendingUp} trend="24.2%" trendType="positive" />
+              <StatCard label="Monthly Profit (Est)" value="$412.8K" icon={LineChart} trend="18.1%" trendType="positive" />
+              <StatCard label="Automation Efficiency" value="99.8%" icon={Cpu} />
             </div>
 
-            <Card className="bg-card border-primary/10 overflow-hidden shadow-2xl relative">
-              <div className="absolute top-0 right-0 p-4 opacity-5">
-                <Workflow className="w-64 h-64 -rotate-12" />
-              </div>
-              <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
-                <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                  <Workflow className="w-3 h-3" /> Autonomous Strategy-to-Revenue Loop
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-8 pb-10">
-                <div className="flex flex-wrap items-center justify-between gap-8 px-4 relative">
-                  <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent -translate-y-1/2 z-0 hidden lg:block" />
-                  {[
-                    { name: "Intelligence", status: "Trend Scan", icon: TrendingUp, active: true },
-                    { name: "Discovery", status: "Niche Score", icon: Target, active: true },
-                    { name: "Production", status: "AI Synthesis", icon: VideoIcon, active: true },
-                    { name: "Assembly", status: "FFmpeg/Capcut", icon: Cpu, active: true },
-                    { name: "Distribution", status: "Multi-Platform", icon: Share2, active: true },
-                    { name: "Learning", status: "Analytics Loop", icon: BrainCircuit, active: true }
-                  ].map((step, idx, arr) => (
-                    <div key={step.name} className="flex items-center gap-4 relative z-10">
-                      <div className={`flex flex-col items-center gap-3 transition-all duration-500 hover:scale-105 ${step.active ? 'scale-110' : 'opacity-50'}`}>
-                        <div className={`p-5 rounded-2xl border transition-all ${step.active ? 'bg-primary/20 border-primary text-primary shadow-[0_0_30px_rgba(var(--primary),0.2)]' : 'bg-secondary/50 border-border text-muted-foreground'}`}>
-                          <step.icon className="w-7 h-7" />
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] font-bold uppercase tracking-tight">{step.name}</p>
-                          <p className="text-[8px] text-muted-foreground uppercase font-mono">{step.status}</p>
-                        </div>
-                      </div>
-                      {idx < arr.length - 1 && (
-                        <div className="h-px w-6 bg-border/50 relative hidden xl:block">
-                          <ArrowRight className="w-3 h-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary/30" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
+            <div className="grid gap-6 lg:grid-cols-3">
+              <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
+                <div className="absolute top-0 right-0 p-4 opacity-5">
+                  <Workflow className="w-64 h-64 -rotate-12" />
                 </div>
-              </CardContent>
-            </Card>
+                <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
+                  <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
+                    <Workflow className="w-3 h-3" /> Autonomous Self-Learning Strategy Loop
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-8 pb-10">
+                  <div className="flex flex-wrap items-center justify-between gap-6 px-4 relative">
+                    {[
+                      { name: "Intelligence", status: "Trend Scan", icon: TrendingUp },
+                      { name: "Discovery", status: "Niche Score", icon: Target },
+                      { name: "Production", status: "AI Synthesis", icon: VideoIcon },
+                      { name: "Grid Render", status: "FFmpeg Grid", icon: Server },
+                      { name: "Distribution", status: "Multi-CH Sync", icon: Share2 },
+                      { name: "Learning", status: "Vector Update", icon: Database }
+                    ].map((step, idx, arr) => (
+                      <div key={step.name} className="flex items-center gap-4 relative z-10">
+                        <div className="flex flex-col items-center gap-3 transition-all duration-500 hover:scale-105 scale-110">
+                          <div className="p-4 rounded-2xl border bg-primary/20 border-primary text-primary shadow-[0_0_30px_rgba(var(--primary),0.2)]">
+                            <step.icon className="w-6 h-6" />
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] font-bold uppercase tracking-tight">{step.name}</p>
+                            <p className="text-[8px] text-muted-foreground uppercase font-mono">{step.status}</p>
+                          </div>
+                        </div>
+                        {idx < arr.length - 1 && (
+                          <ArrowRight className="w-3 h-3 text-primary/30 hidden xl:block" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card border-border/50 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
+                    <Server className="w-4 h-4 text-primary" /> Distributed Render Cluster
+                  </CardTitle>
+                  <CardDescription>Live status of 50 parallel FFmpeg nodes</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-4 gap-2">
+                    {renderCluster.map((node) => (
+                      <div 
+                        key={node.id} 
+                        className={`aspect-square rounded-md border flex flex-col items-center justify-center gap-1 transition-all ${
+                          node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500" : "bg-secondary border-border text-muted-foreground"
+                        }`}
+                      >
+                        <span className="text-[8px] font-bold">NODE {node.id}</span>
+                        {node.status === "Running" && <span className="text-[6px] uppercase font-mono">{node.load}%</span>}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
               <Card className="lg:col-span-4 bg-card border-border/50 shadow-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-primary" />
-                    Network View Velocity
+                    Network Velocity Matrix
                   </CardTitle>
-                  <CardDescription>Viral signals across 50 autonomous channels (Aggregated)</CardDescription>
+                  <CardDescription>Aggregated performance across 124 autonomous channels</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <PerformanceChart />
@@ -133,7 +166,7 @@ export default function DashboardPage() {
                     <Terminal className="w-5 h-5 text-primary" />
                     Agent Orchestration
                   </CardTitle>
-                  <CardDescription>Live execution status (Parallel AI Workers)</CardDescription>
+                  <CardDescription>Enterprise Job Queue (Vector DB Integrated)</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-4 max-h-[350px] pr-2 custom-scrollbar">
                   {activeJobs.map((job) => (
@@ -164,12 +197,12 @@ export default function DashboardPage() {
                 <Zap className="w-8 h-8 fill-white/20" />
               </div>
               <div>
-                <p className="font-bold text-lg font-headline tracking-tight">Intelligence Loop Update: Niche Exploding</p>
-                <p className="text-xs opacity-80 italic max-w-lg">"Vintage Japanese Countryside Lo-Fi" view velocity increased by 142%. Auto-enqueuing 12 production batches for the Midnight Rain Mix channel.</p>
+                <p className="font-bold text-lg font-headline tracking-tight">Self-Learning Update: Niche Priority Shift</p>
+                <p className="text-xs opacity-80 italic max-w-lg">"Vintage iPhone Aesthetics" views outperformed R&B by 240%. Auto-retraining 12 cluster nodes for focus on visual-first Lo-Fi production.</p>
               </div>
             </div>
             <button className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2">
-              <BrainCircuit className="w-4 h-4" /> Review Growth Plan
+              <BrainCircuit className="w-4 h-4" /> Review Production Strategy
             </button>
           </div>
         </SidebarInset>
@@ -177,4 +210,3 @@ export default function DashboardPage() {
     </SidebarProvider>
   );
 }
-
