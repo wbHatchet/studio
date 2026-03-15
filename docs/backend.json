@@ -24,29 +24,41 @@
       },
       "required": ["name", "ownerId"]
     },
-    "Member": {
-      "title": "Member",
-      "type": "object",
-      "description": "User role within a workspace",
-      "properties": {
-        "role": { "type": "string", "enum": ["owner", "admin", "editor", "viewer"] },
-        "joinedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["role"]
-    },
     "Job": {
       "title": "Job",
       "type": "object",
-      "description": "Queue item for AI workers (rendering, script gen, etc.)",
+      "description": "Production Packet for AI workers (rendering, script gen, etc.)",
       "properties": {
         "type": { "type": "string" },
-        "status": { "type": "string", "enum": ["queued", "leased", "running", "succeeded", "failed", "canceled"] },
+        "status": { "type": "string", "enum": ["queued", "generating", "rendered", "published", "failed", "canceled"] },
         "priority": { "type": "number" },
         "workerNodeId": { "type": "string", "description": "ID of the Docker/K8s container running the job" },
-        "renderCommand": { "type": "string", "default": "ffmpeg -i voice.mp3 -i clips.mp4 -vf subtitles=captions.srt -shortest output.mp4" },
-        "runAfter": { "type": "string", "format": "date-time" },
-        "inputRefs": { "type": "object" },
-        "outputRefs": { "type": "object" },
+        "renderConfig": {
+          "type": "object",
+          "properties": {
+            "ffmpegCommand": { "type": "string" },
+            "filterGraph": { "type": "string" },
+            "fps": { "type": "number", "default": 24 },
+            "resolution": { "type": "string", "default": "1280x720" },
+            "vintageLevel": { "type": "number", "default": 0.5 }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "prompt": { "type": "string" },
+            "aesthetic": { "type": "string", "default": "vintage_60s" }
+          }
+        },
+        "assets": {
+          "type": "object",
+          "properties": {
+            "audioUrl": { "type": "string" },
+            "imageUrl": { "type": "string" },
+            "videoUrl": { "type": "string" }
+          }
+        },
         "lease": {
           "type": "object",
           "properties": {
@@ -82,7 +94,7 @@
         "videoId": { "type": "string" },
         "platform": { "type": "string", "enum": ["youtube", "tiktok", "instagram", "facebook"], "default": "youtube" },
         "status": { "type": "string", "enum": ["draft", "scheduled", "published", "failed"] },
-        "apiContext": {
+        "apiPayload": {
           "type": "object",
           "properties": {
             "part": { "type": "string", "default": "snippet,status" },

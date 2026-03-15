@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -16,7 +17,6 @@ import {
   Music,
   Video,
   Search,
-  ExternalLink,
   FileSpreadsheet,
   Upload,
   Database,
@@ -31,7 +31,10 @@ import {
   Scissors,
   Zap,
   CheckCircle2,
-  Loader2
+  Loader2,
+  Terminal,
+  Cpu,
+  Workflow
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -61,7 +64,8 @@ const initialProjects = [
     publishStatus: "Pending Approval",
     progress: 65, 
     type: "Shorts",
-    date: "2024-05-20"
+    date: "2024-05-20",
+    node: "NODE-FFMPEG-42"
   },
   { 
     id: 2, 
@@ -71,7 +75,8 @@ const initialProjects = [
     publishStatus: "Draft",
     progress: 30, 
     type: "Shorts",
-    date: "2024-05-21"
+    date: "2024-05-21",
+    node: "NODE-SUNO-08"
   },
   { 
     id: 3, 
@@ -81,18 +86,9 @@ const initialProjects = [
     publishStatus: "Published",
     progress: 100, 
     type: "Long Form",
-    date: "2024-05-19"
-  },
-  { 
-    id: 4, 
-    name: "Halloween Lofi Beats", 
-    niche: "Seasonal Lo-Fi", 
-    status: "Ready", 
-    publishStatus: "Scheduled (10/20)",
-    progress: 100, 
-    type: "Shorts",
-    date: "2024-05-22"
-  },
+    date: "2024-05-19",
+    node: "NODE-FFMPEG-12"
+  }
 ];
 
 const cloudAssets = [
@@ -117,8 +113,8 @@ export default function ProjectsPage() {
     setTimeout(() => {
       setIsUploading(false);
       toast({
-        title: "Factory Pipeline: Active",
-        description: "Ingested 12 new jobs into the Render Grid.",
+        title: "n8n Orchestration: Triggered",
+        description: "Ingested 12 new jobs into the Render Grid via n8n webhook.",
       });
     }, 2000);
   };
@@ -126,13 +122,12 @@ export default function ProjectsPage() {
   const handleVectorSearch = () => {
     if (!vectorQuery) return;
     setIsSearching(true);
-    // Simulating all-MiniLM-L6-v2 embedding and Supabase Vector search
     setTimeout(() => {
       setIsSearching(false);
       setSearchResults([
-        { path: "clips/funny_cat_jump_3s.mp4", score: 0.98, type: "video/mp4" },
-        { path: "clips/cat_meow_loop.mp4", score: 0.85, type: "video/mp4" },
-        { path: "thumbnails/cat_viral_variant_A.jpg", score: 0.72, type: "image/jpeg" },
+        { path: "clips/vintage_rain_3s.mp4", score: 0.98, type: "video/mp4" },
+        { path: "clips/toronto_night_loop.mp4", score: 0.85, type: "video/mp4" },
+        { path: "thumbnails/vintage_60s_aesthetic.jpg", score: 0.72, type: "image/jpeg" },
       ]);
       toast({
         title: "Vector DB Results",
@@ -164,31 +159,31 @@ export default function ProjectsPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight">Enterprise Production Grid</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Production Logic Grid</h1>
             <div className="ml-auto flex gap-2">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2 border-primary/20 hover:bg-primary/5 h-9 font-bold uppercase text-[10px] tracking-widest px-4">
-                    <FileSpreadsheet className="w-4 h-4" /> Bulk Factory Ingest
+                    <Workflow className="w-4 h-4" /> n8n Bulk Ingest
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[500px]">
                   <DialogHeader>
-                    <DialogTitle className="font-headline uppercase tracking-tighter text-2xl">Ultra-Scale Ingestion</DialogTitle>
+                    <DialogTitle className="font-headline uppercase tracking-tighter text-2xl">n8n Workflow Ingestion</DialogTitle>
                     <DialogDescription>
-                      Upload production sheets to trigger parallel rendering across 50 nodes.
+                      Upload a CSV/JSON to trigger the Suno -> FFmpeg visualizer pipeline via n8n.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-border rounded-2xl bg-secondary/20 hover:bg-secondary/30 transition-all cursor-pointer group">
                       <Upload className="w-8 h-8 mb-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      <p className="text-sm font-bold uppercase tracking-widest">Drop Factory CSV</p>
-                      <p className="text-[9px] text-muted-foreground mt-2 font-mono uppercase tracking-tighter">Capacity: 1000+ videos/day</p>
+                      <p className="text-sm font-bold uppercase tracking-widest">Drop Automation Data</p>
+                      <p className="text-[9px] text-muted-foreground mt-2 font-mono uppercase tracking-tighter">Payload: Suno_Prompt, Title, Aesthetic</p>
                     </div>
                   </div>
                   <DialogFooter>
                     <Button onClick={handleBulkUpload} disabled={isUploading} className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest">
-                      {isUploading ? "Initializing Render Nodes..." : "Deploy to Render Grid"}
+                      {isUploading ? "Initializing n8n Workflow..." : "Deploy to Render Grid"}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -208,8 +203,8 @@ export default function ProjectsPage() {
                 <TabsTrigger value="storage" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   <HardDrive className="w-3 h-3" /> Cloud Asset Factory
                 </TabsTrigger>
-                <TabsTrigger value="publish" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <Youtube className="w-3 h-3" /> Distribution Log
+                <TabsTrigger value="logic" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <Terminal className="w-3 h-3" /> Factory Logic
                 </TabsTrigger>
               </TabsList>
 
@@ -228,7 +223,7 @@ export default function ProjectsPage() {
                                 </div>
                                 <div className="flex items-center gap-4 mt-2">
                                   <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter flex items-center gap-1">
-                                    Factory Niche: <span className="text-primary font-mono">{project.niche}</span>
+                                    Niche: <span className="text-primary font-mono">{project.niche}</span>
                                   </p>
                                   <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter flex items-center gap-1">
                                     Publish: <span className="text-blue-400 font-mono italic">{project.publishStatus}</span>
@@ -243,8 +238,8 @@ export default function ProjectsPage() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="bg-popover border-border p-1">
                                   <DropdownMenuItem className="text-[10px] font-bold uppercase tracking-widest">Asset Details</DropdownMenuItem>
-                                  <DropdownMenuItem className="text-[10px] font-bold uppercase tracking-widest">API Logs</DropdownMenuItem>
-                                  <DropdownMenuItem className="text-destructive font-bold uppercase text-[10px] tracking-widest">Kill Process</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-[10px] font-bold uppercase tracking-widest">n8n Logic Log</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-destructive font-bold uppercase text-[10px] tracking-widest">Kill Node</DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
@@ -252,9 +247,9 @@ export default function ProjectsPage() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between text-[10px] font-bold uppercase">
                                 <span className="text-muted-foreground flex items-center gap-1 font-mono tracking-tighter">
-                                  <Clock className="w-3 h-3" /> GRID_SYNC: {project.date}
+                                  <Cpu className="w-3 h-3" /> {project.node}
                                 </span>
-                                <span className="text-primary font-mono tracking-tighter">{project.progress}% RENDERED</span>
+                                <span className="text-primary font-mono tracking-tighter">{project.progress}% PROCESSED</span>
                               </div>
                               <Progress value={project.progress} className="h-1 bg-secondary/50 rounded-full" />
                             </div>
@@ -265,7 +260,7 @@ export default function ProjectsPage() {
                             <div className="flex gap-1 mt-1">
                               <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Music className="h-3.5 w-3.5" /></Button>
                               <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Video className="h-3.5 w-3.5" /></Button>
-                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Search className="h-3.5 w-3.5" /></Button>
+                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Terminal className="h-3.5 w-3.5" /></Button>
                               {project.progress === 100 && (
                                 <Button variant="outline" size="icon" className="h-8 w-8 text-primary border-primary/30 animate-pulse"><Youtube className="h-3.5 w-3.5" /></Button>
                               )}
@@ -285,12 +280,12 @@ export default function ProjectsPage() {
                       <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
                         <SearchCode className="w-4 h-4 text-primary" /> Vector Asset Search
                       </CardTitle>
-                      <CardDescription className="text-[10px] uppercase font-bold text-muted-foreground">Supabase Vector + all-MiniLM-L6-v2 Embeddings</CardDescription>
+                      <CardDescription className="text-[10px] uppercase font-bold text-muted-foreground">Supabase Vector Semantic Retrieval</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="flex gap-2">
                         <Input 
-                          placeholder="Search semantics (e.g. 'funny cat clips')" 
+                          placeholder="Search semantics (e.g. 'vintage rainy night')" 
                           value={vectorQuery}
                           onChange={(e) => setVectorQuery(e.target.value)}
                           className="bg-secondary/30 border-border/50"
@@ -345,93 +340,43 @@ export default function ProjectsPage() {
                         <CardTitle className="text-[10px] font-headline uppercase tracking-widest">{folder.name}</CardTitle>
                         <CardDescription className="text-[8px] font-mono uppercase font-bold text-muted-foreground mt-0.5">{folder.count} objects</CardDescription>
                       </CardHeader>
-                      <CardContent className="p-4 pt-0">
-                        <div className="h-0.5 w-full bg-secondary/50 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary/40 w-full animate-pulse" />
-                        </div>
-                      </CardContent>
                     </Card>
                   ))}
                 </div>
+              </TabsContent>
 
+              <TabsContent value="logic" className="space-y-6">
                 <Card className="bg-card border-border/50 shadow-md">
-                  <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 pb-4">
-                    <div>
-                      <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2">
-                        <HardDrive className="w-4 h-4 text-primary" /> video-assets-factory
-                      </CardTitle>
-                      <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Live grid activity (Python Workers)</CardDescription>
-                    </div>
-                    <Badge variant="outline" className="font-mono text-[9px] text-green-500 border-green-500/20 bg-green-500/5 px-3 py-1 uppercase tracking-tighter">GCS_BUCKET: READY</Badge>
+                  <CardHeader>
+                    <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2 text-primary">
+                      <Terminal className="w-5 h-5" /> FFmpeg Visualizer Engine Logic
+                    </CardTitle>
+                    <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Python Class: VideoGenerator | filter_complex Specs</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-0">
-                    <div className="overflow-hidden font-mono text-[11px]">
-                      <div className="bg-secondary/30 p-4 flex items-center justify-between text-muted-foreground font-bold uppercase tracking-widest border-b border-border/50">
-                        <span>Factory Path / blob.upload_from_filename</span>
-                        <span>Size / Meta</span>
+                  <CardContent className="space-y-6">
+                    <div className="p-4 bg-black/90 rounded-xl font-mono text-[11px] leading-relaxed text-green-400 overflow-auto">
+                      <p className="text-primary mb-2"># filter_complex construction for Vintage aesthetic</p>
+                      <p>curves=vintage,</p>
+                      <p>vignette=angle=PI/4,</p>
+                      <p>noise=alls=12:allf=t,</p>
+                      <p>showwaves=s=1280x720:mode=line:colors=white@0.3</p>
+                      <div className="h-px bg-white/10 my-4" />
+                      <p className="text-blue-400"># FFmpeg Mapping Sequence</p>
+                      <p>ffmpeg -y -loop 1 -i image.jpg -i audio.mp3 -filter_complex ... -map [outv] -map 1:a -c:v libx264 -preset medium -crf 18 -shortest output.mp4</p>
+                    </div>
+                    
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                        <Label className="text-[9px] uppercase font-bold text-muted-foreground">n8n Orchestrator Hook</Label>
+                        <p className="text-[11px] font-mono text-primary mt-1 truncate">POST https://n8n.factory.io/webhook/visualizer-start</p>
                       </div>
-                      <div className="divide-y divide-border/50 max-h-[400px] overflow-y-auto custom-scrollbar">
-                        {[
-                          { path: "videos/video1.mp4", size: "4.2 MB", status: "Rendered" },
-                          { path: "voice/voice_42.mp3", size: "1.1 MB", status: "Synthesized" },
-                          { path: "thumbnails/short_thumb_v1.jpg", size: "450 KB", status: "Generated" },
-                          { path: "scripts/script_09.json", size: "12 KB", status: "Archived" },
-                          { path: "music/lofi_loop_82bpm.mp3", size: "2.8 MB", status: "Curated" },
-                          { path: "clips/urban_rain_3s.mp4", size: "1.2 MB", status: "Mined" },
-                          { path: "videos/video2.mp4", size: "3.8 MB", status: "Queue" }
-                        ].map((file, i) => (
-                          <div key={i} className="p-4 flex items-center justify-between hover:bg-primary/5 transition-colors group">
-                            <div className="flex items-center gap-3">
-                              <Folder className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
-                              <span className="text-muted-foreground group-hover:text-foreground transition-colors">{file.path}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <span className="text-muted-foreground opacity-50">{file.size}</span>
-                              <Badge variant="outline" className="text-[8px] font-bold uppercase border-border/50">{file.status}</Badge>
-                            </div>
-                          </div>
-                        ))}
+                      <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                        <Label className="text-[9px] uppercase font-bold text-muted-foreground">Worker Node Context</Label>
+                        <p className="text-[11px] font-mono mt-1">Python 3.10+ | FFmpeg 6.0+ | Docker Isolated</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              </TabsContent>
-
-              <TabsContent value="publish" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="grid gap-6">
-                  <Card className="bg-card border-border/50 shadow-md">
-                    <CardHeader>
-                      <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2">
-                        <Youtube className="w-5 h-5 text-red-500" /> YouTube Publication Grid
-                      </CardTitle>
-                      <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Status of automated 10-20/day upload sequence</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {[
-                          { title: "Midnight Confessions", slot: "Slot #14", status: "Published", platform: "YouTube" },
-                          { title: "Filtered Memories", slot: "Slot #15", status: "Scheduled", platform: "YouTube" },
-                          { title: "Late Night Drive", slot: "Slot #16", status: "Queued", platform: "YouTube" }
-                        ].map((pub, i) => (
-                          <div key={i} className="p-4 rounded-xl bg-secondary/30 border border-border/50 flex items-center justify-between group hover:border-primary/30 transition-all">
-                            <div className="flex items-center gap-4">
-                              <div className="p-2 bg-red-500/10 rounded-lg">
-                                <Send className="w-4 h-4 text-red-500" />
-                              </div>
-                              <div>
-                                <p className="text-xs font-bold uppercase tracking-widest">{pub.title}</p>
-                                <p className="text-[9px] text-muted-foreground font-mono mt-1">Factory Sequence: {pub.slot}</p>
-                              </div>
-                            </div>
-                            <Badge variant="outline" className={`text-[9px] font-bold uppercase ${pub.status === 'Published' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20'}`}>
-                              {pub.status}
-                            </Badge>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
               </TabsContent>
             </Tabs>
           </main>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -9,9 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Video, Copy, RefreshCcw, Image as ImageIcon, Sparkles, ImagePlus, Type } from "lucide-react";
+import { Loader2, Copy, RefreshCcw, Image as ImageIcon, Sparkles, ImagePlus, Type, Terminal, Activity } from "lucide-react";
 import { aiVisualsAndAnimation, AiVisualsAndAnimationOutput } from "@/ai/flows/ai-visuals-and-animation-flow";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 export default function VisualsProductionPage() {
   const [loading, setLoading] = useState(false);
@@ -23,7 +25,8 @@ export default function VisualsProductionPage() {
     description: "A cozy anime-style study room at night. A girl is sitting at a desk with a computer and a cup of steaming coffee. Outside the window, a futuristic rainy city skyline is visible.",
     mood: "Calm, dreamy, nostalgic",
     style: "Anime Lo-Fi aesthetic, soft lighting, purple and blue hues",
-    variationCount: 10
+    variationCount: 3,
+    aestheticPreset: "vintage_60s"
   });
 
   async function handleGenerate() {
@@ -54,7 +57,7 @@ export default function VisualsProductionPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl">AI Visuals Director</h1>
+            <h1 className="font-headline font-bold text-xl text-primary uppercase tracking-tight">AI Visuals Director</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
@@ -63,9 +66,9 @@ export default function VisualsProductionPage() {
                 <CardHeader>
                   <CardTitle className="font-headline flex items-center gap-2">
                     <ImageIcon className="w-5 h-5 text-primary" />
-                    Scene Concept & Aesthetic
+                    Scene Concept & FFmpeg Aesthetic
                   </CardTitle>
-                  <CardDescription>Choose how you want to engineer your Lo-Fi visuals</CardDescription>
+                  <CardDescription>Configure the Vintage Visualizer parameters</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <Tabs value={inputType} onValueChange={(v) => setInputType(v as any)} className="w-full">
@@ -85,7 +88,6 @@ export default function VisualsProductionPage() {
                           value={formData.description}
                           onChange={(e) => setFormData({...formData, description: e.target.value})}
                           className="bg-secondary/30 min-h-[100px]"
-                          placeholder={inputType === 'text' ? "What is happening in the scene?" : "Describe your favorite image from Pinterest or YouTube..."}
                         />
                       </div>
                       
@@ -99,25 +101,13 @@ export default function VisualsProductionPage() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label>Artistic Style</Label>
+                          <Label>Visual Aesthetic Preset</Label>
                           <Input 
-                            value={formData.style}
-                            onChange={(e) => setFormData({...formData, style: e.target.value})}
-                            className="bg-secondary/30"
+                            value={formData.aestheticPreset}
+                            onChange={(e) => setFormData({...formData, aestheticPreset: e.target.value})}
+                            className="bg-secondary/30 font-mono"
                           />
                         </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label>Number of Variations (1-10)</Label>
-                        <Input 
-                          type="number"
-                          min={1}
-                          max={10}
-                          value={formData.variationCount}
-                          onChange={(e) => setFormData({...formData, variationCount: parseInt(e.target.value)})}
-                          className="bg-secondary/30"
-                        />
                       </div>
                     </div>
                   </Tabs>
@@ -129,26 +119,27 @@ export default function VisualsProductionPage() {
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                    Engineer {formData.variationCount} Prompt Variations
+                    Engineer Production Packet
                   </Button>
                 </CardFooter>
               </Card>
 
               {result && (
                 <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-                  <h2 className="text-xl font-headline font-bold text-primary flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5" /> Generated Prompt Sets
+                  <h2 className="text-xl font-headline font-bold text-primary flex items-center gap-2 uppercase tracking-tight">
+                    <Activity className="w-5 h-5" /> Production Ready Assets
                   </h2>
                   <div className="grid gap-6 md:grid-cols-2">
                     {result.variations.map((v, idx) => (
                       <Card key={idx} className="bg-card border-primary/10 overflow-hidden">
-                        <CardHeader className="bg-primary/5 py-3">
-                          <CardTitle className="text-sm font-headline">Variation {idx + 1}</CardTitle>
+                        <CardHeader className="bg-primary/5 py-3 flex flex-row items-center justify-between">
+                          <CardTitle className="text-sm font-headline">Packet {idx + 1}</CardTitle>
+                          <Badge variant="outline" className="text-[8px] border-primary/20">v7.0_PACKET</Badge>
                         </CardHeader>
                         <CardContent className="space-y-4 pt-4">
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Image Prompt (Leonardo/Midjourney)</Label>
+                              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Image Prompt (Director Refined)</Label>
                               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(v.imagePrompt)}>
                                 <Copy className="h-3 w-3" />
                               </Button>
@@ -160,13 +151,16 @@ export default function VisualsProductionPage() {
                           
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Animation Prompt (Hailuo/Pika)</Label>
+                              <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                                <Terminal className="w-3 h-3" /> FFmpeg filter_complex String
+                              </Label>
                               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(v.animationPrompt)}>
                                 <Copy className="h-3 w-3" />
                               </Button>
                             </div>
-                            <div className="p-3 rounded-lg bg-secondary/30 text-xs italic leading-relaxed">
-                              {v.animationPrompt}
+                            <div className="p-3 rounded-lg bg-black/90 text-[10px] font-mono leading-relaxed text-blue-400">
+                              {/* Using animationPrompt field to simulate the complex filter string generator */}
+                              [0:v]scale=1280x720,curves=vintage,vignette[bg];[1:a]showwaves=s=1280x720:colors=white@0.3[waves];[bg][waves]overlay,noise[out]
                             </div>
                           </div>
                         </CardContent>

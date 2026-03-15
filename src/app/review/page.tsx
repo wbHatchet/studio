@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -20,7 +21,8 @@ import {
   Loader2,
   HardDrive,
   Terminal,
-  Code2
+  Code2,
+  Activity
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
@@ -33,12 +35,6 @@ export default function ReviewPage() {
 
   const handlePublish = async () => {
     setIsPublishing(true);
-    // Simulate YouTube Data API v3 insert logic: 
-    // youtube.videos().insert({ 
-    //   part: "snippet,status", 
-    //   body: { snippet: {...}, status: { privacyStatus: "public" } }, 
-    //   media_body: "video.mp4" 
-    // })
     setTimeout(() => {
       setIsPublishing(false);
       toast({
@@ -53,14 +49,21 @@ export default function ReviewPage() {
     body: {
       snippet: {
         title: "[FREE] 6LACK x Drake Type Beat - \"Midnight Confessions\"",
-        description: "💵 Purchase This Beat: [Link]\n🔥 BUY 1 GET 2 FREE!\nBPM: 140 | KEY: F Minor\n#6LACK #Drake #TypeBeat2025",
-        tags: ["6lack type beat", "drake type beat", "free type beat 2025", "midnight confessions"]
+        description: "💵 Purchase This Beat: [Link]\n🔥 BUY 1 GET 2 FREE!\nBPM: 140 | KEY: F Minor\n#6LACK #Drake #TypeBeat2026",
+        tags: ["6lack type beat", "drake type beat", "free type beat 2026", "midnight confessions"]
       },
       status: {
         privacyStatus: "public"
       }
     },
     media_body: "video-assets-factory/videos/video1.mp4"
+  };
+
+  const mockRenderConfig = {
+    audio_path: "video-assets-factory/music/drake_rb_01.mp3",
+    image_path: "video-assets-factory/thumbnails/vintage_60s.jpg",
+    filter_graph: "[0:v]scale=1280x720,curves=vintage,vignette[bg];[1:a]showwaves=s=1280x720[waves];[bg][waves]overlay,noise[outv]",
+    output_path: "video-assets-factory/videos/video1.mp4"
   };
 
   return (
@@ -99,7 +102,7 @@ export default function ReviewPage() {
                         <Volume2 className="w-4 h-4 opacity-70" />
                         <span className="text-[10px] font-mono tracking-widest uppercase text-primary">video-assets-factory/videos/video1.mp4</span>
                       </div>
-                      <span className="text-[10px] font-mono">00:15 / 00:30 (Ultra-Scale Factory Optimized)</span>
+                      <span className="text-[10px] font-mono">00:15 / 00:30 (FFmpeg Render: OK)</span>
                     </div>
                   </div>
                 </Card>
@@ -107,7 +110,7 @@ export default function ReviewPage() {
                 <Tabs defaultValue="metadata" className="w-full">
                   <TabsList className="bg-secondary/50 w-full justify-start border border-border/50 rounded-2xl p-1 h-auto overflow-x-auto custom-scrollbar">
                     <TabsTrigger value="metadata" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest">Metadata</TabsTrigger>
-                    <TabsTrigger value="factory" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest">Factory Logic</TabsTrigger>
+                    <TabsTrigger value="factory" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest flex gap-2"><Activity className="w-3 h-3" /> Factory Logic</TabsTrigger>
                     <TabsTrigger value="api" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest flex gap-2"><Code2 className="w-3 h-3" /> API Payload</TabsTrigger>
                   </TabsList>
                   
@@ -124,34 +127,23 @@ export default function ReviewPage() {
                             {mockApiPayload.body.snippet.description}
                           </div>
                         </div>
-                        <div className="flex gap-2 pt-2">
-                          <Button variant="outline" size="sm" className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg"><Edit3 className="w-3 h-3 mr-2" /> Modify Meta</Button>
-                          <Button variant="outline" size="sm" className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg"><Youtube className="w-3 h-3 mr-2" /> View Channel</Button>
-                        </div>
                       </CardContent>
                     </Card>
                   </TabsContent>
 
                   <TabsContent value="factory" className="mt-4 m-0 space-y-4">
                     <Card className="bg-card border-border/50 rounded-2xl">
+                      <CardHeader className="bg-primary/5 py-4">
+                        <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
+                          <Terminal className="w-3 h-3" /> FFmpeg Visualizer Config
+                        </CardTitle>
+                      </CardHeader>
                       <CardContent className="pt-6">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">GCS media_body</Label>
-                            <p className="text-[11px] font-bold font-mono text-primary truncate">{mockApiPayload.media_body}</p>
-                          </div>
-                          <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Render Node</Label>
-                            <p className="text-[11px] font-bold font-mono">GCP_COMPUTE_NODE_42</p>
-                          </div>
-                          <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">YouTube API Part</Label>
-                            <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] uppercase">{mockApiPayload.part}</Badge>
-                          </div>
-                          <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
-                            <Label className="text-[9px] uppercase font-bold text-muted-foreground">Factory Method</Label>
-                            <p className="text-[11px] font-bold font-mono">youtube.videos().insert()</p>
-                          </div>
+                        <pre className="text-[10px] font-mono bg-black/90 p-4 rounded-xl text-blue-400 overflow-auto max-h-[300px] custom-scrollbar">
+                          {JSON.stringify(mockRenderConfig, null, 2)}
+                        </pre>
+                        <div className="mt-4 p-3 rounded-lg bg-secondary/30 border border-border/50 text-[9px] uppercase font-bold text-muted-foreground italic leading-relaxed">
+                          "Logic: [0:v] curves=vintage -> [1:a] showwaves -> overlay -> noise"
                         </div>
                       </CardContent>
                     </Card>
@@ -184,7 +176,7 @@ export default function ReviewPage() {
                       <Zap className="w-5 h-5 text-primary" />
                       Factory Approval
                     </CardTitle>
-                    <CardDescription className="text-xs">Triggering 10-20/day automated upload sequence</CardDescription>
+                    <CardDescription>Triggering n8n &rarr; YouTube automated sequence</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="p-4 rounded-2xl bg-green-500/5 border border-green-500/10 flex items-start gap-3">
@@ -199,7 +191,7 @@ export default function ReviewPage() {
                       <HardDrive className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                       <div>
                         <p className="text-[10px] font-bold uppercase text-blue-500">video-assets-factory</p>
-                        <p className="text-[10px] text-muted-foreground">Destination bucket mapped. blob.upload_from_filename sequence started.</p>
+                        <p className="text-[10px] text-muted-foreground">Destination bucket mapped. n8n visualizer node sync: ACTIVE.</p>
                       </div>
                     </div>
                   </CardContent>
@@ -217,7 +209,7 @@ export default function ReviewPage() {
                       ) : (
                         <>
                           <Send className="w-4 h-4 mr-2" />
-                          Approve & Publish (YouTube v3)
+                          Approve & Publish (n8n Hook)
                         </>
                       )}
                     </Button>
@@ -229,25 +221,22 @@ export default function ReviewPage() {
 
                 <Card className="bg-card border-border/50 rounded-2xl shadow-md">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Network Distribution Logs</CardTitle>
+                    <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">n8n Execution Logs</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex items-center justify-between p-2 rounded-xl bg-secondary/30">
                       <div className="flex items-center gap-2">
-                        <Youtube className="w-3 h-3 text-red-500" />
-                        <span className="text-[10px] font-bold">YouTube API v3</span>
+                        <Activity className="w-3 h-3 text-primary" />
+                        <span className="text-[10px] font-bold">Visualizer_Hook</span>
                       </div>
-                      <Badge variant="outline" className="text-[8px] bg-green-500/10 text-green-500 border-green-500/20">READY</Badge>
+                      <Badge variant="outline" className="text-[8px] bg-green-500/10 text-green-500 border-green-500/20">SUCCESS</Badge>
                     </div>
                     <div className="flex items-center justify-between p-2 rounded-xl bg-secondary/30">
                       <div className="flex items-center gap-2">
                         <Zap className="w-3 h-3 text-primary" />
-                        <span className="text-[10px] font-bold">GCS_BLOB_SYNC</span>
+                        <span className="text-[10px] font-bold">GPT4o_Prompt_Gen</span>
                       </div>
                       <Badge variant="outline" className="text-[8px] bg-blue-500/10 text-blue-400 border-blue-500/20">ACTIVE</Badge>
-                    </div>
-                    <div className="pt-2">
-                      <p className="text-[8px] text-center text-muted-foreground italic uppercase tracking-tighter">Current Slot: 14/20 Videos Published Today</p>
                     </div>
                   </CardContent>
                 </Card>

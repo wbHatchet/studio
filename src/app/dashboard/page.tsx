@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,24 +10,19 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { 
   TrendingUp, 
-  LineChart, 
-  BrainCircuit, 
   Workflow, 
-  ArrowRight, 
-  Video as VideoIcon, 
-  Cpu,
-  Target,
-  Share2,
   Zap,
   Terminal,
   Layers,
   Server,
   Network,
-  Database,
   DollarSign,
   Radio,
   Flame,
-  Star
+  Star,
+  Activity,
+  Cpu,
+  ShieldCheck
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 
@@ -41,7 +37,7 @@ export default function DashboardPage() {
     id: i + 1,
     status: Math.random() > 0.1 ? "Running" : "Idle",
     load: Math.floor(Math.random() * 100),
-    task: ["FFmpeg", "Runway", "ElevenLabs", "Scraper"][Math.floor(Math.random() * 4)]
+    task: ["FFmpeg", "Suno", "n8n", "Scraper"][Math.floor(Math.random() * 4)]
   }));
 
   const nicheStack = [
@@ -66,18 +62,18 @@ export default function DashboardPage() {
             <div className="h-4 w-px bg-border/50 mx-2" />
             <div className="flex flex-col">
               <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2 text-primary">
-                Cash-Cow Factory <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v5.5.0 (2026 Strategy)</span>
+                Director Agent Grid <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v7.0.0 (Market-Driven)</span>
               </h1>
               <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest text-primary flex items-center gap-2">
-                <Flame className="w-3 h-3 text-orange-500" /> Global Network Scale: 7-NICHE STACK ACTIVE
+                <Flame className="w-3 h-3 text-orange-500" /> n8n Orchestration: ACTIVE | FFmpeg Visualizer: STABLE
               </span>
             </div>
             <div className="ml-auto flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary/50 border border-border/50">
-                <Network className="w-3 h-3 text-green-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Compounding: Serialized</span>
+                <ShieldCheck className="w-3 h-3 text-green-500 animate-pulse" />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">GCS_BUCKET: video-assets-factory</span>
               </div>
-              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">Industrial Scale: ENABLED</Badge>
+              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">50-NODE GRID: ENABLED</Badge>
             </div>
           </header>
           
@@ -93,7 +89,7 @@ export default function DashboardPage() {
               <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
                 <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
                   <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                    <Star className="w-3 h-3" /> Fastest Growing Niche Stack (2026)
+                    <Star className="w-3 h-3" /> Market-Driven Niche Stack (2026 Strategy)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -116,9 +112,9 @@ export default function DashboardPage() {
               <Card className="bg-card border-border/50 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
-                    <Server className="w-4 h-4 text-primary" /> FFmpeg Grid Cluster
+                    <Server className="w-4 h-4 text-primary" /> FFmpeg Cluster Monitor
                   </CardTitle>
-                  <CardDescription>48 Parallel Niche Workers (K8s Nodes)</CardDescription>
+                  <CardDescription>48 Parallel K8s Containers (Vintage Engine)</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-6 gap-1">
@@ -134,8 +130,10 @@ export default function DashboardPage() {
                     ))}
                   </div>
                   <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-[10px] uppercase font-bold text-muted-foreground">
-                    <span>Niche Capacity: 1,200/mo</span>
-                    <span className="text-primary font-mono tracking-tighter animate-pulse">GRID_SYNC_OK</span>
+                    <span>CPU Load: {Math.floor(Math.random() * 40 + 20)}%</span>
+                    <span className="text-primary font-mono tracking-tighter animate-pulse flex items-center gap-1">
+                      <Activity className="w-3 h-3" /> n8n_HOOK_OK
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -148,7 +146,7 @@ export default function DashboardPage() {
                     <Workflow className="w-5 h-5" />
                     Serialized Compounding Matrix
                   </CardTitle>
-                  <CardDescription>Network retention across hybrid niche series</CardDescription>
+                  <CardDescription>Profit-first retention across 7 niche channels</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <PerformanceChart />
@@ -161,15 +159,15 @@ export default function DashboardPage() {
                     <Terminal className="w-5 h-5 text-primary" />
                     Agent Logic Stream
                   </CardTitle>
-                  <CardDescription>Viral Formula: Hook(2s) → Story(8s) → Payoff(15s)</CardDescription>
+                  <CardDescription>Director: [n8n] &rarr; [Suno] &rarr; [FFmpeg] &rarr; [YT]</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
                   {[
-                    { node: "NODE-42", status: "Mining 'Rich Habits' Series #4", progress: 88 },
-                    { node: "NODE-08", status: "Runway Gen-3: 'Inside Body' Hook", progress: 42 },
-                    { node: "NODE-15", status: "ElevenLabs: 'Psychology Tricks' v2", progress: 100 },
-                    { node: "NODE-31", status: "Repurpose.io: TikTok/Reels/Shorts Sync", progress: 15 },
-                    { node: "NODE-22", status: "Trend Scraper: Viral Food Hacks", progress: 95 }
+                    { node: "NODE-FFMPEG-42", status: "Vintage Render: 'Rich Habits' #4", progress: 88 },
+                    { node: "NODE-SUNO-08", status: "Suno Synthesis: Melancholic R&B", progress: 42 },
+                    { node: "NODE-n8n-15", status: "Orchestration: Google Sheets -> OpenAI", progress: 100 },
+                    { node: "NODE-YT-31", status: "API Push: YouTube v3 Snippet Upload", progress: 15 },
+                    { node: "NODE-SCRAPER-22", status: "Trend Scraper: TikTok Viral Gold", progress: 95 }
                   ].map((job, idx) => (
                     <div key={idx} className="group flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all">
                       <div className="space-y-1">
@@ -189,15 +187,15 @@ export default function DashboardPage() {
           <div className="sticky bottom-6 mx-6 md:mx-12 p-6 bg-primary text-primary-foreground rounded-3xl shadow-3xl flex flex-col md:flex-row items-center justify-between animate-in slide-in-from-bottom-12 duration-1000 border border-white/20 backdrop-blur-lg">
             <div className="flex items-center gap-5 mb-4 md:mb-0">
               <div className="p-4 bg-white/10 rounded-2xl border border-white/20 shadow-inner">
-                <Flame className="w-8 h-8 fill-white/20" />
+                <Cpu className="w-8 h-8 fill-white/20" />
               </div>
               <div>
-                <p className="font-bold text-lg font-headline tracking-tight">2026 Factory Strategy: ACTIVE</p>
-                <p className="text-xs opacity-80 italic max-w-lg">"Hybrid '60 Second Knowledge' niche stack identified as primary multiplier. Initiating parallel render batch #09."</p>
+                <p className="font-bold text-lg font-headline tracking-tight">Production Pipeline: AUTONOMOUS</p>
+                <p className="text-xs opacity-80 italic max-w-lg">"Director Agent initiating 10-channel publication grid. FFmpeg filter_complex: curves=vintage, showwaves=centered."</p>
               </div>
             </div>
             <button className="px-10 py-4 bg-white text-primary text-sm font-bold rounded-2xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95 border border-primary/20 flex items-center gap-2">
-              <Zap className="w-4 h-4" /> Deploy Niche Batch
+              <Zap className="w-4 h-4" /> Trigger Render Batch
             </button>
           </div>
         </SidebarInset>
