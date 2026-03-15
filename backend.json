@@ -2,44 +2,94 @@
 {
   "collections": {
     "users": {
-      "description": "User profile and API key references",
+      "description": "Global user profiles",
       "fields": {
         "email": "string",
+        "displayName": "string",
+        "avatarUrl": "string",
+        "createdAt": "timestamp"
+      }
+    },
+    "workspaces": {
+      "description": "Multi-tenant containers for content production teams",
+      "fields": {
+        "name": "string",
+        "ownerId": "string",
         "createdAt": "timestamp",
-        "subscription": "string"
-      }
-    },
-    "channels": {
-      "description": "Connected YouTube channels and their metadata",
-      "fields": {
-        "name": "string",
-        "niche": "string",
-        "youtubeId": "string",
-        "status": "string",
-        "userId": "string"
-      }
-    },
-    "projects": {
-      "description": "Production jobs and content metadata",
-      "fields": {
-        "name": "string",
-        "status": "string",
-        "progress": "number",
-        "type": "string",
-        "niche": "string",
+        "settings": "object"
+      },
+      "subcollections": {
+        "members": {
+          "description": "User roles within the workspace (owner, admin, editor, viewer)",
+          "fields": {
+            "role": "string",
+            "joinedAt": "timestamp"
+          }
+        },
+        "channels": {
+          "description": "YouTube/TikTok channels managed by this workspace",
+          "fields": {
+            "platform": "string",
+            "handle": "string",
+            "status": "string",
+            "stats": "object"
+          }
+        },
+        "inputs": {
+          "description": "Ingested data from Excel or Google Sheets",
+          "fields": {
+            "sourceType": "string",
+            "rowCount": "number",
+            "status": "string",
+            "createdBy": "string"
+          }
+        },
+        "ideas": {
+          "description": "Viral concepts generated from inputs or trend scans",
+          "fields": {
+            "topic": "string",
+            "niche": "string",
+            "hook": "string",
+            "status": "string"
+          }
+        },
         "assets": {
-          "audioUrl": "string",
-          "imageUrl": "string",
-          "videoUrl": "string"
+          "description": "Media library (audio, images, video segments)",
+          "fields": {
+            "type": "string",
+            "storagePath": "string",
+            "mimeType": "string",
+            "meta": "object"
+          }
+        },
+        "jobs": {
+          "description": "Leasable queue for AI agents (music_gen, render, etc.)",
+          "fields": {
+            "type": "string",
+            "status": "string",
+            "priority": "number",
+            "lease": "object",
+            "attempts": "number"
+          }
+        },
+        "publishes": {
+          "description": "Final content awaiting approval or scheduled for upload",
+          "fields": {
+            "channelId": "string",
+            "title": "string",
+            "approvalStatus": "string",
+            "scheduledFor": "timestamp"
+          }
+        },
+        "apiKeyRefs": {
+          "description": "Metadata references to secrets stored in Cloud Secret Manager",
+          "fields": {
+            "provider": "string",
+            "label": "string",
+            "secretName": "string",
+            "status": "string"
+          }
         }
-      }
-    },
-    "apiKeys": {
-      "description": "Encrypted or secure storage references for keys (simulated)",
-      "fields": {
-        "userId": "string",
-        "provider": "string",
-        "key": "string"
       }
     }
   }

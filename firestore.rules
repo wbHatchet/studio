@@ -2,17 +2,74 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // --- Helper Functions ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isMember(wsId) {
+      return isSignedIn() && exists(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid));
+    }
+
+    function getMember(wsId) {
+      return get(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid)).data;
+    }
+
+    function hasRole(wsId, roles) {
+      return isMember(wsId) && getMember(wsId).role in roles;
+    }
+
+    // --- User Profiles ---
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == userId;
     }
-    match /channels/{channelId} {
-      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
-    }
-    match /projects/{projectId} {
-      allow read, write: if request.auth != null;
-    }
-    match /apiKeys/{keyId} {
-      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+
+    // --- Workspace Tenancy ---
+    match /workspaces/{wsId} {
+      allow read: if isMember(wsId);
+      allow create: if isSignedIn();
+      allow update, delete: if hasRole(wsId, ['owner']);
+
+      // Workspace Members & RBAC
+      match /members/{uid} {
+        allow read: if isMember(wsId);
+        allow write: if hasRole(wsId, ['owner', 'admin']);
+      }
+
+      // Production Jobs Queue
+      match /jobs/{jobId} {
+        allow read: if isMember(wsId);
+        // Clients can only create queued jobs
+        allow create: if hasRole(wsId, ['owner', 'admin', 'editor']) 
+                      && request.resource.data.status == 'queued'
+                      && !('lease' in request.resource.data);
+        // Clients can update status to 'canceled' or basic metadata
+        // Lease/Attempts are restricted to Server/Admin SDK
+        allow update: if hasRole(wsId, ['owner', 'admin', 'editor'])
+                      && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['lease', 'attempts']);
+      }
+
+      // Content Approvals
+      match /publishes/{publishId} {
+        allow read: if isMember(wsId);
+        allow create: if hasRole(wsId, ['owner', 'admin', 'editor']);
+        // Approval gate: Only admins/owners can approve
+        allow update: if hasRole(wsId, ['owner', 'admin']) 
+                      || (hasRole(wsId, ['editor']) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['approvalStatus']));
+      }
+
+      // API Key References (No secrets, just metadata)
+      match /apiKeyRefs/{keyId} {
+        allow read: if isMember(wsId);
+        allow write: if hasRole(wsId, ['owner', 'admin']);
+      }
+
+      // Default rule for all production subcollections (inputs, ideas, assets, analytics)
+      match /{allSubcollections=**} {
+        allow read: if isMember(wsId);
+        allow write: if hasRole(wsId, ['owner', 'admin', 'editor']);
+      }
     }
   }
 }
