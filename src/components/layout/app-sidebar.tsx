@@ -11,11 +11,14 @@ import {
   Video, 
   BarChart3, 
   Settings, 
-  PlusCircle,
   Radio,
   Layers,
   Search,
-  CheckCircle2
+  CheckCircle2,
+  TrendingUp,
+  Zap,
+  MessageSquare,
+  Repeat
 } from "lucide-react";
 
 import {
@@ -34,14 +37,20 @@ import {
 const mainNav = [
   { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
   { title: "Niche Strategy", icon: Target, url: "/strategy" },
-  { title: "Projects", icon: Layers, url: "/projects" },
+  { title: "Production Queue", icon: Layers, url: "/projects" },
 ];
 
 const productionNav = [
-  { title: "Music Generator", icon: Music, url: "/production/music" },
-  { title: "Visuals & Animation", icon: Video, url: "/production/visuals" },
+  { title: "Music Curator", icon: Music, url: "/production/music" },
+  { title: "Visuals Director", icon: Video, url: "/production/visuals" },
   { title: "SEO Optimizer", icon: Search, url: "/seo" },
   { title: "Review & Approval", icon: CheckCircle2, url: "/review" },
+];
+
+const growthNav = [
+  { title: "Viral Signals", icon: TrendingUp, url: "/growth/signals" },
+  { title: "Hook & Title Lab", icon: Zap, url: "/growth/lab" },
+  { title: "Engagement Bot", icon: MessageSquare, url: "/growth/engagement" },
 ];
 
 const analyticsNav = [
@@ -94,6 +103,27 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.url}
+                  tooltip={item.title}
+                  className="hover:bg-sidebar-accent"
+                >
+                  <Link href={item.url}>
+                    <item.icon className="h-4 w-4" />
+                    <span className="font-medium">{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-muted-foreground font-semibold">GROWTH AGENTS</SidebarGroupLabel>
+          <SidebarMenu>
+            {growthNav.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname.startsWith(item.url)}
                   tooltip={item.title}
                   className="hover:bg-sidebar-accent"
                 >

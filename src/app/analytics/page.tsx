@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Loader2, TrendingUp, BarChart3, Target, Sparkles, BrainCircuit } from "lucide-react";
+import { Loader2, TrendingUp, Target, Sparkles, BrainCircuit, CheckCircle2, DollarSign, LineChart } from "lucide-react";
 import { aiPerformanceFeedback, AiPerformanceFeedbackOutput } from "@/ai/flows/ai-performance-feedback-flow";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -16,7 +17,12 @@ import { useToast } from "@/hooks/use-toast";
 export default function AnalyticsPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AiPerformanceFeedbackOutput | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const [formData, setFormData] = useState({
     channelNiche: "Old Drake R&B Micro-Niche",
@@ -42,6 +48,8 @@ export default function AnalyticsPage() {
     }
   }
 
+  if (!isMounted) return null;
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
@@ -54,6 +62,42 @@ export default function AnalyticsPage() {
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
+            <div className="grid gap-6 md:grid-cols-3">
+              <Card className="bg-card border-green-500/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
+                    <DollarSign className="w-3 h-3 text-green-500" /> Projected Revenue
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-headline">$4,250.00</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Based on current sales velocity</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card border-blue-500/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
+                    <LineChart className="w-3 h-3 text-blue-500" /> Retention Average
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-headline">68.2%</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">+12% from previous week</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-bold uppercase text-muted-foreground flex items-center gap-2">
+                    <BrainCircuit className="w-3 h-3 text-primary" /> Strategy Score
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-headline">A-</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Niche alignment is excellent</p>
+                </CardContent>
+              </Card>
+            </div>
+
             <div className="grid gap-8 lg:grid-cols-2">
               <div className="space-y-6">
                 <Card className="bg-card">
