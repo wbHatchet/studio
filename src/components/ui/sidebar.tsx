@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -276,7 +277,6 @@ const SidebarTrigger = React.forwardRef<
         onClick?.(event)
         toggleSidebar()
       }}
-      {...props}
     >
       <PanelLeft />
       <span className="sr-only">Toggle Sidebar</span>
@@ -650,9 +650,11 @@ const SidebarMenuSkeleton = React.forwardRef<
     showIcon?: boolean
   }
 >(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
+  // Random width between 50 to 90% generated only on client to avoid hydration mismatch
+  const [width, setWidth] = React.useState("70%")
+
+  React.useEffect(() => {
+    setWidth(`${Math.floor(Math.random() * 40) + 50}%`)
   }, [])
 
   return (
