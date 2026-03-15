@@ -9,8 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Mic2, Play, Download, Sparkles, Wand2, Copy, CheckCircle2 } from "lucide-react";
-import { generateVoiceScript } from "@/ai/flows/ai-voice-generation";
+import { Loader2, Mic2, Play, Download, Sparkles, Wand2, Copy, CheckCircle2, Volume2 } from "lucide-react";
+import { generateVoiceScript, textToSpeech } from "@/ai/flows/ai-voice-generation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
@@ -18,6 +18,7 @@ export default function VoiceProductionPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ export default function VoiceProductionPage() {
 
   async function handleGenerateScript() {
     setLoading(true);
+    setAudioUrl(null);
     try {
       const output = await generateVoiceScript(formData);
       setResult(output);
@@ -39,12 +41,19 @@ export default function VoiceProductionPage() {
     }
   }
 
-  function handleSynthesize() {
+  async function handleSynthesize() {
+    if (!result?.script) return;
     setIsGeneratingAudio(true);
-    setTimeout(() => {
+    try {
+      const dataUri = await textToSpeech(result.script);
+      setAudioUrl(dataUri);
+      toast({ title: "Synthesis Complete", description: "Voiceover is ready for preview." });
+    } catch (error) {
+      console.error(error);
+      toast({ variant: "destructive", title: "Error", description: "Synthesis failed. Check API key." });
+    } finally {
       setIsGeneratingAudio(false);
-      toast({ title: "Synthesis Complete", description: "Voiceover.wav is ready for download." });
-    }, 3000);
+    }
   }
 
   return (
@@ -127,7 +136,7 @@ export default function VoiceProductionPage() {
                           <p className="text-[10px] text-muted-foreground">High stability narrative</p>
                         </div>
                       </div>
-                      <Badge variant="outline" className="bg-green-500/10 text-green-500">Connected</Badge>
+                      <Badge variant="outline" className="bg-green-500/10 text-green-500">Live</Badge>
                     </div>
                     <Button 
                       variant="outline" 
@@ -136,8 +145,24 @@ export default function VoiceProductionPage() {
                       disabled={!result || isGeneratingAudio}
                     >
                       {isGeneratingAudio ? <Loader2 className="animate-spin mr-2" /> : <Mic2 className="mr-2 h-4 w-4" />}
-                      Synthesize to WAV
+                      Synthesize to Audio
                     </Button>
+                    
+                    {audioUrl && (
+                      <div className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10 animate-in fade-in zoom-in-95 duration-300">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-[10px] font-bold uppercase text-primary">Vocal Preview</span>
+                          <a href={audioUrl} download="voiceover.mp3">
+                            <Button size="sm" variant="ghost" className="h-7 text-xs gap-1">
+                              <Download className="w-3 h-3" /> Download MP3
+                            </Button>
+                          </a>
+                        </div>
+                        <audio controls className="w-full h-8">
+                          <source src={audioUrl} type="audio/mpeg" />
+                        </audio>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Key, Shield, Globe, Music, Info, Github, ExternalLink, Cpu, Zap, Share2, Video } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 
 export default function SettingsPage() {
   const { toast } = useToast();
@@ -42,7 +42,7 @@ export default function SettingsPage() {
 
           <main className="p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-6">
-              <Tabs defaultValue="core" className="space-y-6">
+              <Tabs defaultValue="media" className="space-y-6">
                 <TabsList className="bg-secondary/50 p-1">
                   <TabsTrigger value="core" className="gap-2"><Cpu className="w-4 h-4" /> Core Brain</TabsTrigger>
                   <TabsTrigger value="media" className="gap-2"><Video className="w-4 h-4" /> Media Engine</TabsTrigger>
@@ -77,8 +77,11 @@ export default function SettingsPage() {
                     </CardHeader>
                     <CardContent className="grid gap-6 md:grid-cols-2">
                       <div className="space-y-2">
-                        <Label>ElevenLabs API (Voice)</Label>
-                        <Input type="password" placeholder="Key..." className="bg-secondary/30" />
+                        <div className="flex items-center justify-between">
+                          <Label>ElevenLabs API (Voice)</Label>
+                          <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/20 text-[10px]">LIVE</Badge>
+                        </div>
+                        <Input type="password" value="********************************" className="bg-secondary/30" readOnly />
                       </div>
                       <div className="space-y-2">
                         <Label>Runway ML Key (Hooks)</Label>
