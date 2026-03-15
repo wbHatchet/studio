@@ -69,17 +69,26 @@
       },
       "required": ["type", "storagePath"]
     },
-    "Signal": {
-      "title": "Viral Signal",
+    "Publication": {
+      "title": "Publication",
       "type": "object",
-      "description": "Trend prediction data from Growth Agents",
+      "description": "Metadata for YouTube/TikTok distribution",
       "properties": {
-        "type": { "type": "string" },
-        "sources": { "type": "array", "items": { "type": "string" } },
-        "topics": { "type": "array" },
-        "discoveredAt": { "type": "string", "format": "date-time" }
+        "videoId": { "type": "string" },
+        "platform": { "type": "string", "enum": ["youtube", "tiktok", "instagram", "facebook"] },
+        "status": { "type": "string", "enum": ["draft", "scheduled", "published", "failed"] },
+        "scheduledAt": { "type": "string", "format": "date-time" },
+        "externalUrl": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } }
+          }
+        }
       },
-      "required": ["type", "discoveredAt"]
+      "required": ["videoId", "platform", "status"]
     }
   },
   "auth": {
@@ -109,6 +118,14 @@
           "entityName": "Asset",
           "schema": { "$ref": "#/backend/entities/Asset" },
           "description": "Metadata for assets stored in GCS assets/ folder"
+        }
+      },
+      {
+        "path": "/workspaces/{wsId}/publishes/{publishId}",
+        "definition": {
+          "entityName": "Publication",
+          "schema": { "$ref": "#/backend/entities/Publication" },
+          "description": "Automation queue for YouTube/TikTok uploads"
         }
       }
     ]

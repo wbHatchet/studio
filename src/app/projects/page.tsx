@@ -25,7 +25,9 @@ import {
   Folder,
   FileText,
   Mic2,
-  HardDrive
+  HardDrive,
+  Send,
+  Youtube
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -52,8 +54,9 @@ const initialProjects = [
     name: "Midnight Rain Mix #42", 
     niche: "Drake R&B", 
     status: "Rendering", 
+    publishStatus: "Pending Approval",
     progress: 65, 
-    type: "Long Form",
+    type: "Shorts",
     date: "2024-05-20"
   },
   { 
@@ -61,6 +64,7 @@ const initialProjects = [
     name: "Cyberpunk Night Walk", 
     niche: "Dark Trap", 
     status: "AI Prompting", 
+    publishStatus: "Draft",
     progress: 30, 
     type: "Shorts",
     date: "2024-05-21"
@@ -69,18 +73,20 @@ const initialProjects = [
     id: 3, 
     name: "Cozy Study Session LIVE", 
     niche: "Lo-Fi Study", 
-    status: "Streaming", 
+    status: "Live", 
+    publishStatus: "Published",
     progress: 100, 
-    type: "24/7 Live",
+    type: "Long Form",
     date: "2024-05-19"
   },
   { 
     id: 4, 
     name: "Halloween Lofi Beats", 
     niche: "Seasonal Lo-Fi", 
-    status: "Review Required", 
-    progress: 90, 
-    type: "Long Form",
+    status: "Ready", 
+    publishStatus: "Scheduled (10/20)",
+    progress: 100, 
+    type: "Shorts",
     date: "2024-05-22"
   },
 ];
@@ -93,7 +99,7 @@ const cloudAssets = [
 ];
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState(initialProjects);
+  const [projects] = useState(initialProjects);
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
 
@@ -102,8 +108,8 @@ export default function ProjectsPage() {
     setTimeout(() => {
       setIsUploading(false);
       toast({
-        title: "Spreadsheet Processed",
-        description: "Added 12 new jobs to the production queue.",
+        title: "Factory Pipeline: Active",
+        description: "Ingested 12 new jobs into the Render Grid.",
       });
     }, 2000);
   };
@@ -111,15 +117,15 @@ export default function ProjectsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Rendering":
-        return <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20"><Clock className="w-3 h-3 mr-1" /> Rendering</Badge>;
+        return <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20 text-[9px] uppercase"><Clock className="w-3 h-3 mr-1" /> Rendering</Badge>;
       case "AI Prompting":
-        return <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/20"><Layers className="w-3 h-3 mr-1" /> AI Thinking</Badge>;
-      case "Streaming":
-        return <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20"><PlayCircle className="w-3 h-3 mr-1" /> Live</Badge>;
-      case "Review Required":
-        return <Badge variant="outline" className="bg-orange-500/10 text-orange-400 border-orange-500/20"><Clock className="w-3 h-3 mr-1" /> Review</Badge>;
+        return <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/20 text-[9px] uppercase"><Layers className="w-3 h-3 mr-1" /> AI Thinking</Badge>;
+      case "Live":
+        return <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20 text-[9px] uppercase"><PlayCircle className="w-3 h-3 mr-1" /> Streaming</Badge>;
+      case "Ready":
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-[9px] uppercase"><CheckCircle2 className="w-3 h-3 mr-1" /> Ready</Badge>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="secondary" className="text-[9px] uppercase">{status}</Badge>;
     }
   };
 
@@ -135,32 +141,32 @@ export default function ProjectsPage() {
             <div className="ml-auto flex gap-2">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2 border-primary/20 hover:bg-primary/5">
-                    <FileSpreadsheet className="w-4 h-4" /> Ingest Factory Sheet
+                  <Button variant="outline" size="sm" className="gap-2 border-primary/20 hover:bg-primary/5 h-9 font-bold uppercase text-[10px] tracking-widest px-4">
+                    <FileSpreadsheet className="w-4 h-4" /> Bulk Factory Ingest
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[500px]">
                   <DialogHeader>
-                    <DialogTitle className="font-headline uppercase tracking-tighter text-xl">Ultra-Scale Ingestion</DialogTitle>
+                    <DialogTitle className="font-headline uppercase tracking-tighter text-2xl">Ultra-Scale Ingestion</DialogTitle>
                     <DialogDescription>
                       Upload production sheets to trigger parallel rendering across 50 nodes.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
-                    <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-border rounded-xl bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer group">
+                    <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-border rounded-2xl bg-secondary/20 hover:bg-secondary/30 transition-all cursor-pointer group">
                       <Upload className="w-8 h-8 mb-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      <p className="text-sm font-medium">Drop Factory CSV here</p>
-                      <p className="text-xs text-muted-foreground mt-1 font-mono">Scale: 1000+ videos daily capacity</p>
+                      <p className="text-sm font-bold uppercase tracking-widest">Drop Factory CSV</p>
+                      <p className="text-[9px] text-muted-foreground mt-2 font-mono uppercase tracking-tighter">Capacity: 1000+ videos/day</p>
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button onClick={handleBulkUpload} disabled={isUploading} className="w-full bg-primary text-primary-foreground font-bold">
-                      {isUploading ? "Starting Cluster..." : "Deploy to Render Grid"}
+                    <Button onClick={handleBulkUpload} disabled={isUploading} className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest">
+                      {isUploading ? "Initializing Render Nodes..." : "Deploy to Render Grid"}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-              <Button size="sm" className="bg-primary text-primary-foreground font-bold">
+              <Button size="sm" className="bg-primary text-primary-foreground font-bold h-9 uppercase text-[10px] tracking-widest px-6">
                 <PlusCircle className="w-4 h-4 mr-2" /> New Asset
               </Button>
             </div>
@@ -168,16 +174,22 @@ export default function ProjectsPage() {
 
           <main className="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
             <Tabs defaultValue="queue" className="w-full">
-              <TabsList className="bg-secondary/50 p-1 mb-8 border border-border/50 backdrop-blur-md">
-                <TabsTrigger value="queue" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6"><Layers className="w-3 h-3" /> Production Queue</TabsTrigger>
-                <TabsTrigger value="storage" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6"><HardDrive className="w-3 h-3" /> Cloud Asset Factory</TabsTrigger>
-                <TabsTrigger value="vector" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6"><Database className="w-3 h-3" /> Vector Asset Search</TabsTrigger>
+              <TabsList className="bg-secondary/50 p-1 mb-8 border border-border/50 backdrop-blur-md rounded-xl">
+                <TabsTrigger value="queue" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <Layers className="w-3 h-3" /> Production Queue
+                </TabsTrigger>
+                <TabsTrigger value="storage" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <HardDrive className="w-3 h-3" /> Cloud Asset Factory
+                </TabsTrigger>
+                <TabsTrigger value="publish" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <Youtube className="w-3 h-3" /> Distribution Log
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="queue" className="space-y-6">
                 <div className="grid gap-6">
                   {projects.map((project) => (
-                    <Card key={project.id} className="bg-card hover:border-primary/30 transition-all group overflow-hidden border-border/50">
+                    <Card key={project.id} className="bg-card hover:border-primary/30 transition-all group overflow-hidden border-border/50 shadow-sm">
                       <CardContent className="p-0">
                         <div className="flex flex-col md:flex-row md:items-center gap-6 p-6">
                           <div className="flex-1 space-y-4">
@@ -185,9 +197,16 @@ export default function ProjectsPage() {
                               <div>
                                 <div className="flex items-center gap-3">
                                   <h3 className="text-lg font-headline font-bold group-hover:text-primary transition-colors">{project.name}</h3>
-                                  <Badge variant="secondary" className="text-[9px] uppercase tracking-widest font-mono bg-secondary/50">{project.type}</Badge>
+                                  <Badge variant="secondary" className="text-[9px] uppercase tracking-widest font-mono bg-secondary/50 border-border/50">{project.type}</Badge>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-tighter">Factory Niche: <span className="text-primary font-mono">{project.niche}</span></p>
+                                <div className="flex items-center gap-4 mt-2">
+                                  <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter flex items-center gap-1">
+                                    Factory Niche: <span className="text-primary font-mono">{project.niche}</span>
+                                  </p>
+                                  <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter flex items-center gap-1">
+                                    Publish: <span className="text-blue-400 font-mono italic">{project.publishStatus}</span>
+                                  </p>
+                                </div>
                               </div>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -195,33 +214,33 @@ export default function ProjectsPage() {
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-popover border-border">
-                                  <DropdownMenuItem>View Grid Assets</DropdownMenuItem>
-                                  <DropdownMenuItem>Vector Similarity Search</DropdownMenuItem>
-                                  <DropdownMenuItem className="text-destructive font-bold uppercase text-[10px]">Purge Node Cache</DropdownMenuItem>
+                                <DropdownMenuContent align="end" className="bg-popover border-border p-1">
+                                  <DropdownMenuItem className="text-[10px] font-bold uppercase tracking-widest">Asset Details</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-[10px] font-bold uppercase tracking-widest">API Logs</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-destructive font-bold uppercase text-[10px] tracking-widest">Kill Process</DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
 
                             <div className="space-y-2">
                               <div className="flex items-center justify-between text-[10px] font-bold uppercase">
-                                <span className="text-muted-foreground flex items-center gap-1 font-mono">
-                                  <Clock className="w-3 h-3" /> GRID_ACTIVITY: {project.date}
+                                <span className="text-muted-foreground flex items-center gap-1 font-mono tracking-tighter">
+                                  <Clock className="w-3 h-3" /> GRID_SYNC: {project.date}
                                 </span>
-                                <span className="text-primary font-mono tracking-tighter">{project.progress}% SYNCED</span>
+                                <span className="text-primary font-mono tracking-tighter">{project.progress}% RENDERED</span>
                               </div>
-                              <Progress value={project.progress} className="h-1 bg-secondary/50" />
+                              <Progress value={project.progress} className="h-1 bg-secondary/50 rounded-full" />
                             </div>
                           </div>
 
                           <div className="flex md:flex-col gap-2 md:w-48 shrink-0">
                             {getStatusBadge(project.status)}
-                            <div className="flex gap-1 mt-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50"><Music className="h-3.5 w-3.5" /></Button>
-                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50"><Video className="h-3.5 w-3.5" /></Button>
-                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50"><Search className="h-3.5 w-3.5" /></Button>
+                            <div className="flex gap-1 mt-1">
+                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Music className="h-3.5 w-3.5" /></Button>
+                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Video className="h-3.5 w-3.5" /></Button>
+                              <Button variant="outline" size="icon" className="h-8 w-8 opacity-50 border-border/50 hover:opacity-100 transition-opacity"><Search className="h-3.5 w-3.5" /></Button>
                               {project.progress === 100 && (
-                                <Button variant="outline" size="icon" className="h-8 w-8 text-primary border-primary/30 animate-pulse"><ExternalLink className="h-3.5 w-3.5" /></Button>
+                                <Button variant="outline" size="icon" className="h-8 w-8 text-primary border-primary/30 animate-pulse"><Youtube className="h-3.5 w-3.5" /></Button>
                               )}
                             </div>
                           </div>
@@ -235,11 +254,11 @@ export default function ProjectsPage() {
               <TabsContent value="storage" className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                   {cloudAssets.map((folder) => (
-                    <Card key={folder.name} className="bg-card border-border/50 group hover:border-primary/30 transition-all cursor-pointer">
+                    <Card key={folder.name} className="bg-card border-border/50 group hover:border-primary/30 transition-all cursor-pointer shadow-sm">
                       <CardHeader className="pb-2">
-                        <folder.icon className={`w-8 h-8 ${folder.color} mb-2 group-hover:scale-110 transition-transform`} />
-                        <CardTitle className="text-sm font-headline uppercase tracking-tighter">{folder.name}</CardTitle>
-                        <CardDescription className="text-[10px] font-mono uppercase font-bold text-muted-foreground">{folder.count} objects synced</CardDescription>
+                        <folder.icon className={`w-8 h-8 ${folder.color} mb-3 group-hover:scale-110 transition-transform`} />
+                        <CardTitle className="text-xs font-headline uppercase tracking-widest">{folder.name}</CardTitle>
+                        <CardDescription className="text-[9px] font-mono uppercase font-bold text-muted-foreground mt-1">{folder.count} objects active</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="h-1 w-full bg-secondary/50 rounded-full overflow-hidden">
@@ -250,38 +269,39 @@ export default function ProjectsPage() {
                   ))}
                 </div>
 
-                <Card className="bg-card border-border/50">
-                  <CardHeader className="flex flex-row items-center justify-between">
+                <Card className="bg-card border-border/50 shadow-md">
+                  <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 pb-4">
                     <div>
                       <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2">
-                        <HardDrive className="w-4 h-4 text-primary" /> Google Cloud Storage Live (Free Tier)
+                        <HardDrive className="w-4 h-4 text-primary" /> Cloud Storage Factory Log
                       </CardTitle>
-                      <CardDescription className="text-xs">Recursive scan of factory asset structure: assets/*</CardDescription>
+                      <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Live grid activity: assets/*</CardDescription>
                     </div>
-                    <Badge variant="outline" className="font-mono text-[9px] text-green-500 border-green-500/20">BUCKET_SYNC: OK</Badge>
+                    <Badge variant="outline" className="font-mono text-[9px] text-green-500 border-green-500/20 bg-green-500/5 px-3 py-1 uppercase tracking-tighter">BUCKET_SYNC: OK</Badge>
                   </CardHeader>
-                  <CardContent>
-                    <div className="rounded-xl border border-border/50 overflow-hidden font-mono text-[11px]">
-                      <div className="bg-secondary/30 p-3 border-b border-border/50 flex items-center justify-between text-muted-foreground font-bold uppercase">
-                        <span>Path / Filename (blob.upload_from_filename)</span>
+                  <CardContent className="p-0">
+                    <div className="overflow-hidden font-mono text-[11px]">
+                      <div className="bg-secondary/30 p-4 flex items-center justify-between text-muted-foreground font-bold uppercase tracking-widest border-b border-border/50">
+                        <span>Factory Path / blob.upload_from_filename</span>
                         <span>Size / Meta</span>
                       </div>
-                      <div className="divide-y divide-border/50">
+                      <div className="divide-y divide-border/50 max-h-[400px] overflow-y-auto custom-scrollbar">
                         {[
                           { path: "assets/videos/batch_12_short_001.mp4", size: "4.2 MB", status: "Rendered" },
-                          { path: "assets/voices/adam_script_v2.mp3", size: "1.1 MB", status: "Synthesized" },
-                          { path: "assets/thumbnails/6lack_type_variant_a.jpg", size: "450 KB", status: "Generated" },
-                          { path: "assets/scripts/midnight_rain_mix.json", size: "12 KB", status: "Archived" },
-                          { path: "assets/videos/batch_12_short_002.mp4", size: "3.8 MB", status: "Queue" }
+                          { path: "assets/voices/elevenlabs_voice_42.mp3", size: "1.1 MB", status: "Synthesized" },
+                          { path: "assets/thumbnails/short_thumb_v1.jpg", size: "450 KB", status: "Generated" },
+                          { path: "assets/scripts/viral_topic_09.json", size: "12 KB", status: "Archived" },
+                          { path: "assets/videos/batch_12_short_002.mp4", size: "3.8 MB", status: "Queue" },
+                          { path: "assets/videos/batch_12_short_003.mp4", size: "4.1 MB", status: "Queue" }
                         ].map((file, i) => (
                           <div key={i} className="p-4 flex items-center justify-between hover:bg-primary/5 transition-colors group">
                             <div className="flex items-center gap-3">
-                              <Folder className="w-3 h-3 text-muted-foreground group-hover:text-primary" />
+                              <Folder className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
                               <span className="text-muted-foreground group-hover:text-foreground transition-colors">{file.path}</span>
                             </div>
                             <div className="flex items-center gap-4">
                               <span className="text-muted-foreground opacity-50">{file.size}</span>
-                              <Badge variant="outline" className="text-[9px] font-bold uppercase">{file.status}</Badge>
+                              <Badge variant="outline" className="text-[8px] font-bold uppercase border-border/50">{file.status}</Badge>
                             </div>
                           </div>
                         ))}
@@ -291,63 +311,39 @@ export default function ProjectsPage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="vector">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <Card className="bg-card border-primary/20 shadow-xl shadow-primary/5">
+              <TabsContent value="publish" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="grid gap-6">
+                  <Card className="bg-card border-border/50 shadow-md">
                     <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-tighter flex items-center gap-2">
-                        <SearchCode className="w-4 h-4 text-primary" /> Similarity Search Engine
+                      <CardTitle className="text-base font-headline uppercase tracking-tighter flex items-center gap-2">
+                        <Youtube className="w-5 h-5 text-red-500" /> YouTube Publication Grid
                       </CardTitle>
-                      <CardDescription>Find reusable clips using vector embeddings</CardDescription>
+                      <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Status of automated 10-20/day upload sequence</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex gap-2">
-                        <div className="flex-1 h-10 bg-secondary/30 rounded-lg border border-border/50 px-3 flex items-center text-[10px] text-muted-foreground font-mono">
-                          QUERY: "atmospheric dark rnb studio vibes"
-                        </div>
-                        <Button size="icon" className="h-10 w-10 bg-primary/20 border border-primary/30 text-primary hover:bg-primary/30 transition-all"><Sparkles className="w-4 h-4" /></Button>
-                      </div>
-                      <div className="space-y-2">
-                        {[1, 2, 3].map(i => (
-                          <div key={i} className="p-3 rounded-lg bg-secondary/20 border border-border/50 flex items-center justify-between group hover:border-primary/30 transition-all">
-                            <div className="flex items-center gap-3">
-                              <Database className="w-3 h-3 text-muted-foreground group-hover:text-primary" />
-                              <span className="text-xs font-bold font-mono">ASSET_REF_{100 + i}</span>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {[
+                          { title: "Midnight Confessions", slot: "Slot #14", status: "Published", platform: "YouTube" },
+                          { title: "Filtered Memories", slot: "Slot #15", status: "Scheduled", platform: "YouTube" },
+                          { title: "Late Night Drive", slot: "Slot #16", status: "Queued", platform: "YouTube" }
+                        ].map((pub, i) => (
+                          <div key={i} className="p-4 rounded-xl bg-secondary/30 border border-border/50 flex items-center justify-between group hover:border-primary/30 transition-all">
+                            <div className="flex items-center gap-4">
+                              <div className="p-2 bg-red-500/10 rounded-lg">
+                                <Send className="w-4 h-4 text-red-500" />
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold uppercase tracking-widest">{pub.title}</p>
+                                <p className="text-[9px] text-muted-foreground font-mono mt-1">Factory Sequence: {pub.slot}</p>
+                              </div>
                             </div>
-                            <Badge variant="outline" className="text-[9px] bg-green-500/10 text-green-500 border-green-500/20 font-bold uppercase">{99 - i}% MATCH</Badge>
+                            <Badge variant="outline" className={`text-[9px] font-bold uppercase ${pub.status === 'Published' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20'}`}>
+                              {pub.status}
+                            </Badge>
                           </div>
                         ))}
                       </div>
                     </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-card border-border/50 flex flex-col">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-tighter flex items-center gap-2">
-                        <Database className="w-4 h-4 text-primary" /> Asset Reuse Optimization
-                      </CardTitle>
-                      <CardDescription>Leveraging vector library to minimize compute</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-1 space-y-4">
-                      <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10 shadow-inner">
-                        <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1 font-mono">REUSE_RATIO</p>
-                        <p className="text-4xl font-headline font-bold text-primary tracking-tighter">42.8%</p>
-                        <p className="text-[10px] text-muted-foreground mt-2 uppercase font-bold font-mono italic">EST_SAVINGS: $2,420.00 / MO</p>
-                      </div>
-                      <div className="space-y-3 pt-2">
-                        <div className="flex justify-between text-[9px] font-bold uppercase text-muted-foreground font-mono">
-                          <span>Vector Index Sync</span>
-                          <span>98%</span>
-                        </div>
-                        <Progress value={98} className="h-1" />
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-card border-dashed border-2 border-border/50 flex flex-col items-center justify-center p-8 opacity-60 hover:opacity-100 transition-opacity cursor-pointer group">
-                    <Database className="w-8 h-8 mb-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                    <p className="text-xs font-bold uppercase tracking-widest">Connect External Vector DB</p>
-                    <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold font-mono">Pinecone / Supabase Integration</p>
                   </Card>
                 </div>
               </TabsContent>
