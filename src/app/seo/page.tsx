@@ -9,10 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Search, Copy, RefreshCcw, Tag, Hash, FileText } from "lucide-react";
+import { Loader2, Search, Copy, RefreshCcw, Tag, Hash, FileText, Flame } from "lucide-react";
 import { aiYoutubeSeoOptimization, AiYoutubeSeoOptimizationOutput } from "@/ai/flows/ai-youtube-seo-optimization";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+
+const viralKeywords = [
+  "lofi beats", "lofi study music", "harbor lofi", "moon lofi", "lofi radio",
+  "study beats", "lofi chill", "relaxing lofi music", "late night lofi",
+  "lofi sleep music", "lofi hip hop", "study music 2026", "rain lofi",
+  "coding music", "focus music", "chill beats", "ambient lofi", "lofi mix",
+  "deep focus music", "background study music"
+];
 
 export default function SeoOptimizerPage() {
   const [loading, setLoading] = useState(false);
@@ -21,8 +29,8 @@ export default function SeoOptimizerPage() {
   
   const [formData, setFormData] = useState({
     microNiche: "Harbor Moon LoFi Radio - Night Escape",
-    videoTopic: "Calm moonlit harbor vibes with gentle water sounds and lo-fi beats for late-night study.",
-    keywords: ["harbor moon lofi", "late night escape", "moonlit harbor beats", "calm water lofi", "study radio"],
+    videoTopic: "Moonlit Harbor Lofi 🌙 Deep Focus Study Beats",
+    keywords: viralKeywords,
     artistName: "Harbor Moon",
     bpm: 78,
     key: "C Minor",
@@ -34,8 +42,9 @@ export default function SeoOptimizerPage() {
     try {
       const output = await aiYoutubeSeoOptimization(formData);
       setResult(output);
+      toast({ title: "Viral SEO Engineered", description: "Metadata optimized for Harbor Moon algorithm warm-up." });
     } catch (error) {
-      toast({ title: "Error", description: "Failed to generate SEO metadata." });
+      toast({ variant: "destructive", title: "Error", description: "Failed to generate SEO metadata." });
     } finally {
       setLoading(false);
     }
@@ -58,14 +67,25 @@ export default function SeoOptimizerPage() {
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
+            <div className="bg-primary/5 border border-primary/20 p-4 rounded-2xl flex items-center justify-between max-w-5xl mx-auto">
+               <div className="flex items-center gap-3">
+                 <Flame className="w-5 h-5 text-orange-500" />
+                 <div>
+                   <p className="text-[10px] font-bold uppercase text-primary">Active Blueprint: Harbor Moon LoFi Radio</p>
+                   <p className="text-xs font-headline font-bold">Week 1 Algorithm Warm-Up Calibration</p>
+                 </div>
+               </div>
+               <Badge className="bg-green-500/20 text-green-500 uppercase font-mono text-[10px]">VIRAL-READY</Badge>
+            </div>
+
             <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-5">
               <Card className="bg-card lg:col-span-2 h-fit">
                 <CardHeader>
                   <CardTitle className="font-headline flex items-center gap-2">
                     <Tag className="w-5 h-5 text-primary" />
-                    Asset Details
+                    Algorithm Calibration
                   </CardTitle>
-                  <CardDescription>Engineering titles for Harbor Moon Radio</CardDescription>
+                  <CardDescription>Engineering titles based on Emotion + Scene + Use</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
@@ -77,11 +97,12 @@ export default function SeoOptimizerPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Scene & Purpose</Label>
+                    <Label>Scene & Purpose (Viral Title Structure)</Label>
                     <Textarea 
                       value={formData.videoTopic}
                       onChange={(e) => setFormData({...formData, videoTopic: e.target.value})}
                       className="bg-secondary/30 min-h-[80px]"
+                      placeholder="Emotion + Scene + Use (e.g. Moonlit Harbor Lofi Deep Focus Study Beats)"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -104,11 +125,11 @@ export default function SeoOptimizerPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Keywords (Comma separated)</Label>
-                    <Input 
+                    <Label>Viral Keyword Stack</Label>
+                    <Textarea 
                       value={formData.keywords.join(", ")}
                       onChange={(e) => setFormData({...formData, keywords: e.target.value.split(",").map(k => k.trim())})}
-                      className="bg-secondary/30"
+                      className="bg-secondary/30 min-h-[100px]"
                     />
                   </div>
                   <Button 

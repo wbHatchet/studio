@@ -24,7 +24,8 @@ import {
   Cpu,
   Workflow,
   Terminal,
-  Activity
+  Activity,
+  Flame
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -44,44 +45,55 @@ const productionStages = [
   { id: "published", label: "YouTube Ready", count: 32, color: "text-green-400" },
 ];
 
-const initialQueue = [
+const warmUpQueue = [
   { 
     id: 1, 
-    name: "Rainy Cafe Lo-Fi", 
-    niche: "Lofi Girl Style", 
+    name: "Moonlit Harbor Study Beats 🌙", 
+    niche: "Harbor Moon Radio", 
     status: "FFmpeg Rendering", 
     duration: "3h Loop",
-    progress: 65, 
+    progress: 85, 
     type: "Long-form",
-    node: "FFMPEG-NODE-42",
+    node: "FFMPEG-NODE-01",
     stage: "render"
   },
   { 
     id: 2, 
-    name: "Neon Cyberpunk Night", 
-    niche: "Vibe Beats", 
+    name: "Rainy Dock Lofi – Deep Focus Mix", 
+    niche: "Harbor Moon Radio", 
     status: "Music Gen (Suno)", 
-    duration: "1h Loop",
+    duration: "2h Loop",
     progress: 30, 
     type: "Long-form",
-    node: "SUNO-API-08",
+    node: "SUNO-API-02",
     stage: "music"
   },
   { 
     id: 3, 
-    name: "Deep Focus Studio", 
-    niche: "Focus Lo-Fi", 
+    name: "Late Night Harbor Radio", 
+    niche: "Harbor Moon Radio", 
     status: "Ready for Upload", 
-    duration: "2h Loop",
+    duration: "3h Loop",
     progress: 100, 
     type: "Long-form",
-    node: "YT-API-UPLOAD-12",
+    node: "YT-API-UPLOAD-03",
     stage: "published"
+  },
+  { 
+    id: 4, 
+    name: "Quiet Harbor Café Lofi", 
+    niche: "Harbor Moon Radio", 
+    status: "Pending Scene", 
+    duration: "1h Loop",
+    progress: 15, 
+    type: "Long-form",
+    node: "MJ-SCENE-04",
+    stage: "scene"
   }
 ];
 
 export default function ProjectsPage() {
-  const [queue] = useState(initialQueue);
+  const [queue] = useState(warmUpQueue);
   const { toast } = useToast();
 
   return (
@@ -92,13 +104,24 @@ export default function ProjectsPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Content Production Queue</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Week 1 Algorithm Warm-Up Queue</h1>
             <Button size="sm" className="ml-auto bg-primary text-primary-foreground font-bold h-9 uppercase text-[10px] tracking-widest px-6">
-              <PlusCircle className="w-4 h-4 mr-2" /> New Lo-Fi Idea
+              <PlusCircle className="w-4 h-4 mr-2" /> Launch Harbor Moon Video
             </Button>
           </header>
 
           <main className="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
+            <div className="bg-primary/5 border border-primary/20 p-4 rounded-2xl flex items-center justify-between">
+               <div className="flex items-center gap-3">
+                 <Flame className="w-5 h-5 text-orange-500" />
+                 <div>
+                   <p className="text-[10px] font-bold uppercase text-primary">Active Blueprint: Harbor Moon LoFi Radio</p>
+                   <p className="text-xs font-headline font-bold">Week 1 Strategy: 10 Videos / Algorithm Warm-Up</p>
+                 </div>
+               </div>
+               <Badge className="bg-green-500/20 text-green-500 uppercase font-mono text-[10px]">3/10 COMPLETE</Badge>
+            </div>
+
             <div className="grid grid-cols-5 gap-4">
               {productionStages.map((stage) => (
                 <Card key={stage.id} className="bg-card border-border/50 shadow-sm overflow-hidden">
