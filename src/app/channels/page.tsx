@@ -25,13 +25,14 @@ import { Progress } from "@/components/ui/progress";
 const mockChannels = [
   {
     id: 1,
-    name: "Luxury Lifestyle Grid",
-    niche: "High-Ticket Aspiration",
+    name: "Harbor Moon LoFi Radio",
+    niche: "Late Night Harbor Escape",
+    handle: "@harbormoonlofi",
     subs: "420K",
     views: "15.4M",
     status: "Active",
     health: 98,
-    avatar: "https://picsum.photos/seed/ch1/100/100",
+    avatar: "https://picsum.photos/seed/moon1/100/100",
     queued: 85,
     today: 3
   },
@@ -49,8 +50,8 @@ const mockChannels = [
   },
   {
     id: 3,
-    name: "Story Series: Dark History",
-    niche: "History Mysteries",
+    name: "Dark Psychology Tricks",
+    niche: "Mind Hacks",
     subs: "124K",
     views: "2.1M",
     status: "Warming Up",
@@ -109,7 +110,9 @@ export default function ChannelsPage() {
                     <img src={channel.avatar} alt="" className="w-12 h-12 rounded-full border border-border" />
                     <div className="flex-1 min-w-0">
                       <CardTitle className="text-base truncate font-headline">{channel.name}</CardTitle>
-                      <CardDescription className="text-[10px] font-bold uppercase text-primary">{channel.niche}</CardDescription>
+                      <CardDescription className="text-[10px] font-bold uppercase text-primary">
+                        {channel.niche} • {channel.handle}
+                      </CardDescription>
                     </div>
                     <Badge variant={channel.status === "Active" ? "default" : "secondary"} className="text-[9px] uppercase">
                       {channel.status}

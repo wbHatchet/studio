@@ -20,9 +20,9 @@ export default function VisualsProductionPage() {
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
-    description: "cozy anime cafe, rain outside window, warm lighting, lofi aesthetic, 4k detail",
-    mood: "Calm, dreamy, nostalgic",
-    style: "Midjourney Lo-Fi Style v6",
+    description: "cozy moonlit harbor, moonlight reflecting on water, lighthouse glow in distance, rainy dockside windows, anime lofi aesthetic, 4k detail",
+    mood: "Calm, dreamy, nostalgic, late-night escape",
+    style: "Midjourney Lo-Fi Style v6 (Harbor Theme)",
     variationCount: 1
   });
 
@@ -34,7 +34,7 @@ export default function VisualsProductionPage() {
         inputType: 'text'
       });
       setResult(output);
-      toast({ title: "Scene Prompt Generated", description: "Midjourney/Playground instructions ready." });
+      toast({ title: "Harbor Scene Engineered", description: "Midjourney/Playground instructions for Harbor Moon Radio ready." });
     } catch (error) {
       toast({ title: "Error", description: "Failed to generate visual prompts." });
     } finally {
@@ -50,33 +50,33 @@ export default function VisualsProductionPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Scene Generation (Midjourney)</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Visuals (Harbor Moon)</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
             <div className="max-w-4xl mx-auto space-y-8">
-              <Card className="bg-card border-border/50 shadow-xl">
+              <Card className="bg-card border-border/50 shadow-2xl">
                 <CardHeader>
                   <CardTitle className="font-headline flex items-center gap-2 text-primary">
                     <ImageIcon className="w-5 h-5" />
-                    Visual Scene Concept
+                    Visual Scene Context
                   </CardTitle>
-                  <CardDescription>Step 4: Creating the high-retention background scene</CardDescription>
+                  <CardDescription>Engineering the moonlit aesthetic for Harbor Moon radio loops</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label>Scene Description (Core Prompt)</Label>
+                    <Label>Visual Logic (Core Prompt)</Label>
                     <Textarea 
                       value={formData.description}
                       onChange={(e) => setFormData({...formData, description: e.target.value})}
                       className="bg-secondary/30 min-h-[100px]"
-                      placeholder="e.g. cozy anime cafe, rain outside window..."
+                      placeholder="e.g. cozy moonlit harbor, rain on water..."
                     />
                   </div>
                   
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>Aesthetic Style</Label>
+                      <Label>Midjourney Style V6</Label>
                       <Input 
                         value={formData.style}
                         onChange={(e) => setFormData({...formData, style: e.target.value})}
@@ -84,7 +84,7 @@ export default function VisualsProductionPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Mood Target</Label>
+                      <Label>Atmosphere Target</Label>
                       <Input 
                         value={formData.mood}
                         onChange={(e) => setFormData({...formData, mood: e.target.value})}
@@ -95,12 +95,12 @@ export default function VisualsProductionPage() {
                 </CardContent>
                 <CardFooter className="bg-secondary/10 border-t border-border/50 p-6">
                   <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] tracking-widest"
+                    className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] tracking-widest shadow-xl"
                     onClick={handleGenerate}
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                    Engineer Midjourney Prompt
+                    Engineer Aesthetic Scene
                   </Button>
                 </CardFooter>
               </Card>
@@ -108,17 +108,17 @@ export default function VisualsProductionPage() {
               {result && (
                 <div className="grid gap-6 animate-in slide-in-from-bottom-4 duration-500">
                   <Card className="bg-card border-primary/20 shadow-md">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                        <Maximize2 className="w-3 h-3" /> Step 5: Scene Upscaling
+                    <CardHeader className="pb-2 bg-primary/5 rounded-t-lg">
+                      <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                        <Maximize2 className="w-3 h-3" /> Scene Upscaling Hub
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="p-4 rounded-xl bg-secondary/30 border border-border italic text-sm leading-relaxed text-muted-foreground">
+                    <CardContent className="pt-6 space-y-4">
+                      <div className="p-4 rounded-xl bg-secondary/30 border border-border italic text-[11px] leading-relaxed text-muted-foreground bg-secondary/10">
                         {result.variations[0].imagePrompt}
                       </div>
                       <div className="flex items-center justify-between">
-                        <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 text-[8px] uppercase">Ready for Playground AI</Badge>
+                        <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 text-[8px] uppercase font-bold">Node Ready for Playground AI</Badge>
                         <Button variant="ghost" size="sm" className="h-8 text-[10px] uppercase font-bold text-primary">
                           <Copy className="w-3 h-3 mr-2" /> Copy Prompt
                         </Button>

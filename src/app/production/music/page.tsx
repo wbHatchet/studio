@@ -22,12 +22,12 @@ export default function MusicProductionPage() {
   
   const [formData, setFormData] = useState({
     referenceUrl: "",
-    nicheConcept: "Rainy anime coffee shop",
-    mood: "Chill Lo-Fi, nostalgic",
-    keyInstruments: "Muffled piano, subtle boom bap drums, vinyl crackle",
-    tempoDescription: "70-80 BPM",
-    targetDuration: "Loop to 3 hours",
-    additionalInstructions: "Suno AI optimized: Warm Rhodes piano, atmospheric pads."
+    nicheConcept: "Moonlit Harbor LoFi Radio",
+    mood: "Calm, nostalgic, oceanic vibes",
+    keyInstruments: "Muffled piano, slow boom bap, distant harbor foghorn, water lapping",
+    tempoDescription: "74-78 BPM",
+    targetDuration: "Loop to 3 hours (Late Night Escape)",
+    additionalInstructions: "Suno AI optimized: Warm Rhodes piano, atmospheric pads, vintage vinyl crackle."
   });
 
   async function handleGenerate() {
@@ -37,7 +37,7 @@ export default function MusicProductionPage() {
       const output = await generateMusicPrompt(formData);
       setResult(output);
       setStatus("complete");
-      toast({ title: "Suno AI Prompt Ready", description: "Generation instructions engineered." });
+      toast({ title: "Harbor Moon Prompt Ready", description: "Suno AI instructions engineered for the late-night escape." });
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "Failed to process music task." });
       setStatus("idle");
@@ -54,23 +54,23 @@ export default function MusicProductionPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Music Generation (Suno AI)</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Music Gen (Harbor Moon)</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
             <div className="max-w-4xl mx-auto space-y-8">
-              <Card className="bg-card border-border/50">
+              <Card className="bg-card border-border/50 shadow-xl">
                 <CardHeader>
                   <CardTitle className="font-headline flex items-center gap-2 text-primary">
                     <Music className="w-5 h-5" />
-                    Lo-Fi Composition Parameters
+                    Composition Parameters
                   </CardTitle>
-                  <CardDescription>Step 3: Creating the 2-minute loopable foundation</CardDescription>
+                  <CardDescription>Engineering the foundation for Harbor Moon LoFi Radio</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>Micro-Niche Concept</Label>
+                      <Label>Micro-Niche / Theme</Label>
                       <Input 
                         value={formData.nicheConcept}
                         onChange={(e) => setFormData({...formData, nicheConcept: e.target.value})}
@@ -86,7 +86,7 @@ export default function MusicProductionPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Key Instruments</Label>
+                      <Label>Key Instruments (Aesthetic)</Label>
                       <Input 
                         value={formData.keyInstruments}
                         onChange={(e) => setFormData({...formData, keyInstruments: e.target.value})}
@@ -94,7 +94,7 @@ export default function MusicProductionPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Loop Strategy</Label>
+                      <Label>Loop Strategy (Duration)</Label>
                       <Input 
                         value={formData.targetDuration}
                         onChange={(e) => setFormData({...formData, targetDuration: e.target.value})}
@@ -102,7 +102,7 @@ export default function MusicProductionPage() {
                       />
                     </div>
                     <div className="space-y-2 md:col-span-2">
-                      <Label>Additional Instructions (Suno/Stable Audio)</Label>
+                      <Label>Master Prompt Instructions (Suno/Stable Audio)</Label>
                       <Textarea 
                         value={formData.additionalInstructions}
                         onChange={(e) => setFormData({...formData, additionalInstructions: e.target.value})}
@@ -118,7 +118,7 @@ export default function MusicProductionPage() {
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <RefreshCcw className="mr-2 h-4 w-4" />}
-                    Trigger Suno AI Generation
+                    Trigger Harbor Moon Generation
                   </Button>
                 </CardFooter>
               </Card>
@@ -126,25 +126,25 @@ export default function MusicProductionPage() {
               {result && (
                 <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
                   <Card className="bg-card border-primary/20 shadow-lg">
-                    <CardHeader className="bg-primary/5 py-3">
-                      <CardTitle className="text-sm font-headline text-primary flex items-center gap-2">
-                        <Repeat className="w-4 h-4" /> FFmpeg Loop Instruction
+                    <CardHeader className="bg-primary/5 py-3 rounded-t-lg">
+                      <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                        <Repeat className="w-4 h-4" /> FFmpeg Orchestration Logic
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-4">
-                      <div className="p-4 rounded-xl bg-secondary/50 border border-border font-mono text-xs leading-relaxed text-blue-400">
+                      <div className="p-4 rounded-xl bg-secondary/50 border border-border font-mono text-[10px] leading-relaxed text-blue-400">
                         ffmpeg -i track.mp3 -filter_complex "aloop=loop=-1:size=2e+09" -t 10800 output_loop.mp3
                       </div>
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold italic">Process: 2-minute Suno track &rarr; 3-hour seamless background loop</p>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold italic tracking-tighter">Process: 2m Suno Node &rarr; 3h Seamless Harbor Loop (GCS Sync)</p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-card">
+                  <Card className="bg-card border-border/50">
                     <CardHeader>
-                      <CardTitle className="font-headline text-lg uppercase tracking-tight">AI Composition Prompt</CardTitle>
+                      <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">AI Generated Prompt</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground italic bg-secondary/20 p-4 rounded-xl border border-border/50">"{result.musicGeneratorPrompt}"</p>
+                      <p className="text-muted-foreground italic bg-secondary/20 p-4 rounded-xl border border-border/50 text-sm leading-relaxed">"{result.musicGeneratorPrompt}"</p>
                     </CardContent>
                   </Card>
                 </div>

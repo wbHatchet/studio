@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -19,13 +20,13 @@ export default function SeoOptimizerPage() {
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
-    microNiche: "Old Drake x 2010 R&B Type Beats",
-    videoTopic: "Emotional late night drive vibes with filtered piano and smooth sub bass.",
-    keywords: ["old drake type beat", "take care type beat", "rnb type beat 2026", "emotional r&b instrumental"],
-    artistName: "Drake",
-    bpm: 82,
-    key: "Eb Minor",
-    licensingInfo: "FREE for non-profit. Purchase license for monetization."
+    microNiche: "Harbor Moon LoFi Radio - Night Escape",
+    videoTopic: "Calm moonlit harbor vibes with gentle water sounds and lo-fi beats for late-night study.",
+    keywords: ["harbor moon lofi", "late night escape", "moonlit harbor beats", "calm water lofi", "study radio"],
+    artistName: "Harbor Moon",
+    bpm: 78,
+    key: "C Minor",
+    licensingInfo: "FREE for non-profit. Harbor Moon LoFi Radio Exclusive."
   });
 
   async function handleGenerate() {
@@ -53,7 +54,7 @@ export default function SeoOptimizerPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl">SEO Metadata Optimizer</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">SEO Metadata Hub (Harbor Moon)</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
@@ -62,13 +63,13 @@ export default function SeoOptimizerPage() {
                 <CardHeader>
                   <CardTitle className="font-headline flex items-center gap-2">
                     <Tag className="w-5 h-5 text-primary" />
-                    Content Details
+                    Asset Details
                   </CardTitle>
-                  <CardDescription>Input video details for optimized metadata</CardDescription>
+                  <CardDescription>Engineering titles for Harbor Moon Radio</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label>Micro-Niche</Label>
+                    <Label>Micro-Niche / Channel</Label>
                     <Input 
                       value={formData.microNiche}
                       onChange={(e) => setFormData({...formData, microNiche: e.target.value})}
@@ -76,7 +77,7 @@ export default function SeoOptimizerPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Video Topic</Label>
+                    <Label>Scene & Purpose</Label>
                     <Textarea 
                       value={formData.videoTopic}
                       onChange={(e) => setFormData({...formData, videoTopic: e.target.value})}
@@ -111,22 +112,22 @@ export default function SeoOptimizerPage() {
                     />
                   </div>
                   <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold"
+                    className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] tracking-widest shadow-lg"
                     onClick={handleGenerate}
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2 h-4 w-4" />}
-                    Optimize for Ranking
+                    Engineer Viral Metadata
                   </Button>
                 </CardContent>
               </Card>
 
               <div className="lg:col-span-3 space-y-6">
                 {!result && !loading && (
-                  <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50">
+                  <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
                     <FileText className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium">Metadata Engine Ready</p>
-                    <p className="text-sm text-muted-foreground">Fill in the beat details to generate SEO-ready titles and descriptions.</p>
+                    <p className="text-lg font-bold uppercase text-[10px] tracking-widest">Metadata Engine: READY</p>
+                    <p className="text-xs text-muted-foreground mt-2 max-w-xs mx-auto">Input Harbor Moon vibes to generate SEO-optimized titles and descriptions.</p>
                   </div>
                 )}
 
@@ -141,34 +142,34 @@ export default function SeoOptimizerPage() {
                 {result && (
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                     <Card className="bg-card border-primary/20">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-bold uppercase text-muted-foreground tracking-wider">Video Title</CardTitle>
+                      <CardHeader className="flex flex-row items-center justify-between pb-2 bg-primary/5 rounded-t-lg">
+                        <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest">Viral Optimized Title</CardTitle>
                         <Button variant="ghost" size="icon" onClick={() => copyToClipboard(result.title)}>
                           <Copy className="h-4 w-4" />
                         </Button>
                       </CardHeader>
-                      <CardContent>
-                        <p className="text-xl font-headline font-bold">{result.title}</p>
+                      <CardContent className="pt-4">
+                        <p className="text-xl font-headline font-bold text-foreground">{result.title}</p>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-card">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-bold uppercase text-muted-foreground tracking-wider">Description</CardTitle>
+                    <Card className="bg-card border-border/50">
+                      <CardHeader className="flex flex-row items-center justify-between pb-2 bg-secondary/10 rounded-t-lg">
+                        <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Description Template</CardTitle>
                         <Button variant="ghost" size="icon" onClick={() => copyToClipboard(result.description)}>
                           <Copy className="h-4 w-4" />
                         </Button>
                       </CardHeader>
-                      <CardContent>
-                        <pre className="text-xs whitespace-pre-wrap font-sans text-muted-foreground leading-relaxed h-64 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg">
+                      <CardContent className="pt-4">
+                        <pre className="text-[11px] whitespace-pre-wrap font-sans text-muted-foreground leading-relaxed h-64 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic">
                           {result.description}
                         </pre>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-card">
+                    <Card className="bg-card border-border/50">
                       <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-bold uppercase text-muted-foreground tracking-wider">Tags & Hashtags</CardTitle>
+                        <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Tag Blueprint</CardTitle>
                         <Button variant="ghost" size="icon" onClick={() => copyToClipboard(result.tags.join(", "))}>
                           <Copy className="h-4 w-4" />
                         </Button>
@@ -176,7 +177,7 @@ export default function SeoOptimizerPage() {
                       <CardContent>
                         <div className="flex flex-wrap gap-2">
                           {result.tags.map((tag, idx) => (
-                            <Badge key={idx} variant="secondary" className="bg-primary/5 text-[10px] text-primary border-primary/10">
+                            <Badge key={idx} variant="secondary" className="bg-primary/10 text-[9px] text-primary border-primary/20 uppercase font-mono">
                               {tag}
                             </Badge>
                           ))}
