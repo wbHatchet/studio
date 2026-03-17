@@ -192,16 +192,18 @@ export default function VoiceProductionPage() {
                               <CardTitle className="text-xs font-bold uppercase">{script.title}</CardTitle>
                               <CardDescription className="text-[10px] font-mono">{script.estimatedWordCount} Words | 30s Structure</CardDescription>
                             </div>
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              className="h-8 text-[10px] font-bold uppercase border-primary/20"
-                              onClick={() => handleSynthesizeSingle(idx, script.fullScript)}
-                              disabled={isGeneratingAudio}
-                            >
-                              {isGeneratingAudio ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Mic2 className="w-3 h-3 mr-1" />}
-                              {audioUrls[idx] ? "Re-Synthesize" : "Synthesize"}
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="h-8 text-[10px] font-bold uppercase border-primary/20"
+                                onClick={() => handleSynthesizeSingle(idx, script.fullScript)}
+                                disabled={isGeneratingAudio}
+                              >
+                                {isGeneratingAudio ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Mic2 className="w-3 h-3 mr-1" />}
+                                {audioUrls[idx] ? "Re-Synthesize" : "Synthesize"}
+                              </Button>
+                            </div>
                           </CardHeader>
                           <CardContent className="pt-4 space-y-4">
                             <div className="grid grid-cols-4 gap-2">
