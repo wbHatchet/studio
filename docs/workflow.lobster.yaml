@@ -1,0 +1,67 @@
+name: AI_Empire_Production_v1
+version: 1.0.0
+description: Autonomous 20-agent pipeline for YouTube Automation
+
+# Global settings for the Director Agent
+runtime:
+  max_retries: 3
+  timeout_minutes: 20
+  concurrency_limit: 10
+  memory_strategy: "active_context" # Referencing SOUL.md memory logic
+
+# Definition of the 20-agent execution flow
+pipeline:
+  - stage: Initialization
+    agents:
+      - id: input_parser
+        tool: "excel_handler"
+        on_failure: "abort"
+
+  - stage: Strategy_and_Research
+    parallel: true
+    agents:
+      - id: trend_predictor
+        tool: "claude_3_5"
+        context_source: "trendSignals" # External Intel memory
+      - id: competitor_scanner
+        tool: "youtube_data_api"
+      - id: niche_validator
+        tool: "claude_3_5"
+
+  - stage: Creative_Generation
+    agents:
+      - id: creative_director
+        tool: "claude_3_5"
+        output: ["script", "suno_prompt", "dalle_prompt", "seo_pack"]
+
+  - stage: Media_Production
+    parallel: true # Music and Visuals run at the same time for speed
+    agents:
+      - id: maestro_music
+        tool: "suno_v4_api"
+        retry_logic: "swap_to_udio" # Escalation rule
+      - id: art_director
+        tool: "dalle_3"
+      - id: voice_over
+        tool: "eleven_labs_flash"
+
+  - stage: Video_Assembly
+    agents:
+      - id: video_editor
+        tool: "ffmpeg_core"
+        params:
+          motion_blur: true
+          resolution: "1080x1920" # Default for Shorts
+      - id: subtitle_generator
+        tool: "openai_whisper"
+
+  - stage: Human_Gate
+    type: "approval_step"
+    condition: "always" # Director waits for user sign-off in JobDetailPage
+    on_reject: "requeue_with_feedback"
+
+  - stage: Distribution
+    agents:
+      - id: youtube_publisher
+        tool: "google_oauth_yt"
+        retries: 5

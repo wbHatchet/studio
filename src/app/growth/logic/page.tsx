@@ -4,7 +4,7 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle } from "lucide-react";
+import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle, Workflow, Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function DirectorLogicPage() {
@@ -64,6 +64,59 @@ export default function DirectorLogicPage() {
                 desc="Maintains 3 videos/day across the 20-channel grid automatically."
               />
             </div>
+
+            {/* Lobster Workflow Section */}
+            <Card className="bg-card border-border/50 shadow-xl overflow-hidden rounded-3xl">
+              <CardHeader className="bg-blue-500/5 border-b border-border/50 py-4">
+                <CardTitle className="text-[10px] font-bold uppercase text-blue-400 flex items-center gap-2 tracking-widest">
+                  <Workflow className="w-4 h-4" /> Lobster Workflow Engine (workflow.lobster.yaml)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid gap-6 lg:grid-cols-3">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Parallel Execution</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      `Media_Production` stage runs Suno, DALL-E, and ElevenLabs simultaneously, reducing total production time by 60%.
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.5)]" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Self-Healing Retries</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Deterministic retry logic: If Suno fails, the system automatically swaps to Udio to ensure pipeline continuity.
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.5)]" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Human-in-the-Loop</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      `Human_Gate` step pauses distribution, sending assets to the Live Pipeline UI for final strategic sign-off.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-6 p-4 rounded-2xl bg-secondary/20 border border-border/50">
+                  <pre className="text-[10px] font-mono text-blue-300 overflow-x-auto">
+{`# workflow.lobster.yaml execution snippet
+- stage: Media_Production
+  parallel: true
+  agents:
+    - id: maestro_music
+      tool: "suno_v4_api"
+      retry_logic: "swap_to_udio"
+    - id: art_director
+      tool: "dalle_3"`}
+                  </pre>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Memory Architecture */}
             <Card className="bg-card border-border/50 shadow-xl overflow-hidden rounded-3xl">
