@@ -27,6 +27,10 @@ The Director follows these logic gates when processing jobs in the `jobs/` colle
 * **Rule:** Before triggering a high-cost agent (Runway for animation or Udio for music), check the user's `creditsUsed` against their assigned `PLANS` tier.
 * **Action:** If credits are low, degrade the quality automatically (e.g., use a static image instead of a 4-second Runway video) to ensure the upload finishes.
 
+### D. Storage Management (The "Purge" Protocol)
+* **Trigger:** Successful YouTube Data API sync (`uploaded` status).
+* **Action:** Immediately delete local temporary blobs from `temp_media/`. This ensures the VPS disk never reaches 100% capacity during 3-hour Lofi renders.
+
 ---
 
 ## 3. Memory & Context Logic
@@ -53,3 +57,4 @@ The Director is responsible for ensuring every job completes this 17-step flow:
 7.  **Optimization:** Generate A/B Thumbnails and Title tests.
 8.  **QC:** Quality Control check on final `.mp4`.
 9.  **Deployment:** Execute Upload to YouTube Data API.
+10. **Cleanup:** Execute Purge Protocol.

@@ -4,7 +4,7 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle, Workflow, Code2 } from "lucide-react";
+import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle, Workflow, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function DirectorLogicPage() {
@@ -38,7 +38,7 @@ export default function DirectorLogicPage() {
               </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <LogicCard 
                 title="Winner Loop (Replication)" 
                 logic={`if video.ctr > 8% or video.retention > 60%:\n  director.queue("evolve", count=3)\n  director.memo("maintain aesthetic, update hooks")\n# Triggered: High performance detected.`}
@@ -58,10 +58,16 @@ export default function DirectorLogicPage() {
                 desc="Ensures pipeline completion by managing industrial costs."
               />
               <LogicCard 
+                title="Purge Protocol (Storage)" 
+                logic={`if video.status == "uploaded":\n  worker.purge("temp_media")\n  director.log("Storage recovered")\n# Triggered: Post-upload cleanup.`}
+                icon={Trash2}
+                desc="Ensures VPS disk never reaches 100% capacity during renders."
+              />
+              <LogicCard 
                 title="Autonomous Cadence" 
-                logic={`for channel in grid:\n  if uploads_today < target:\n    director.dispatch(channel, next_topic)\n# Triggered: Maintaining relentless upload frequency.`}
+                logic={`for channel in grid:\n  if uploads_today < target:\n    director.dispatch(channel, next_topic)\n# Triggered: Maintaining Relentless frequency.`}
                 icon={Zap}
-                desc="Maintains 3 videos/day across the 20-channel grid automatically."
+                desc="Maintains 3 videos/day across the grid automatically."
               />
             </div>
 
@@ -101,19 +107,6 @@ export default function DirectorLogicPage() {
                       `Human_Gate` step pauses distribution, sending assets to the Live Pipeline UI for final strategic sign-off.
                     </p>
                   </div>
-                </div>
-                <div className="mt-6 p-4 rounded-2xl bg-secondary/20 border border-border/50">
-                  <pre className="text-[10px] font-mono text-blue-300 overflow-x-auto">
-{`# workflow.lobster.yaml execution snippet
-- stage: Media_Production
-  parallel: true
-  agents:
-    - id: maestro_music
-      tool: "suno_v4_api"
-      retry_logic: "swap_to_udio"
-    - id: art_director
-      tool: "dalle_3"`}
-                  </pre>
                 </div>
               </CardContent>
             </Card>
@@ -179,21 +172,6 @@ export default function DirectorLogicPage() {
                 </Table>
               </CardContent>
             </Card>
-
-            {/* Industrial Pipeline Flow */}
-            <Card className="bg-secondary/10 border-border/50 p-6 rounded-3xl">
-              <div className="flex items-center gap-3 mb-6">
-                <Server className="w-5 h-5 text-primary" />
-                <h3 className="font-headline font-bold uppercase text-sm tracking-tight">17-Step Industrial Pipeline</h3>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <PipelinePhase num="01-03" label="Intelligence" desc="Input parsing, Trend mining, Competitor scan." />
-                <PipelinePhase num="04-06" label="Strategy" desc="Niche definition, Script writing, Hook engineering." />
-                <PipelinePhase num="07-10" label="Production" desc="Voice synthesis, Music gen, Scene rendering." />
-                <PipelinePhase num="11-14" label="Optimization" desc="Assembly, Subtitles, A/B Thumbnails." />
-                <PipelinePhase num="15-17" label="Deployment" desc="QC Check, API Upload, Analytics Sync." />
-              </div>
-            </Card>
           </main>
         </SidebarInset>
       </div>
@@ -218,18 +196,5 @@ function LogicCard({ title, logic, icon: Icon, desc }: any) {
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-function PipelinePhase({ num, label, desc }: any) {
-  return (
-    <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-2 group hover:border-primary/30 transition-all">
-      <div className="flex justify-between items-center">
-        <span className="text-[9px] font-mono font-bold text-primary">{num}</span>
-        <div className="w-1.5 h-1.5 rounded-full bg-primary/20 group-hover:bg-primary group-hover:shadow-[0_0_10px_rgba(var(--primary),0.5)] transition-all" />
-      </div>
-      <p className="text-[10px] font-bold uppercase tracking-tight">{label}</p>
-      <p className="text-[9px] text-muted-foreground leading-relaxed">{desc}</p>
-    </div>
   );
 }

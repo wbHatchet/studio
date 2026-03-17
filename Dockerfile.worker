@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/playwright:v1.45.0-jammy
+
+# Install FFmpeg for video composition
+RUN apt-get update && apt-get install -y ffmpeg
+
+WORKDIR /app
+
+# Install dependencies for the 20-agent pipeline
+COPY package*.json ./
+RUN npm install
+
+# Copy project source and configs
+COPY . .
+
+# Ensure the worker has access to the "SOUL" logic and technical map
+COPY docs/SOUL.md ./ 
+COPY docs/workflow.lobster.yaml ./
+
+# The worker entry point (Orchestration script)
+CMD ["npx", "tsx", "src/worker/index.ts"]

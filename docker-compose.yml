@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # 1. Frontend: The Next.js Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "3000:3000"
+    env_file: .env
+    restart: always
+
+  # 2. Pipeline Worker: The "Soul" of the operation
+  # Handles FFmpeg, Suno automation, and Claude orchestration
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    depends_on:
+      - dashboard
+    env_file: .env
+    volumes:
+      - ./temp_media:/app/temp_media
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  # 3. Firebase Emulator (Optional for Local Dev)
+  firebase:
+    image: andreysenov/firebase-tools
+    ports:
+      - "4000:4000" # UI
+      - "9000:9000" # Database
+    volumes:
+      - .:/home/node/app
+    command: firebase emulators:start
