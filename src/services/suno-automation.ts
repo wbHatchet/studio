@@ -1,6 +1,10 @@
-import { chromium } from 'playwright';
+import { chromium } from 'playwright-extra';
+import stealth from 'puppeteer-extra-plugin-stealth';
 import path from 'path';
 import fs from 'fs';
+
+// @ts-ignore - Stealth plugin for playwright
+chromium.use(stealth());
 
 /**
  * Industrial Suno AI Automation Service.
@@ -17,14 +21,14 @@ export interface SunoConfig {
 /**
  * Utility to mimic human "thought time" or interaction delays.
  */
-const randomDelay = (min = 2000, max = 7000) => 
+const randomDelay = (min = 5000, max = 15000) => 
   new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * (max - min + 1) + min)));
 
 export async function executeSunoGeneration(config: SunoConfig): Promise<{ status: string; message: string }> {
   const authPath = path.join(process.cwd(), 'suno_auth.json');
   
   if (!fs.existsSync(authPath)) {
-    console.warn('Suno Auth: Missing suno_auth.json. Operating in simulation mode.');
+    console.warn('Suno Agent: Missing suno_auth.json. Operating in simulation mode.');
     return { status: 'SIMULATED', message: 'Auth file missing. Please refresh session manually.' };
   }
 
@@ -33,7 +37,7 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
     args: [
       '--no-sandbox', 
       '--disable-setuid-sandbox',
-      '--disable-blink-features=AutomationControlled' // Mitigation: Hide automation signature
+      '--disable-blink-features=AutomationControlled'
     ]
   });
 
@@ -57,9 +61,9 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
     }
 
     // 2. Credit Exhaustion Mitigation
-    // Scrape credit count from the UI (typically in the sidebar or account menu)
     console.log('Suno Agent: Verifying credit balance...');
-    const creditText = await page.locator('div, span, p').filter({ hasText: /^\d+\sCredits$/ }).first().innerText().catch(() => "1000"); // Fallback if hidden
+    // Text-based scraping for industrial resilience
+    const creditText = await page.locator('div, span, p').filter({ hasText: /^\d+\sCredits$/ }).first().innerText().catch(() => "1000"); 
     const credits = parseInt(creditText.replace(/\D/g, '')) || 0;
     
     if (credits < 10) {
@@ -67,24 +71,36 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
     }
     console.log(`Suno Agent: Credits verified (${credits}).`);
 
-    // 3. UI Resilience: Text-based selectors for prompt injection
+    // 3. UI Resilience: Text-based prompt injection
     console.log('Suno Agent: Injecting engineered prompt...');
+    const promptInput = `${config.style ? config.style + ': ' : ''}${config.prompt}`;
+    
+    // Attempt to toggle Custom Mode if needed or just use simple prompt
     const textarea = page.locator('textarea').filter({ has: page.locator('..', { hasText: /Enter a description/i }) }).first();
+    
     if (!await textarea.isVisible()) {
-      // Fallback selector if the above fails due to layout changes
-      await page.locator('textarea[placeholder*="description"]').fill(`${config.style ? config.style + ': ' : ''}${config.prompt}`);
+      await page.locator('textarea[placeholder*="description"]').fill(promptInput);
     } else {
-      await textarea.fill(`${config.style ? config.style + ': ' : ''}${config.prompt}`);
+      await textarea.fill(promptInput);
     }
 
-    await randomDelay(2000, 4000); // Rate Limiting: Human-like pause
+    // 4. Instrumental Logic
+    if (config.makeInstrumental) {
+      const instrumentalToggle = page.locator('button:has-text("Instrumental")');
+      if (await instrumentalToggle.isVisible()) {
+        const isChecked = await instrumentalToggle.getAttribute('aria-checked') === 'true';
+        if (!isChecked) await instrumentalToggle.click();
+      }
+    }
 
-    // 4. Rate Limiting: Mimic human "Create" click
+    await randomDelay(2000, 5000); // Rate Limiting pause
+
+    // 5. Mimic human "Create" click
     console.log('Suno Agent: Triggering generation node...');
     const createButton = page.locator('button').filter({ hasText: /^Create$/i }).first();
     await createButton.click();
 
-    await randomDelay(5000, 10000); // Wait to ensure the request is sent
+    await randomDelay(5000, 10000); // Wait for submission acknowledgment
     
     await browser.close();
     return { status: 'TRIGGERED', message: `Suno generation initiated. Credits remaining: ${credits - 10}` };

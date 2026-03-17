@@ -41,13 +41,10 @@ The Director monitors the infrastructure health to ensure relentless 24/7 operat
 * **Protocol:** Check `suno_auth.json` age every 24h. If > 25 days, flag the user for a "Session Refresh" to prevent music generation timeouts.
 
 ### B. Automation Resilience (Suno/Udio)
-* **Bot Detection:** Use stealth signatures and `randomDelay(5000, 15000)` between actions.
-* **UI Resilience:** Prioritize text-based selectors (`has-text("Create")`) over fragile CSS paths.
-* **Credit Safeguard:** Scrape credit count pre-run; abort if balance < 10.
-
-### C. SSL Heartbeat
-* **Trigger:** Every Monday at 3:00 AM.
-* **Action:** Execute `scripts/renew_ssl.sh`. Logs results to the **Correction Ledger** (`agentRuns/`).
+* **Stealth Mitigation:** Use `playwright-extra` with the stealth plugin to hide automation signatures.
+* **UI Resilience:** Prioritize text-based selectors (`has-text("Create")`) rather than fragile CSS paths.
+* **Credit Safeguard:** Scrape credit count from sidebar pre-run; abort if balance < 10.
+* **Rate Limiting:** Insert `randomDelay(5000, 15000)` between actions to mimic human "thought time."
 
 ---
 

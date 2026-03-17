@@ -38,7 +38,10 @@ pipeline:
     parallel: true # Music and Visuals run at the same time for speed
     agents:
       - id: maestro_music
-        tool: "suno_v4_api"
+        tool: "node functions/agents/sunoAgent.js"
+        params:
+          prompt: "${job.music_style}"
+          instrumental: "${job.is_instrumental}"
         retry_logic: "swap_to_udio" # Escalation rule
       - id: art_director
         tool: "dalle_3"
