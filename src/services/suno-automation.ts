@@ -29,7 +29,7 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
   
   if (!fs.existsSync(authPath)) {
     console.warn('Suno Agent: Missing suno_auth.json. Operating in simulation mode.');
-    return { status: 'SIMULATED', message: 'Auth file missing. Please refresh session manually.' };
+    return { status: 'SIMULATED', message: 'Auth file missing. Please run scripts/save_suno_session.js manually.' };
   }
 
   const browser = await chromium.launch({ 
@@ -60,9 +60,15 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
       throw new Error('Suno Agent: Session expired. Refresh suno_auth.json required.');
     }
 
-    // 2. Credit Exhaustion Mitigation
+    // 2. UI Resilience: Toggle Custom Mode
+    const customButton = page.locator('button:has-text("Custom")');
+    if (await customButton.isVisible()) {
+      await customButton.click();
+      await randomDelay(1000, 3000);
+    }
+
+    // 3. Credit Exhaustion Mitigation
     console.log('Suno Agent: Verifying credit balance...');
-    // Text-based scraping for industrial resilience
     const creditText = await page.locator('div, span, p').filter({ hasText: /^\d+\sCredits$/ }).first().innerText().catch(() => "1000"); 
     const credits = parseInt(creditText.replace(/\D/g, '')) || 0;
     
@@ -71,20 +77,11 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
     }
     console.log(`Suno Agent: Credits verified (${credits}).`);
 
-    // 3. UI Resilience: Text-based prompt injection
+    // 4. Industrial Prompt Injection
     console.log('Suno Agent: Injecting engineered prompt...');
-    const promptInput = `${config.style ? config.style + ': ' : ''}${config.prompt}`;
-    
-    // Attempt to toggle Custom Mode if needed or just use simple prompt
-    const textarea = page.locator('textarea').filter({ has: page.locator('..', { hasText: /Enter a description/i }) }).first();
-    
-    if (!await textarea.isVisible()) {
-      await page.locator('textarea[placeholder*="description"]').fill(promptInput);
-    } else {
-      await textarea.fill(promptInput);
-    }
+    const styleInput = page.locator('textarea[placeholder*="Enter style of music"]').first();
+    await styleInput.fill(config.style || config.prompt);
 
-    // 4. Instrumental Logic
     if (config.makeInstrumental) {
       const instrumentalToggle = page.locator('button:has-text("Instrumental")');
       if (await instrumentalToggle.isVisible()) {
@@ -100,10 +97,14 @@ export async function executeSunoGeneration(config: SunoConfig): Promise<{ statu
     const createButton = page.locator('button').filter({ hasText: /^Create$/i }).first();
     await createButton.click();
 
-    await randomDelay(5000, 10000); // Wait for submission acknowledgment
+    // 6. Monitor for progress (Polling)
+    console.log('Suno Agent: Monitoring generation status...');
+    await page.waitForSelector('div[class*="playing"]', { timeout: 120000 }).catch(() => {
+      console.log('Suno Agent: Progress monitor timed out, but generation was triggered.');
+    });
     
     await browser.close();
-    return { status: 'TRIGGERED', message: `Suno generation initiated. Credits remaining: ${credits - 10}` };
+    return { status: 'TRIGGERED', message: `Suno generation initiated successfully. Credits: ${credits - 10} remaining.` };
   } catch (error: any) {
     await browser.close();
     console.error('Suno Agent Critical Failure:', error.message);

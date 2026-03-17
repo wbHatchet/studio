@@ -21,55 +21,45 @@ The Director follows these logic gates when processing jobs in the `jobs/` colle
 
 ### B. Niche Pivot (The "Dying" Logic)
 * **Trigger:** If 5 consecutive videos in a specific niche fail to cross the 1,000-view threshold.
-* **Action:** Flag the channel for a "Pivot." The **Trend Prediction** agent must scan for a high-CPM alternative (e.g., shifting from "Sad Lofi" to "Space Ambient").
+* **Action:** Flag the channel for a "Pivot." The **Trend Prediction** agent must scan for a high-CPM alternative.
 
 ### C. Resource Management (The "Credit" Guard)
-* **Rule:** Before triggering a high-cost agent (Runway for animation or Udio for music), check the user's `creditsUsed` against their assigned `PLANS` tier.
-* **Action:** If credits are low, degrade the quality automatically (e.g., use a static image instead of a 4-second Runway video) to ensure the upload finishes.
+* **Rule:** Before triggering a high-cost agent (Runway for animation or Udio for music), check the user's `creditsUsed`.
+* **Action:** If credits are low, degrade the quality automatically (e.g., use a static image instead of video) to ensure completion.
 
 ### D. Storage Management (The "Purge" Protocol)
 * **Trigger:** Successful YouTube Data API sync (`uploaded` status).
-* **Action:** Immediately delete local temporary blobs from `temp_media/`. This ensures the VPS disk never reaches 100% capacity during 3-hour Lofi renders.
+* **Action:** Immediately delete local temporary blobs from `temp_media/`. This ensures the VPS disk never reaches 100% capacity.
 
 ---
 
 ## 3. Maintenance & Health Protocols
-The Director monitors the infrastructure health to ensure relentless 24/7 operation:
+The Director monitors infrastructure health to ensure relentless 24/7 operation:
 
 ### A. Auth Session Monitoring
 * **Node:** Suno/Udio Playwright Workers.
-* **Protocol:** Check `suno_auth.json` age every 24h. If > 25 days, flag the user for a "Session Refresh" to prevent music generation timeouts.
+* **Protocol:** Check `suno_auth.json` age every 24h. If > 25 days, flag for "Session Refresh" to prevent music generation timeouts.
 
 ### B. Automation Resilience (Suno/Udio)
-* **Stealth Mitigation:** Use `playwright-extra` with the stealth plugin to hide automation signatures.
-* **UI Resilience:** Prioritize text-based selectors (`has-text("Create")`) rather than fragile CSS paths.
-* **Credit Safeguard:** Scrape credit count from sidebar pre-run; abort if balance < 10.
-* **Rate Limiting:** Insert `randomDelay(5000, 15000)` between actions to mimic human "thought time."
+| Risk | Mitigation Strategy |
+| :--- | :--- |
+| **Bot Detection** | Use `playwright-extra` with the stealth plugin to hide automation signatures. |
+| **UI Updates** | Suno updates CSS classes frequently. Use **Text-based selectors** (e.g., `has-text("Create")`) rather than fragile CSS paths. |
+| **Credit Exhaustion** | Before clicking "Create", the agent must scrape the "Credits" text and abort if < 10. |
+| **Rate Limiting** | Insert a `randomDelay(5000, 15000)` between actions to mimic human "thought time." |
 
 ---
 
 ## 4. Memory & Context Logic
-The Director manages state across the following Firestore collections:
-
 | Memory Layer | Storage | Description |
 | :--- | :--- | :--- |
 | **Active Memory** | `jobs/` | Real-time status of the 20-agent pipeline. |
 | **Institutional Memory** | `channels/` | Historical performance data used to calculate the "Viral Formula". |
-| **External Intel** | `trendSignals/` | Live "heat map" of viral topics across YouTube, TikTok, and Reddit. |
-| **Correction Ledger** | `agentRuns/` | A log of every agent's "Hallucination" or "Error" to avoid repeating mistakes. |
+| **External Intel** | `trendSignals/` | Live "heat map" of viral topics across platforms. |
+| **Correction Ledger** | `agentRuns/` | Log of every agent's "Hallucination" or "Error" to avoid repeating mistakes. |
 
 ---
 
 ## 5. Operational Pipeline Steps
-The Director is responsible for ensuring every job completes this 17-step flow:
-
-1.  **Input:** Parse Excel row or Manual prompt.
-2.  **Research:** Trigger **Trend** and **Competitor** agents.
-3.  **Strategy:** Define Niche and write Script/Hook.
-4.  **Audio Production:** Coordinate Voiceover (ElevenLabs) and Music (Suno/Udio).
-5.  **Visual Production:** Coordinate B-roll, Images, and Animations.
-6.  **Assembly:** Compose video and generate Subtitles.
-7.  **Optimization:** Generate A/B Thumbnails and Title tests.
-8.  **QC:** Quality Control check on final `.mp4`.
-9.  **Deployment:** Execute Upload to YouTube Data API.
-10. **Cleanup:** Execute Purge Protocol.
+The Director ensures every job completes this 17-step flow:
+1. **Input**: Parse Excel/Prompt. 2. **Research**: Trend/Competitor scan. 3. **Strategy**: Niche/Script. 4. **Audio**: Voice/Music. 5. **Visual**: B-roll/Images. 6. **Assembly**: Compose/Subtitles. 7. **Optimization**: A/B Test. 8. **QC**: Asset check. 9. **Deployment**: YouTube Upload. 10. **Cleanup**: Purge Protocol.
