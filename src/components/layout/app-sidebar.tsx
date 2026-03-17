@@ -27,7 +27,9 @@ import {
   Calculator,
   CalendarDays,
   Terminal,
-  Server
+  Server,
+  ShieldCheck,
+  LogOut
 } from "lucide-react";
 
 import {
@@ -42,6 +44,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/firebase";
+import { signOut } from "firebase/auth";
 
 const studioNav = [
   { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
@@ -63,12 +67,13 @@ const growthNav = [
 
 const configNav = [
   { title: "API Keys", icon: Target, url: "/settings" },
-  { title: "Tech Stack", icon: Server, url: "/settings/stack" },
-  { title: "Billing", icon: CreditCard, url: "/settings" },
+  { title: "Billing", icon: CreditCard, url: "/billing" },
+  { title: "Admin", icon: ShieldCheck, url: "/admin" },
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const auth = useAuth();
 
   return (
     <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-border/50">
@@ -90,9 +95,11 @@ export function AppSidebar() {
       
       <SidebarContent className="px-2 pt-4">
         <div className="px-4 mb-4">
-          <button className="w-full bg-primary text-primary-foreground font-bold uppercase text-[10px] py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/10">
-            <Play className="w-3 h-3 fill-current" /> New Project
-          </button>
+          <Link href="/dashboard">
+            <button className="w-full bg-primary text-primary-foreground font-bold uppercase text-[10px] py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/10">
+              <Play className="w-3 h-3 fill-current" /> New Project
+            </button>
+          </Link>
         </div>
 
         <SidebarGroup>
@@ -169,6 +176,12 @@ export function AppSidebar() {
             </div>
             <p className="text-[8px] text-muted-foreground mt-1 uppercase font-bold tracking-tighter">13.6K / 20K Credits</p>
           </div>
+          <button 
+            onClick={() => signOut(auth)}
+            className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground group-data-[collapsible=icon]:hidden"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </SidebarFooter>
       <SidebarRail />
