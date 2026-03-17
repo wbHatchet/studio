@@ -1,4 +1,3 @@
-
 #!/bin/bash
 # scripts/assemble_video.sh
 # Industrial FFmpeg composition script with System Alert logging.
@@ -22,7 +21,8 @@ curl -X POST "$LOG_URL" \
      -H "Content-Type: application/json" \
      -d "{\"userId\": \"$USER_ID\", \"agentId\": \"ffmpeg_worker\", \"success\": true, \"message\": \"Starting render for $OUTPUT_VIDEO\"}"
 
-# Execution
+# Execution: Applying high-retention Ken Burns zoom effect
+# Formula: Scale to 8000px height, slow zoom (0.0005), 1080x1920 output
 ffmpeg -loop 1 -i "$IMAGE_INPUT" -i "$AUDIO_INPUT" \
   -vf "scale=8000:-1,zoompan=z='min(zoom+0.0005,1.5)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920" \
   -c:v libx264 \

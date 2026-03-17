@@ -44,14 +44,14 @@ pipeline:
           instrumental: "${job.is_instrumental}"
         retry_logic: "swap_to_udio" # Escalation rule
       - id: art_director
-        tool: "dalle_3"
+        tool: "src/services/visual-generator.ts"
       - id: voice_over
         tool: "eleven_labs_flash"
 
   - stage: Video_Assembly
     agents:
       - id: video_editor
-        tool: "ffmpeg_core"
+        tool: "scripts/assemble_video.sh"
         params:
           motion_blur: true
           resolution: "1080x1920" # Default for Shorts
