@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers, Terminal, Search, Share2, Youtube } from "lucide-react";
+import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers, Terminal, Search, Share2, Youtube, Mic2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
