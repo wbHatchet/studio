@@ -21,7 +21,8 @@ import {
   Network,
   Cpu,
   Flame,
-  CreditCard
+  CreditCard,
+  Play
 } from "lucide-react";
 
 import {
