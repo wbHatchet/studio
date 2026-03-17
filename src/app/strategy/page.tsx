@@ -7,22 +7,28 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Target, Search, BarChart3, TrendingUp, Zap, Sparkles, Brain, Award, Activity } from "lucide-react";
+import { Target, Search, BarChart3, TrendingUp, Zap, Sparkles, Brain, Award, Activity, CalendarDays } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const NICHE_DATA = [
-  { name: 'AI tools & automation', emoji: '🤖', desc: 'Highest CPM on YouTube. Every new AI tool is a video. Massive interest from software companies.', ex: ['"5 AI tools that replace your job"', '"AI that writes emails for you"', '"ChatGPT secrets nobody uses"'], cpm: '$10–$20', grow: 96, comp: 50, ai: 98, ret: 82 },
-  { name: 'Body & health facts', emoji: '🧬', desc: 'High-retention curiosity hooks. "What happens if..." format is instantly compelling.', ex: ['"What if you stop drinking water"', '"What happens in your brain during sleep"'], cpm: '$6–$12', grow: 78, comp: 28, ai: 84, ret: 92 },
-  { name: 'Luxury & billionaires', emoji: '💰', desc: 'Aspiration + curiosity = most viral emotional combo. Jeff Bezos, yachts, daily routines.', ex: ['"Jeff Bezos daily routine"', '"Inside a $400M yacht"'], cpm: '$7–$15', grow: 88, comp: 50, ai: 80, ret: 84 },
-  { name: 'Micro-learning & facts', emoji: '🧠', desc: 'Viewers prefer quick-learning. Psychology tricks, science facts, money habits in 60s.', ex: ['"3 psychology tricks for status"', '"History in 30 seconds: Rome"'], cpm: '$5–$10', grow: 74, comp: 26, ai: 96, ret: 76 },
-  { name: 'Transformation', emoji: '⚡', desc: 'Algorithm specifically rewards before→after content. Clean room, wealth transformation.', ex: ['"Dirty room → clean in 60 seconds"', '"$0 to first $10K journey"'], cpm: '$4–$9', grow: 86, comp: 48, ai: 74, ret: 90 },
+  { name: 'Pop', score: 100, color: 'bg-primary', badge: 'Highest' },
+  { name: 'R&B', score: 88, color: 'bg-blue-400', badge: 'Very High' },
+  { name: 'Boom Bap', score: 78, color: 'bg-purple-400', badge: 'High' },
+  { name: 'Soul / Trap Soul', score: 60, color: 'bg-amber-500', badge: 'Medium' },
+  { name: 'Trap', score: 28, color: 'bg-muted-foreground', badge: 'Lowest' },
+];
+
+const TIMELINE = [
+  { month: 'Month 1', title: 'Foundation', desc: 'Pick niche, 60 videos, connect Suno + DALL-E, build prompt sheet.', stats: '60 Videos · $0-$50' },
+  { month: 'Month 2-3', title: 'Traction', desc: 'Study performing video, replicate format, first funnel.', stats: '300 Videos · $200-$1K' },
+  { month: 'Month 4-6', title: 'Monetized', desc: 'YPP eligibility, 2nd micro-niche channel, email list.', stats: '600 Videos · $1K-$5K' },
+  { month: 'Month 7-9', title: 'Scaling', desc: '3-5 channels, Director agent auto-replicates winning beats.', stats: '900 Videos · $3K-$10K' },
+  { month: 'Month 10-12', title: 'Full Op', desc: 'Beat farm running, placements happening, funnels converting.', stats: '1,000+ Videos · $5K-$20K+' },
 ];
 
 export default function NicheIntelPage() {
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const activeNiche = NICHE_DATA[selectedIdx];
-
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">
@@ -31,86 +37,91 @@ export default function NicheIntelPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <div className="flex-1">
-              <h1 className="font-headline font-bold text-xl uppercase text-primary">Niche Intelligence</h1>
-              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">7 fastest-growing niches in 2026 — click to explore</p>
-            </div>
+            <h1 className="font-headline font-bold text-xl uppercase text-primary tracking-tight">Intelligence & Roadmap</h1>
           </header>
 
-          <main className="p-6 md:p-8 space-y-8 max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-              {NICHE_DATA.map((niche, idx) => (
-                <button 
-                  key={niche.name}
-                  onClick={() => setSelectedIdx(idx)}
-                  className={cn(
-                    "p-4 rounded-2xl border transition-all text-center group",
-                    selectedIdx === idx 
-                      ? "border-primary bg-primary/10 shadow-lg shadow-primary/10" 
-                      : "border-border/50 hover:border-primary/30 bg-secondary/20"
-                  )}
-                >
-                  <span className="text-2xl mb-2 block">{niche.emoji}</span>
-                  <p className="text-[10px] font-bold uppercase text-foreground leading-tight">{niche.name}</p>
-                  <p className={cn(
-                    "text-[9px] mt-1 font-bold",
-                    selectedIdx === idx ? "text-primary" : "text-green-500/70"
-                  )}>{niche.cpm} CPM</p>
-                </button>
-              ))}
-            </div>
+          <main className="p-6 md:p-8 space-y-8 max-w-6xl mx-auto w-full">
+            <Tabs defaultValue="index" className="space-y-8">
+              <TabsList className="bg-secondary/50 p-1 border border-border/50 rounded-xl">
+                <TabsTrigger value="index" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6">Micro-Niche Index</TabsTrigger>
+                <TabsTrigger value="timeline" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6">Growth Timeline</TabsTrigger>
+              </TabsList>
 
-            <Card className="bg-card border-border/50 shadow-2xl overflow-hidden">
-              <div className="grid md:grid-cols-2">
-                <div className="p-8 space-y-6 border-r border-border/50">
-                  <div className="space-y-2">
-                    <h2 className="text-2xl font-headline font-bold text-foreground">{activeNiche.name}</h2>
-                    <p className="text-xs leading-relaxed text-muted-foreground italic">"{activeNiche.desc}"</p>
-                  </div>
+              <TabsContent value="index" className="space-y-8 m-0">
+                <div className="grid gap-8 lg:grid-cols-2">
+                  <Card className="bg-card border-border/50 shadow-xl">
+                    <CardHeader>
+                      <CardTitle className="font-headline text-primary uppercase text-xs tracking-widest">Genre Profitability Ranking</CardTitle>
+                      <CardDescription>Industrial ranking by revenue potential (2026 Index)</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {NICHE_DATA.map((niche, idx) => (
+                        <div key={niche.name} className="space-y-2">
+                          <div className="flex justify-between items-end">
+                            <div className="flex items-center gap-3">
+                              <span className="text-[10px] font-mono text-muted-foreground">#0{idx + 1}</span>
+                              <p className="text-xs font-bold uppercase">{niche.name}</p>
+                            </div>
+                            <Badge variant="outline" className={cn("text-[8px] border-0 bg-secondary px-2", niche.color.replace('bg-', 'text-'))}>
+                              {niche.badge}
+                            </Badge>
+                          </div>
+                          <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                            <div className={cn("h-full", niche.color)} style={{ width: `${niche.score}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
 
-                  <div className="space-y-3">
-                    <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Example Shorts Strategy</p>
-                    <div className="space-y-2">
-                      {activeNiche.ex.map((ex, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30 border border-border/50 text-[11px] font-medium">
-                          <span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[9px] font-bold">{i+1}</span>
-                          {ex}
+                  <Card className="bg-card border-border/50 shadow-xl">
+                    <CardHeader>
+                      <CardTitle className="font-headline text-primary uppercase text-xs tracking-widest">Niche Selection Checklist</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <CheckItem label="Starts from profitable genre (R&B, Bap, Pop)" />
+                      <CheckItem label="Competition has under 10K subscribers" />
+                      <CheckItem label="Consistent views — not spike-reliant" />
+                      <CheckItem label="More demand than current supply" />
+                      <CheckItem label="Validated with VidIQ search score" />
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <NicheSampleCard title="Old Drake x Take Care" genre="R&B" tags="sad drake, 2010 rnb" />
+                  <NicheSampleCard title="J Cole x Forest Hills" genre="Boom Bap" tags="soulful, jid type" />
+                  <NicheSampleCard title="6LACK x Trap Soul" genre="Trap Soul" tags="dark rnb, nighttime" />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="timeline" className="space-y-6 m-0">
+                <Card className="bg-card border-border/50 shadow-2xl">
+                  <CardHeader className="bg-primary/5 py-6">
+                    <CardTitle className="font-headline text-lg uppercase tracking-tight">12-Month Road to Full Operation</CardTitle>
+                    <CardDescription>Realistic roadmap using the 2 beats/day micro-niche strategy</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <div className="divide-y divide-border/50">
+                      {TIMELINE.map((item) => (
+                        <div key={item.month} className="flex flex-col md:flex-row gap-4 p-6 hover:bg-secondary/10 transition-colors">
+                          <div className="w-32 shrink-0">
+                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">{item.month}</p>
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <p className="font-headline font-bold text-foreground">{item.title}</p>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant="outline" className="text-[9px] font-mono border-primary/20 text-primary uppercase">{item.stats}</Badge>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                </div>
-
-                <div className="p-8 bg-secondary/10 space-y-6">
-                  <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Niche Scorecard (Algorithm Index)</p>
-                  <div className="space-y-5">
-                    <ScoreRow label="CPM Potential" value={activeNiche.cpm} progress={activeNiche.grow * 0.9} color="bg-primary" />
-                    <ScoreRow label="Growth Rate" value="Explosive" progress={activeNiche.grow} color="bg-blue-400" />
-                    <ScoreRow label="Competition (Low = Better)" value="Medium" progress={100 - activeNiche.comp} color="bg-amber-500" />
-                    <ScoreRow label="AI-Friendliness" value="Perfect" progress={activeNiche.ai} color="bg-primary" />
-                    <ScoreRow label="Retention Index" value="High" progress={activeNiche.ret} color="bg-green-500" />
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="bg-primary/5 border-primary/20 p-6">
-                <Target className="w-6 h-6 text-primary mb-3" />
-                <h3 className="text-[11px] font-bold uppercase text-primary mb-1">Profit Validation</h3>
-                <p className="text-[10px] text-muted-foreground leading-relaxed">System only pushes ideas with &gt;$8 CPM potential and &lt;10K competitor average sub count.</p>
-              </Card>
-              <Card className="bg-blue-400/5 border-blue-400/20 p-6">
-                <Brain className="w-6 h-6 text-blue-400 mb-3" />
-                <h3 className="text-[11px] font-bold uppercase text-blue-400 mb-1">Agent Strategy</h3>
-                <p className="text-[10px] text-muted-foreground leading-relaxed">Director Agent uses "Curiosity Gaps" to force retention scores above the 90% viral threshold.</p>
-              </Card>
-              <Card className="bg-amber-500/5 border-amber-500/20 p-6">
-                <Zap className="w-6 h-6 text-amber-500 mb-3" />
-                <h3 className="text-[11px] font-bold uppercase text-amber-500 mb-1">Viral Replication</h3>
-                <p className="text-[10px] text-muted-foreground leading-relaxed">If any niche node hits 1M views, the system autonomously deploys 10 micro-niche sub-channels.</p>
-              </Card>
-            </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </main>
         </SidebarInset>
       </div>
@@ -118,14 +129,26 @@ export default function NicheIntelPage() {
   );
 }
 
-function ScoreRow({ label, value, progress, color }: any) {
+function CheckItem({ label }: { label: string }) {
   return (
-    <div className="space-y-2">
-      <div className="flex justify-between items-end text-[10px] font-bold uppercase">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="text-foreground">{value}</span>
+    <div className="flex items-center gap-3">
+      <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
+        <Zap className="w-2.5 h-2.5 text-primary" />
       </div>
-      <Progress value={progress} className={cn("h-1.5 bg-border/50", color)} />
+      <span className="text-xs text-muted-foreground">{label}</span>
     </div>
+  );
+}
+
+function NicheSampleCard({ title, genre, tags }: any) {
+  return (
+    <Card className="bg-secondary/20 border-border/50 p-4 hover:border-primary/30 transition-all group">
+      <div className="flex justify-between items-start mb-3">
+        <p className="text-sm font-bold group-hover:text-primary transition-colors">{title}</p>
+        <Badge variant="secondary" className="text-[8px] uppercase">{genre}</Badge>
+      </div>
+      <p className="text-[10px] text-muted-foreground italic mb-3">Tags: {tags}</p>
+      <Button variant="ghost" size="sm" className="w-full h-7 text-[9px] uppercase font-bold border border-border/50 group-hover:bg-primary group-hover:text-primary-foreground">Analyze Demand</Button>
+    </Card>
   );
 }

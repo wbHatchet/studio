@@ -1,0 +1,569 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px}
+.shell{display:grid;grid-template-columns:196px 1fr;min-height:740px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.brand{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.brand-name{font-size:14px;font-weight:500}
+.brand-tag{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.nav-section{padding:8px 16px 4px;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);margin-top:6px}
+nav{flex:1;overflow-y:auto}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;transition:background 0.1s}
+.ni:hover,.ni.on{background:var(--color-background-primary);color:var(--color-text-primary)}
+.ni.on{font-weight:500}
+.ni svg{width:13px;height:13px;flex-shrink:0;opacity:0.55}
+.ni.on svg{opacity:1}
+.sidebar-footer{padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary)}
+.run-btn{width:100%;padding:8px;font-size:12px;font-weight:500;cursor:pointer;border-radius:var(--border-radius-md);border:none;background:#534AB7;color:#fff;font-family:var(--font-sans)}
+.run-btn:hover{background:#3C3489}
+.content{overflow-y:auto;max-height:740px;background:var(--color-background-primary)}
+.view{display:none;padding:18px 20px}
+.view.on{display:block}
+.pg-title{font-size:16px;font-weight:500;margin-bottom:2px}
+.pg-sub{font-size:12px;color:var(--color-text-tertiary);margin-bottom:16px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px;color:var(--color-text-tertiary);margin-bottom:10px}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:var(--border-radius-md);font-weight:500}
+.bg{background:#EAF3DE;color:#27500A}
+.ba{background:#FAEEDA;color:#633806}
+.bb{background:#E6F1FB;color:#0C447C}
+.bp{background:#EEEDFE;color:#3C3489}
+.bx{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+.bt{background:#E1F5EE;color:#085041}
+.br{background:#FCEBEB;color:#791F1F}
+.row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dg{background:#639922}.da{background:#EF9F27}.dp{background:#534AB7}.dx{background:var(--color-border-secondary)}.db{background:#378ADD}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
+.met-val{font-size:20px;font-weight:500}
+.met-lbl{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.met-d{font-size:10px;margin-top:3px;color:#3B6D11}
+.step{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:5px}
+.sn{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary)}
+.step.sd .sn{background:#639922;color:#fff;border-color:#639922}
+.step.sr .sn{background:#534AB7;color:#fff;border-color:#534AB7}
+.sb{flex:1}
+.sname{font-size:12px;font-weight:500}
+.sdesc{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.prog{height:3px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden;margin-top:5px}
+.pf{height:100%;background:#534AB7;border-radius:2px}
+.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.agent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ac{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.ac.director{border-color:#AFA9EC;background:#EEEDFE}
+.ai{width:26px;height:26px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:7px}
+.an{font-size:12px;font-weight:500;margin-bottom:2px}
+.ad{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.at{margin-top:7px;display:flex;flex-wrap:wrap;gap:3px}
+.tt{font-size:10px;padding:2px 6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);color:var(--color-text-secondary)}
+.logic{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;font-family:var(--font-mono);font-size:11px;line-height:1.8;color:var(--color-text-secondary);margin-top:8px;border:0.5px solid var(--color-border-tertiary)}
+.kw{color:#534AB7;font-weight:500}.val{color:#3B6D11}.cm{color:var(--color-text-tertiary)}
+.flow-node{display:flex;align-items:center;gap:10px;padding:9px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:12px;margin-bottom:3px}
+.flow-node.dir{border-color:#534AB7;background:#EEEDFE}
+.fc{text-align:center;color:var(--color-text-tertiary);font-size:11px;height:14px;display:flex;align-items:center;justify-content:center;margin-bottom:3px}
+.fi{width:24px;height:24px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fn{flex:1}.fnt{font-weight:500}.fns{font-size:11px;color:var(--color-text-tertiary)}
+.ch-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ch-row:last-child{border-bottom:none}
+.ch-dot{width:30px;height:30px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.ch-info{flex:1}.ch-name{font-size:12px;font-weight:500}.ch-niche{font-size:11px;color:var(--color-text-tertiary)}
+.ch-stats{display:flex;gap:12px;font-size:11px;color:var(--color-text-secondary)}
+.ch-stats span{color:var(--color-text-primary);font-weight:500}
+.bar-wrap{height:5px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden;flex:1}
+.bar-fill{height:100%;border-radius:2px}
+.appr-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:10px}
+.appr-card.pend{border-color:#AFA9EC}
+input[type=range]{width:100%}
+.calc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12px}
+.calc-label{min-width:130px;color:var(--color-text-secondary)}
+.calc-val{min-width:60px;text-align:right;font-weight:500}
+.niche-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px;margin-bottom:8px}
+.timeline-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.timeline-row:last-child{border-bottom:none}
+.tl-month{min-width:60px;font-weight:500;font-size:11px;color:var(--color-text-tertiary)}
+.tl-content{flex:1}
+.tl-stats{display:flex;gap:14px;margin-top:4px;font-size:11px;color:var(--color-text-secondary)}
+.tl-stats span{font-weight:500;color:var(--color-text-primary)}
+</style>
+
+<div class="shell">
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-name">AI Beat Business</div>
+    <div class="brand-tag">OpenClaw orchestrated</div>
+  </div>
+  <nav>
+    <div class="nav-section">Business</div>
+    <div class="ni on" onclick="sw('overview',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Overview</div>
+    <div class="ni" onclick="sw('calculator',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="2" width="10" height="12" rx="1.5"/><path d="M6 5h4M6 8h4M6 11h2"/></svg>Revenue calculator</div>
+    <div class="ni" onclick="sw('timeline',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h12M8 4v8"/><circle cx="2" cy="8" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="14" cy="8" r="1.5"/></svg>Growth timeline</div>
+    <div class="ni" onclick="sw('niches',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="3"/><circle cx="8" cy="8" r="1"/></svg>Micro-niches</div>
+    <div class="nav-section">Pipeline</div>
+    <div class="ni" onclick="sw('flow',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="3" r="1.5"/><path d="M8 4.5v7"/><circle cx="8" cy="13" r="1.5"/></svg>Pipeline flow</div>
+    <div class="ni" onclick="sw('liverun',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h4v4H3zM9 9h4v4H9zM9 3h4v4H9zM3 9h4v4H3z"/></svg>Live run</div>
+    <div class="ni" onclick="sw('agents',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="6" height="6" rx="1.5"/><path d="M3 14c0-2.2 2.2-4 5-4s5 1.8 5 4"/></svg>Agents</div>
+    <div class="ni" onclick="sw('logic',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M5 8h6M8 12h2"/></svg>Director logic</div>
+    <div class="nav-section">Operations</div>
+    <div class="ni" onclick="sw('channels',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M5 2l3 2 3-2"/></svg>Channels</div>
+    <div class="ni" onclick="sw('queue',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h9M2 12h6"/></svg>Beat queue</div>
+    <div class="ni" onclick="sw('approvals',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l3.5 3.5L13 4.5"/></svg>Approvals</div>
+    <div class="ni" onclick="sw('stack',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="3.5" rx="1"/><rect x="2" y="6.5" width="12" height="3.5" rx="1"/><rect x="2" y="11" width="12" height="3" rx="1"/></svg>Tech stack</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="run-btn" onclick="simRun()">Run pipeline</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<div class="view on" id="v-overview">
+  <div class="pg-title">Overview</div>
+  <div class="pg-sub">AI beat business — 4 revenue streams + OpenClaw automation</div>
+  <div class="four">
+    <div class="met"><div class="met-val">$840</div><div class="met-lbl">YouTube ads</div><div class="met-d">+$120 this month</div></div>
+    <div class="met"><div class="met-val">$1,260</div><div class="met-lbl">Beat licensing</div><div class="met-d">+$340 this month</div></div>
+    <div class="met"><div class="met-val">$490</div><div class="met-lbl">Beat bundles</div><div class="met-d">+$90 this month</div></div>
+    <div class="met"><div class="met-val">$250</div><div class="met-lbl">Placements</div><div class="met-d">1 this month</div></div>
+  </div>
+  <div class="two">
+    <div>
+      <div class="card">
+        <div class="card-title">The 4 income streams</div>
+        <div class="row"><div class="dot dg"></div><div style="flex:1"><strong>YouTube ad revenue</strong><div style="font-size:11px;color:var(--color-text-tertiary)">$3–$8 CPM · 100K views = $300–$800/mo</div></div></div>
+        <div class="row"><div class="dot db"></div><div style="flex:1"><strong>Beat licensing</strong><div style="font-size:11px;color:var(--color-text-tertiary)">MP3 $30 · WAV $75 · Exclusive $300–$1,500</div></div></div>
+        <div class="row"><div class="dot dp"></div><div style="flex:1"><strong>Beat packs / funnels</strong><div style="font-size:11px;color:var(--color-text-tertiary)">50 beats for $99 · producer kits · sample packs</div></div></div>
+        <div class="row"><div class="dot da"></div><div style="flex:1"><strong>Artist placements</strong><div style="font-size:11px;color:var(--color-text-tertiary)">Big artists find beats on YouTube organically</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">OpenClaw gateway status</div>
+        <div class="row"><div class="dot dg"></div><div style="flex:1">Gateway process</div><span class="badge bg">Running</span></div>
+        <div class="row"><div class="dot dg"></div><div style="flex:1">Director agent</div><span class="badge bg">Active</span></div>
+        <div class="row"><div class="dot dp"></div><div style="flex:1">Artwork agent (2/4 beats)</div><span class="badge ba">Running</span></div>
+        <div class="row"><div class="dot dp"></div><div style="flex:1">CTR spike — replicating Drake R&B</div><span class="badge bp">Auto-queued 3×</span></div>
+        <div class="row"><div class="dot dg"></div><div style="flex:1">47 videos live across 5 channels</div><span class="badge bg">On track</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">The micro-niche advantage</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.7">Micro-niches convert because YouTube matches your video to exactly the right audience. The viewer already knows the sound before they click.</div>
+        <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;font-size:12px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--color-background-secondary);padding:6px 10px;font-size:10px;font-weight:500;text-transform:uppercase;color:var(--color-text-tertiary)"><span>Channel type</span><span style="text-align:center">Views</span><span style="text-align:right">Revenue</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:var(--color-text-secondary)">Broad trap</span><span style="text-align:center">500K</span><span style="text-align:right;color:#3B6D11;font-weight:500">$5,000</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:7px 10px;background:#EAF3DE"><span style="color:#27500A;font-weight:500">Micro-niche</span><span style="text-align:center;color:#27500A;font-weight:500">70K</span><span style="text-align:right;color:#27500A;font-weight:500">$5,000</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px">Same revenue. 7× less views needed. Micro-niche wins every time.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Today's production</div>
+        <div class="row"><div class="dot dg"></div><div style="flex:1">Old Drake x Take Care Type Beat</div><span class="badge bg">Live</span></div>
+        <div class="row"><div class="dot dg"></div><div style="flex:1">J Cole Soul Reflection Type Beat</div><span class="badge bg">Live</span></div>
+        <div class="row"><div class="dot da"></div><div style="flex:1">6LACK Midnight Tears Type Beat</div><span class="badge ba">In progress</span></div>
+        <div class="row"><div class="dot dx"></div><div style="flex:1">Nas Vinyl Chronicles Type Beat</div><span class="badge bx">Queued</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REVENUE CALCULATOR -->
+<div class="view" id="v-calculator">
+  <div class="pg-title">Revenue calculator</div>
+  <div class="pg-sub">Adjust the sliders to model your monthly income</div>
+  <div class="two">
+    <div class="card">
+      <div class="card-title">Your numbers</div>
+      <div class="calc-row"><div class="calc-label">Monthly views</div><input type="range" min="10000" max="2000000" step="10000" value="300000" id="sl-views" oninput="calc()"><div class="calc-val" id="out-views">300K</div></div>
+      <div class="calc-row"><div class="calc-label">CPM ($)</div><input type="range" min="1" max="12" step="0.5" value="5" id="sl-cpm" oninput="calc()"><div class="calc-val" id="out-cpm">$5</div></div>
+      <div class="calc-row"><div class="calc-label">Beat price ($)</div><input type="range" min="20" max="200" step="5" value="30" id="sl-price" oninput="calc()"><div class="calc-val" id="out-price">$30</div></div>
+      <div class="calc-row"><div class="calc-label">Conversion rate (%)</div><input type="range" min="0.1" max="3" step="0.1" value="0.5" id="sl-conv" oninput="calc()"><div class="calc-val" id="out-conv">0.5%</div></div>
+      <div class="calc-row"><div class="calc-label">Bundle sales/mo</div><input type="range" min="0" max="100" step="1" value="10" id="sl-bundle" oninput="calc()"><div class="calc-val" id="out-bundle">10</div></div>
+      <div class="calc-row"><div class="calc-label">Bundle price ($)</div><input type="range" min="49" max="299" step="1" value="99" id="sl-bprice" oninput="calc()"><div class="calc-val" id="out-bprice">$99</div></div>
+    </div>
+    <div>
+      <div class="four" style="grid-template-columns:1fr 1fr;margin-bottom:12px">
+        <div class="met"><div class="met-val" id="r-ads">$1,500</div><div class="met-lbl">YouTube ads</div></div>
+        <div class="met"><div class="met-val" id="r-lic">$450</div><div class="met-lbl">Beat licensing</div></div>
+        <div class="met"><div class="met-val" id="r-bun">$990</div><div class="met-lbl">Bundle funnels</div></div>
+        <div class="met"><div class="met-val" id="r-total" style="color:#3B6D11">$2,940</div><div class="met-lbl">Total/month</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Annual projection</div>
+        <div style="position:relative;height:180px"><canvas id="rev-chart"></canvas></div>
+      </div>
+      <div class="card" style="margin-top:0">
+        <div class="card-title">Key insight</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7" id="insight-text">At 300K views/month with a 0.5% conversion rate, licensing alone covers most producers' basic expenses. The bundle funnel is where serious income begins.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GROWTH TIMELINE -->
+<div class="view" id="v-timeline">
+  <div class="pg-title">Growth timeline</div>
+  <div class="pg-sub">Realistic 12-month roadmap — 2 beats/day, micro-niche strategy</div>
+  <div class="card">
+    <div class="timeline-row">
+      <div class="tl-month">Month 1</div>
+      <div class="tl-content">
+        <div style="font-weight:500">Foundation — pick niche, set up channel, first 60 videos</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Set up OpenClaw, configure Director agent, connect Suno + DALL-E, build prompt sheet</div>
+        <div class="tl-stats"><div>Videos <span>60</span></div><div>Views <span>2–5K</span></div><div>Revenue <span>$0–$50</span></div><div>Sales <span>1–2</span></div></div>
+      </div>
+      <span class="badge bx">Foundation</span>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-month">Month 2–3</div>
+      <div class="tl-content">
+        <div style="font-weight:500">Traction — algorithm starts picking up consistent uploaders</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Study first performing video, replicate format, add BeatStars store link, first funnel</div>
+        <div class="tl-stats"><div>Videos <span>180–300</span></div><div>Views <span>20–80K</span></div><div>Revenue <span>$200–$1K</span></div><div>Sales <span>5–20</span></div></div>
+      </div>
+      <span class="badge ba">Traction</span>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-month">Month 4–6</div>
+      <div class="tl-content">
+        <div style="font-weight:500">Monetization — YouTube Partner Program eligibility, beat sales growing</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Launch 2nd micro-niche channel, add email list, introduce bundle offer, watch for niche expansion keywords</div>
+        <div class="tl-stats"><div>Videos <span>300–600</span></div><div>Views <span>80–300K</span></div><div>Revenue <span>$1K–$5K</span></div><div>Sales <span>30–100</span></div></div>
+      </div>
+      <span class="badge bb">Monetized</span>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-month">Month 7–9</div>
+      <div class="tl-content">
+        <div style="font-weight:500">Scaling — 3–5 channels running, OpenClaw fully automated</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Director agent auto-replicates winning beats, trend agent discovering new niches, placement inquiries begin</div>
+        <div class="tl-stats"><div>Videos <span>600–900</span></div><div>Views <span>300K–800K</span></div><div>Revenue <span>$3K–$10K</span></div><div>Sales <span>100–300</span></div></div>
+      </div>
+      <span class="badge bp">Scaling</span>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-month">Month 10–12</div>
+      <div class="tl-content">
+        <div style="font-weight:500">Full operation — beat farm running, placements happening, funnels converting</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">5+ channels · 1,000+ videos · Director agent scaling autonomously · artist placement outreach</div>
+        <div class="tl-stats"><div>Videos <span>1,000+</span></div><div>Views <span>800K–2M</span></div><div>Revenue <span>$5K–$20K</span></div><div>Sales <span>300–600</span></div></div>
+      </div>
+      <span class="badge bg">Full op</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">90-day action plan</div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">1</div><div>Pick 1 micro-niche (R&B, Boom Bap, or Pop — not trap to start)</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">2</div><div>Create 20 beats — use Suno AI with niche-specific prompts</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">3</div><div>Set up YouTube channel with clean branding (Canva, no emoji)</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">4</div><div>Upload 2 beats daily — consistent cadence beats everything</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">5</div><div>List every beat on BeatStars — MP3 $30, WAV $75</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">6</div><div>Add SEO tags + [FREE] title format to every video</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">7</div><div>Study first video that gains traction — replicate it immediately</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:20px;font-weight:500;color:var(--color-text-tertiary)">8</div><div>Install OpenClaw, automate steps 2–6 once system is proven</div></div>
+  </div>
+</div>
+
+<!-- MICRO-NICHES -->
+<div class="view" id="v-niches">
+  <div class="pg-title">Micro-niche index</div>
+  <div class="pg-sub">Profitable type beat niches for 2026 — genre ranked by revenue potential</div>
+  <div class="two" style="margin-bottom:12px">
+    <div class="card">
+      <div class="card-title">Genre profitability ranking</div>
+      <div class="row" style="font-size:12px"><div style="min-width:18px;color:var(--color-text-tertiary);font-weight:500">#1</div><div style="flex:1">Pop</div><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#639922"></div></div><span class="badge bg" style="margin-left:8px">Highest</span></div>
+      <div class="row" style="font-size:12px"><div style="min-width:18px;color:var(--color-text-tertiary);font-weight:500">#2</div><div style="flex:1">R&B</div><div class="bar-wrap"><div class="bar-fill" style="width:88%;background:#378ADD"></div></div><span class="badge bb" style="margin-left:8px">Very high</span></div>
+      <div class="row" style="font-size:12px"><div style="min-width:18px;color:var(--color-text-tertiary);font-weight:500">#3</div><div style="flex:1">Boom Bap</div><div class="bar-wrap"><div class="bar-fill" style="width:78%;background:#534AB7"></div></div><span class="badge bp" style="margin-left:8px">High</span></div>
+      <div class="row" style="font-size:12px"><div style="min-width:18px;color:var(--color-text-tertiary);font-weight:500">#4</div><div style="flex:1">Soul / Trap Soul</div><div class="bar-wrap"><div class="bar-fill" style="width:60%;background:#EF9F27"></div></div><span class="badge ba" style="margin-left:8px">Medium</span></div>
+      <div class="row" style="font-size:12px"><div style="min-width:18px;color:var(--color-text-tertiary);font-weight:500">#5</div><div style="flex:1">Trap</div><div class="bar-wrap"><div class="bar-fill" style="width:28%;background:#888780"></div></div><span class="badge bx" style="margin-left:8px">Lowest</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Niche selection checklist</div>
+      <div class="row" style="font-size:12px"><span style="color:#639922;font-weight:500;min-width:14px">✓</span><div>Starts from a profitable genre (R&B, Boom Bap, Pop)</div></div>
+      <div class="row" style="font-size:12px"><span style="color:#639922;font-weight:500;min-width:14px">✓</span><div>Competition has under 10K subscribers</div></div>
+      <div class="row" style="font-size:12px"><span style="color:#639922;font-weight:500;min-width:14px">✓</span><div>Consistent views — not spike-reliant</div></div>
+      <div class="row" style="font-size:12px"><span style="color:#639922;font-weight:500;min-width:14px">✓</span><div>More demand than current supply</div></div>
+      <div class="row" style="font-size:12px"><span style="color:#639922;font-weight:500;min-width:14px">✓</span><div>Room for keyword expansion after 10K subs</div></div>
+      <div class="row" style="font-size:12px"><span style="color:#639922;font-weight:500;min-width:14px">✓</span><div>Validated with VidIQ search score</div></div>
+    </div>
+  </div>
+  <div class="niche-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-weight:500;font-size:13px">Old Drake x Take Care Type Beat</div><span class="badge bg">High value</span></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">Keyword: "old drake type beat" · Genre: R&B · Competition: Low · Era-specific = very specific audience match</div>
+    <div style="font-size:12px;color:var(--color-text-secondary)">Title: <em>[FREE] Old Drake x Take Care Type Beat – "Midnight"</em></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Expand to → "take care era beat" · "2010 r&b beat" · "sad drake type beat"</div>
+  </div>
+  <div class="niche-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-weight:500;font-size:13px">J Cole x Forest Hills Drive Soul Beat</div><span class="badge bg">High value</span></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">Keyword: "j cole soul type beat" · Genre: Boom Bap · Competition: Low · Mature buyer = higher spend</div>
+    <div style="font-size:12px;color:var(--color-text-secondary)">Title: <em>[FREE] J Cole Soul Type Beat – "Forest Hills"</em></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Expand to → "conscious rap beat" · "JID type beat" · "Kendrick Lamar type beat"</div>
+  </div>
+  <div class="niche-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-weight:500;font-size:13px">6LACK x East Atlanta Trap Soul</div><span class="badge bb">Trending 2026</span></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">Keyword: "6lack type beat" · Genre: Trap Soul · Competition: Very low · Growing demand</div>
+    <div style="font-size:12px;color:var(--color-text-secondary)">Title: <em>[FREE] 6LACK Type Beat – "Midnight Confessions"</em></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Expand to → "summer walker type beat" · "dark r&b beat" · "trap soul instrumental"</div>
+  </div>
+  <div class="niche-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-weight:500;font-size:13px">Nas x 90s NY Boom Bap Vinyl</div><span class="badge bp">Evergreen</span></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">Keyword: "nas vinyl type beat" · Genre: Boom Bap · Targets 30–50 age group = highest avg spend</div>
+    <div style="font-size:12px;color:var(--color-text-secondary)">Title: <em>[FREE] Nas Boom Bap Type Beat – "Bedford Ave"</em></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Expand to → "Biggie type beat" · "90s boom bap" · "boom bap sample beat"</div>
+  </div>
+  <div class="niche-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-weight:500;font-size:13px">Conan Gray x Bedroom Pop Guitar</div><span class="badge bt">Untapped</span></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">Keyword: "conan gray type beat" · Genre: Pop · Competition: Almost zero · Pop = highest revenue per sale</div>
+    <div style="font-size:12px;color:var(--color-text-secondary)">Title: <em>[FREE] Conan Gray Pop Type Beat – "Heather's Shadow"</em></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Expand to → "bedroom pop beat" · "indie pop instrumental" · "soft pop type beat"</div>
+  </div>
+</div>
+
+<!-- PIPELINE FLOW -->
+<div class="view" id="v-flow">
+  <div class="pg-title">Pipeline flow</div>
+  <div class="pg-sub">How OpenClaw routes every beat from prompt to published video</div>
+  <div class="flow-node" style="background:var(--color-background-secondary)"><div class="fi" style="background:#E6F1FB"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#185FA5" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 7h6M5 10h4"/></svg></div><div class="fn"><div class="fnt">Excel / Google Sheets input</div><div class="fns">Artist · Genre · Mood · BPM · Era — one row per beat</div></div><span class="badge bb">Trigger</span></div>
+  <div class="fc">↓</div>
+  <div class="flow-node dir"><div class="fi" style="background:#AFA9EC"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#26215C" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg></div><div class="fn"><div class="fnt" style="color:#26215C">OpenClaw — Director Agent</div><div class="fns" style="color:#3C3489">Orchestrator · routes tasks · holds memory · makes autonomous decisions</div></div><span class="badge bp">Core</span></div>
+  <div class="fc">↓ dispatches to agents</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div class="flow-node"><div class="fi" style="background:#EEEDFE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#534AB7" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 2"/></svg></div><div class="fn"><div class="fnt">Prompt expansion</div><div class="fns">ChatGPT → Suno brief + metadata</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#EAF3DE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#3B6D11" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M6 5.5l4 2.5-4 2.5V5.5z"/></svg></div><div class="fn"><div class="fnt">Music generation</div><div class="fns">Suno → MP3 download</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#FBEAF0"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#993556" stroke-width="1.5"><rect x="3" y="3" width="10" height="10" rx="1.5"/><circle cx="6" cy="6" r="1.5"/><path d="M3 11l3-3 2 2 2-3 3 4"/></svg></div><div class="fn"><div class="fnt">Artwork agent</div><div class="fns">DALL-E → niche-matched thumbnail</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#E1F5EE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#0F6E56" stroke-width="1.5"><path d="M2 4h12M2 8h8M2 12h10"/></svg></div><div class="fn"><div class="fnt">SEO metadata agent</div><div class="fns">Title · description · 20 tags · hashtags</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#FAEEDA"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#854F0B" stroke-width="1.5"><rect x="3" y="3" width="10" height="10" rx="1.5"/><path d="M6 8h4M8 6v4"/></svg></div><div class="fn"><div class="fnt">Video builder</div><div class="fns">FFmpeg → MP3 + art → 1080p MP4</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#FCEBEB"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#A32D2D" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M6 5.5l4 2.5-4 2.5V5.5z"/></svg></div><div class="fn"><div class="fnt">YouTube upload agent</div><div class="fns">YouTube API → schedule + thumbnail</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#FAEEDA"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#854F0B" stroke-width="1.5"><path d="M8 2v12M3 8h10"/></svg></div><div class="fn"><div class="fnt">Beat store agent</div><div class="fns">BeatStars → MP3 $30 · WAV $75 · Exclusive</div></div></div>
+    <div class="flow-node"><div class="fi" style="background:#E6F1FB"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M2 12l4-4 3 3 5-7"/></svg></div><div class="fn"><div class="fnt">Analytics agent</div><div class="fns">CTR · views · sales → feeds Director</div></div></div>
+  </div>
+  <div class="fc" style="margin-top:8px">↑ analytics loop → OpenClaw Director self-optimizes</div>
+</div>
+
+<!-- LIVE RUN -->
+<div class="view" id="v-liverun">
+  <div class="pg-title">Live run</div>
+  <div class="pg-sub">OpenClaw session: "old_drake_midnight" · Started 14 min ago</div>
+  <div id="steps">
+    <div class="step sd"><div class="sn">1</div><div class="sb"><div class="sname">Input agent — Excel row 4</div><div class="sdesc">Artist: Drake · R&B · Emotional · 82 BPM · Take Care era</div></div><span class="badge bg">Done 14m</span></div>
+    <div class="step sd"><div class="sn">2</div><div class="sb"><div class="sname">OpenClaw Director — task routed</div><div class="sdesc">Session created · agents assigned · memory loaded</div></div><span class="badge bp">Routed</span></div>
+    <div class="step sd"><div class="sn">3</div><div class="sb"><div class="sname">Prompt expansion agent — ChatGPT</div><div class="sdesc">Suno prompt · lyrics · image prompt · title · description · 20 tags generated</div></div><span class="badge bg">Done 11m</span></div>
+    <div class="step sd"><div class="sn">4</div><div class="sb"><div class="sname">Music generation agent — Suno</div><div class="sdesc">beat_drake_midnight.mp3 · 3:24 · 82 BPM · F minor · saved to S3</div></div><span class="badge bg">Done 7m</span></div>
+    <div class="step sr"><div class="sn">5</div><div class="sb"><div class="sname">Artwork agent — DALL-E</div><div class="sdesc">Prompt: vintage Drake · dark blue cinematic · film grain · 1280×720</div><div class="prog"><div class="pf pulse" style="width:65%"></div></div></div><span class="badge bp">Running</span></div>
+    <div class="step"><div class="sn">6</div><div class="sb"><div class="sname">SEO metadata agent</div><div class="sdesc">Will generate: [FREE] Drake Type Beat – "Midnight" · description · 20 tags</div></div><span class="badge bx">Waiting</span></div>
+    <div class="step"><div class="sn">7</div><div class="sb"><div class="sname">QC agent — copyright + asset check</div><div class="sdesc">Audio length · image size · metadata complete · copyright scan</div></div><span class="badge bx">Waiting</span></div>
+    <div class="step"><div class="sn">8</div><div class="sb"><div class="sname">Video builder — FFmpeg</div><div class="sdesc">MP3 + artwork → 1080p MP4 with waveform visualizer</div></div><span class="badge bx">Waiting</span></div>
+    <div class="step"><div class="sn">9</div><div class="sb"><div class="sname">OpenClaw Director — pre-upload gate</div><div class="sdesc">Confirms quality score · decides optimal publish time</div></div><span class="badge bx">Waiting</span></div>
+    <div class="step"><div class="sn">10</div><div class="sb"><div class="sname">YouTube upload agent</div><div class="sdesc">Old Drake R&B Beats channel · Scheduled tomorrow 9:00 AM</div></div><span class="badge bx">Scheduled</span></div>
+    <div class="step"><div class="sn">11</div><div class="sb"><div class="sname">BeatStars listing agent</div><div class="sdesc">MP3 $30 · WAV $75 · Exclusive $500 · Buy 1 Get 2 Free</div></div><span class="badge bx">Waiting</span></div>
+    <div class="step"><div class="sn">12</div><div class="sb"><div class="sname">Approval agent — your review</div><div class="sdesc">Preview link sent · approve / edit / reject before live</div></div><span class="badge bb">Awaiting you</span></div>
+  </div>
+</div>
+
+<!-- AGENTS -->
+<div class="view" id="v-agents">
+  <div class="pg-title">Agent directory</div>
+  <div class="pg-sub">All agents managed and orchestrated by OpenClaw Gateway</div>
+  <div class="card" style="border-color:#AFA9EC;background:#EEEDFE;margin-bottom:14px">
+    <div style="display:flex;gap:10px">
+      <div style="width:30px;height:30px;border-radius:var(--border-radius-md);background:#AFA9EC;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#26215C" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg></div>
+      <div><div style="font-size:13px;font-weight:500;color:#26215C;margin-bottom:2px">OpenClaw — Director Agent (Orchestrator)</div><div style="font-size:12px;color:#3C3489;line-height:1.6">Central Gateway process. Controls all agent routing, maintains session memory, makes autonomous decisions (replicate winning beats, spin up new channels on demand spikes, pivot dying niches before views drop).</div><div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px"><span class="tt" style="background:#AFA9EC;color:#26215C;border-color:#534AB7">OpenClaw Gateway</span><span class="tt" style="background:#AFA9EC;color:#26215C;border-color:#534AB7">SOUL.md config</span><span class="tt" style="background:#AFA9EC;color:#26215C;border-color:#534AB7">Lobster YAML workflow</span><span class="tt" style="background:#AFA9EC;color:#26215C;border-color:#534AB7">Claude / GPT model</span></div></div>
+    </div>
+  </div>
+  <div class="agent-grid">
+    <div class="ac"><div class="ai" style="background:#E6F1FB"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#185FA5" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 7h6"/></svg></div><div class="an">Input agent</div><div class="ad">Watches Excel / Sheets for new rows, triggers the Director</div><div class="at"><span class="tt">Sheets API</span><span class="tt">n8n / Zapier</span></div></div>
+    <div class="ac"><div class="ai" style="background:#EEEDFE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#534AB7" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 2"/></svg></div><div class="an">Prompt expansion agent</div><div class="ad">Turns raw row into Suno brief, lyrics, image prompt, full metadata</div><div class="at"><span class="tt">ChatGPT API</span></div></div>
+    <div class="ac"><div class="ai" style="background:#EAF3DE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#3B6D11" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M6 5.5l4 2.5-4 2.5V5.5z"/></svg></div><div class="an">Music generation agent</div><div class="ad">Submits prompt to Suno, downloads MP3/WAV to S3</div><div class="at"><span class="tt">Suno AI</span><span class="tt">Playwright</span></div></div>
+    <div class="ac"><div class="ai" style="background:#FBEAF0"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#993556" stroke-width="1.5"><rect x="3" y="3" width="10" height="10" rx="1.5"/><circle cx="6" cy="6" r="1.5"/><path d="M3 11l3-3 2 2 2-3 3 4"/></svg></div><div class="an">Artwork agent</div><div class="ad">Creates niche-aesthetic thumbnail and cover art</div><div class="at"><span class="tt">DALL-E</span><span class="tt">Stable Diffusion</span></div></div>
+    <div class="ac"><div class="ai" style="background:#E1F5EE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#0F6E56" stroke-width="1.5"><path d="M2 4h12M2 8h8M2 12h10"/></svg></div><div class="an">SEO metadata agent</div><div class="ad">Title, description, 20 stacked tags, hashtags, BPM/key block</div><div class="at"><span class="tt">ChatGPT API</span><span class="tt">VidIQ data</span></div></div>
+    <div class="ac"><div class="ai" style="background:#FAEEDA"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#854F0B" stroke-width="1.5"><rect x="3" y="3" width="10" height="10" rx="1.5"/><path d="M6 8h4M8 6v4"/></svg></div><div class="an">Video builder agent</div><div class="ad">MP3 + artwork → 1080p MP4 with waveform overlay</div><div class="at"><span class="tt">FFmpeg</span><span class="tt">Python</span></div></div>
+    <div class="ac"><div class="ai" style="background:#FCEBEB"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#A32D2D" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M6 5.5l4 2.5-4 2.5V5.5z"/></svg></div><div class="an">YouTube upload agent</div><div class="ad">Uploads video, all metadata, thumbnail, schedules publish</div><div class="at"><span class="tt">YouTube Data API</span></div></div>
+    <div class="ac"><div class="ai" style="background:#FAEEDA"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#854F0B" stroke-width="1.5"><path d="M8 2v12M3 8h10"/></svg></div><div class="an">Beat store agent</div><div class="ad">Lists beat on BeatStars with license tiers and Buy 1 Get 2 Free offer</div><div class="at"><span class="tt">BeatStars API</span><span class="tt">Gumroad</span></div></div>
+    <div class="ac"><div class="ai" style="background:#E6F1FB"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M2 12l4-4 3 3 5-7"/></svg></div><div class="an">Analytics agent</div><div class="ad">Views, CTR, beat sales → feeds results back to Director for self-optimization</div><div class="at"><span class="tt">YouTube Analytics</span><span class="tt">BeatStars</span></div></div>
+    <div class="ac"><div class="ai" style="background:#E1F5EE"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#0F6E56" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2.5"/></svg></div><div class="an">Niche / trend agent</div><div class="ad">Scrapes YouTube, TikTok, Spotify charts — discovers new micro-niche opportunities</div><div class="at"><span class="tt">YouTube API</span><span class="tt">VidIQ</span></div></div>
+  </div>
+</div>
+
+<!-- DIRECTOR LOGIC -->
+<div class="view" id="v-logic">
+  <div class="pg-title">Director logic</div>
+  <div class="pg-sub">OpenClaw autonomous decision rules — self-optimizing beat factory</div>
+  <div class="card"><div class="card-title">Beat replication rule</div><div class="logic"><span class="kw">if</span> video.ctr <span class="kw">></span> <span class="val">5%</span> <span class="kw">and</span> video.views <span class="kw">></span> <span class="val">10000</span>:<br>&nbsp;&nbsp;director.queue(<span class="val">"replicate"</span>, beat_style, count=<span class="val">3</span>)<br>&nbsp;&nbsp;director.memo(<span class="val">"copy arrangement, thumbnail aesthetic, title format"</span>)<br><span class="cm">  # Drake R&B CTR 8.2% → 3 more auto-queued today</span></div></div>
+  <div class="card"><div class="card-title">New channel creation rule</div><div class="logic"><span class="kw">if</span> niche_agent.demand_score <span class="kw">></span> <span class="val">80</span> <span class="kw">and</span> no_channel_exists:<br>&nbsp;&nbsp;director.create_channel(niche, genre, keyword)<br>&nbsp;&nbsp;director.assign_all_agents(new_channel)<br><span class="cm">  # SZA R&B demand spike → new channel auto-created</span></div></div>
+  <div class="card"><div class="card-title">Upload cadence rule</div><div class="logic"><span class="kw">for</span> channel <span class="kw">in</span> active_channels:<br>&nbsp;&nbsp;<span class="kw">if</span> channel.uploads_today <span class="kw">&lt;</span> <span class="val">2</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;director.dispatch(channel, next_queued_prompt)<br><span class="cm">  # maintains 2 beats/day/channel automatically</span></div></div>
+  <div class="card"><div class="card-title">Niche pivot rule</div><div class="logic"><span class="kw">if</span> channel.subs <span class="kw">></span> <span class="val">10000</span>:<br>&nbsp;&nbsp;director.expand_keywords(channel, related_artists)<br><span class="kw">if</span> niche.search_volume <span class="kw">&lt;</span> threshold <span class="kw">and</span> trending_alt_exists:<br>&nbsp;&nbsp;director.pivot_niche(channel, new_keyword)<br><span class="cm">  # kills dying niche before your views drop</span></div></div>
+  <div class="card"><div class="card-title">Memory system</div><div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7">OpenClaw's Director retains memory across all agent sessions — which thumbnails got the highest CTR, which beat arrangements keep viewers watching longest, which niche keywords are growing or decaying. Every new beat it dispatches is informed by all previous data. This is what makes it a self-optimizing system, not just an automation.</div></div>
+</div>
+
+<!-- CHANNELS -->
+<div class="view" id="v-channels">
+  <div class="pg-title">Channel network</div>
+  <div class="pg-sub">6 micro-niche channels · each managed by OpenClaw Director</div>
+  <div class="four">
+    <div class="met"><div class="met-val">6</div><div class="met-lbl">Channels</div></div>
+    <div class="met"><div class="met-val">47</div><div class="met-lbl">Videos live</div></div>
+    <div class="met"><div class="met-val">312K</div><div class="met-lbl">Total views</div></div>
+    <div class="met"><div class="met-val">$2,840</div><div class="met-lbl">Revenue</div></div>
+  </div>
+  <div class="card">
+    <div class="ch-row"><div class="ch-dot" style="background:#E6F1FB;color:#0C447C">DR</div><div class="ch-info"><div class="ch-name">Old Drake R&B Beats</div><div class="ch-niche">R&B · Take Care era · old drake type beat</div></div><div class="ch-stats"><div>Videos <span>14</span></div><div>Views <span>128K</span></div><div>Subs <span>2.1K</span></div><div>Rev <span>$960</span></div></div><span class="badge bg">Active</span></div>
+    <div class="ch-row"><div class="ch-dot" style="background:#EEEDFE;color:#3C3489">JC</div><div class="ch-info"><div class="ch-name">J Cole Soul Beats</div><div class="ch-niche">Boom Bap · Forest Hills · j cole soul type beat</div></div><div class="ch-stats"><div>Videos <span>11</span></div><div>Views <span>84K</span></div><div>Subs <span>1.4K</span></div><div>Rev <span>$720</span></div></div><span class="badge bg">Active</span></div>
+    <div class="ch-row"><div class="ch-dot" style="background:#EAF3DE;color:#27500A">BB</div><div class="ch-info"><div class="ch-name">Boom Bap Vinyl Beats</div><div class="ch-niche">Boom Bap · Vinyl sample · nas type beat</div></div><div class="ch-stats"><div>Videos <span>9</span></div><div>Views <span>62K</span></div><div>Subs <span>980</span></div><div>Rev <span>$580</span></div></div><span class="badge bg">Active</span></div>
+    <div class="ch-row"><div class="ch-dot" style="background:#FBEAF0;color:#72243E">6L</div><div class="ch-info"><div class="ch-name">6LACK Trap Soul Beats</div><div class="ch-niche">Trap Soul · Dark R&B · 6lack type beat</div></div><div class="ch-stats"><div>Videos <span>8</span></div><div>Views <span>29K</span></div><div>Subs <span>440</span></div><div>Rev <span>$380</span></div></div><span class="badge ba">Growing</span></div>
+    <div class="ch-row"><div class="ch-dot" style="background:#FAEEDA;color:#633806">PG</div><div class="ch-info"><div class="ch-name">Pop Guitar Beats</div><div class="ch-niche">Pop · Guitar-driven · conan gray type beat</div></div><div class="ch-stats"><div>Videos <span>5</span></div><div>Views <span>9K</span></div><div>Subs <span>120</span></div><div>Rev <span>$200</span></div></div><span class="badge bb">New</span></div>
+    <div class="ch-row"><div class="ch-dot" style="background:#EEEDFE;color:#3C3489">SZ</div><div class="ch-info"><div class="ch-name">SZA R&B Beats</div><div class="ch-niche">R&B · SZA · demand spike detected by Director</div></div><div class="ch-stats"><div>Videos <span>0</span></div><div>Views <span>—</span></div><div>Subs <span>—</span></div><div>Rev <span>—</span></div></div><span class="badge bp">Auto-created</span></div>
+  </div>
+</div>
+
+<!-- BEAT QUEUE -->
+<div class="view" id="v-queue">
+  <div class="pg-title">Beat queue</div>
+  <div class="pg-sub">Dispatched by OpenClaw Director from your Excel prompt sheet</div>
+  <div class="card"><div class="card-title">Today</div>
+    <div class="row"><div class="dot dg"></div><div style="flex:1"><strong>Old Drake x Take Care</strong> — "Midnight" · R&B · 82 BPM · F minor · Old Drake R&B Beats</div><span class="badge bg">Uploaded</span></div>
+    <div class="row"><div class="dot dg"></div><div style="flex:1"><strong>J Cole Soul Reflection</strong> · Boom Bap · 88 BPM · G major · J Cole Soul Beats</div><span class="badge bg">Uploaded</span></div>
+    <div class="row"><div class="dot da"></div><div style="flex:1"><strong>6LACK Midnight Tears</strong> · Trap Soul · 140 BPM · C# minor · 6LACK Beats</div><span class="badge ba">In progress</span></div>
+    <div class="row"><div class="dot dx"></div><div style="flex:1"><strong>Nas Vinyl Chronicles</strong> — "Bedford Ave" · Boom Bap · 90 BPM · Boom Bap Vinyl</div><span class="badge bx">Queued</span></div>
+  </div>
+  <div class="card"><div class="card-title">Tomorrow — Director auto-scheduled</div>
+    <div class="row"><div class="dot dp"></div><div style="flex:1"><strong>Old Drake R&B</strong> — "Late Drive" · <em style="color:var(--color-text-tertiary)">auto-replicated from 8.2% CTR</em></div><span class="badge bp">Auto-queued</span></div>
+    <div class="row"><div class="dot dp"></div><div style="flex:1"><strong>Old Drake R&B</strong> — "3AM" · <em style="color:var(--color-text-tertiary)">auto-replicated from 8.2% CTR</em></div><span class="badge bp">Auto-queued</span></div>
+    <div class="row"><div class="dot dx"></div><div style="flex:1"><strong>Kendrick Lamar Soul</strong> — "Compton Skies" · Boom Bap · 92 BPM</div><span class="badge bx">Scheduled</span></div>
+    <div class="row"><div class="dot bb"></div><div style="flex:1"><strong>SZA R&B</strong> — "Garden State" · 78 BPM · E major · <em style="color:var(--color-text-tertiary)">new SZA channel</em></div><span class="badge bb">New channel</span></div>
+  </div>
+</div>
+
+<!-- APPROVALS -->
+<div class="view" id="v-approvals">
+  <div class="pg-title">Approvals</div>
+  <div class="pg-sub">Approval agent — beats awaiting your sign-off before they go live</div>
+  <div class="appr-card pend">
+    <div style="font-size:13px;font-weight:500;margin-bottom:3px">[FREE] Old Drake Type Beat – "Midnight Confessions"</div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Old Drake R&B Beats · 82 BPM · F Minor · 3:24 · Tomorrow 9 AM</div>
+    <div style="font-size:11px;background:var(--color-background-secondary);padding:8px 10px;border-radius:var(--border-radius-md);margin-bottom:10px;line-height:1.6;color:var(--color-text-secondary)">Take Care era R&B · Rhodes piano · soft trap drums · emotional pads · cinematic · 82 BPM</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px"><span class="tt">old drake type beat</span><span class="tt">take care type beat</span><span class="tt">rnb type beat 2026</span><span class="tt">+17 more</span></div>
+    <div style="display:flex;gap:7px">
+      <button style="padding:7px 14px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);border:none;background:#639922;color:#fff;font-family:var(--font-sans)" onclick="this.textContent='Approved!';this.disabled=true">Approve</button>
+      <button style="padding:7px 12px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);font-family:var(--font-sans)">Edit</button>
+      <button style="padding:7px 12px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-danger);font-family:var(--font-sans)" onclick="this.closest('.appr-card').style.opacity='0.3'">Reject</button>
+    </div>
+  </div>
+  <div class="appr-card pend">
+    <div style="font-size:13px;font-weight:500;margin-bottom:3px">[FREE] J Cole Soul Type Beat – "Soul Reflection"</div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">J Cole Soul Beats · 88 BPM · G Major · 3:41 · Tomorrow 11 AM</div>
+    <div style="font-size:11px;background:var(--color-background-secondary);padding:8px 10px;border-radius:var(--border-radius-md);margin-bottom:10px;line-height:1.6;color:var(--color-text-secondary)">Forest Hills Drive era boom bap · soulful vocal samples · dusty drums · warm bass · 88 BPM</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px"><span class="tt">j cole type beat</span><span class="tt">boom bap type beat</span><span class="tt">soul type beat 2026</span><span class="tt">+17 more</span></div>
+    <div style="display:flex;gap:7px">
+      <button style="padding:7px 14px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);border:none;background:#639922;color:#fff;font-family:var(--font-sans)" onclick="this.textContent='Approved!';this.disabled=true">Approve</button>
+      <button style="padding:7px 12px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);font-family:var(--font-sans)">Edit</button>
+      <button style="padding:7px 12px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-danger);font-family:var(--font-sans)" onclick="this.closest('.appr-card').style.opacity='0.3'">Reject</button>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="view" id="v-stack">
+  <div class="pg-title">Tech stack</div>
+  <div class="pg-sub">Full infrastructure to build and run the AI beat factory</div>
+  <div class="card">
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">OpenClaw</div><div style="flex:1;color:var(--color-text-secondary)">Director agent — orchestrates all tasks, session memory, autonomous decisions</div><span class="badge bp">Core</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">Lobster (OpenClaw)</div><div style="flex:1;color:var(--color-text-secondary)">YAML workflow engine inside OpenClaw — deterministic agent order</div><span class="badge bp">Core</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">Claude / GPT-4</div><div style="flex:1;color:var(--color-text-secondary)">AI model powering Director + Prompt agents (model-agnostic via OpenClaw)</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">Suno AI</div><div style="flex:1;color:var(--color-text-secondary)">Beat generation from natural language prompts</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">DALL-E / SD</div><div style="flex:1;color:var(--color-text-secondary)">Thumbnail + cover art generation, niche-matched aesthetic</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">FFmpeg</div><div style="flex:1;color:var(--color-text-secondary)">MP3 + artwork → 1080p MP4 with waveform visualizer</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">YouTube Data API</div><div style="flex:1;color:var(--color-text-secondary)">Upload, metadata, thumbnail, scheduling</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">BeatStars API</div><div style="flex:1;color:var(--color-text-secondary)">Auto-list beats with license tiers and bundle offers</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">AWS S3</div><div style="flex:1;color:var(--color-text-secondary)">Asset storage — MP3, artwork, MP4, metadata JSON</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">Python</div><div style="flex:1;color:var(--color-text-secondary)">Glue scripts connecting all services</div><span class="badge bg">Active</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">Playwright</div><div style="flex:1;color:var(--color-text-secondary)">Browser automation for Suno if no direct API</div><span class="badge ba">Optional</span></div>
+    <div class="row" style="font-size:12px"><div style="min-width:130px;font-weight:500">Google Sheets</div><div style="flex:1;color:var(--color-text-secondary)">Prompt database — one row per beat triggers full pipeline</div><span class="badge bg">Active</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Build order</div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">1</div><div>Install OpenClaw on VPS — configure Gateway process</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">2</div><div>Write SOUL.md — define Director agent rules, niche logic, memory behaviour</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">3</div><div>Build Lobster YAML pipeline — deterministic step order</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">4</div><div>Connect Suno (API or Playwright browser automation)</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">5</div><div>Add DALL-E image agent + FFmpeg video builder scripts</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">6</div><div>Connect YouTube Data API uploader</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">7</div><div>Connect BeatStars listing agent</div></div>
+    <div class="row" style="font-size:12px"><div style="min-width:22px;color:var(--color-text-tertiary);font-weight:500">8</div><div>Run first end-to-end test · add approval dashboard · scale channels</div></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function sw(id,el){document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));document.getElementById('v-'+id).classList.add('on');el.classList.add('on');if(id==='calculator')setTimeout(initChart,100);}
+
+let chartInst=null;
+function initChart(){
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  const ctx=document.getElementById('rev-chart');
+  if(!ctx)return;
+  const base=calcTotal();
+  const data=Array.from({length:12},(_,i)=>Math.round(base*(1+i*0.18)));
+  chartInst=new Chart(ctx,{type:'line',data:{labels:['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],datasets:[{data,borderColor:'#534AB7',backgroundColor:'rgba(83,74,183,0.06)',tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:10},callback:v=>'$'+Math.round(v).toLocaleString()}}}}});
+}
+
+function calcTotal(){
+  const views=+document.getElementById('sl-views').value;
+  const cpm=+document.getElementById('sl-cpm').value;
+  const price=+document.getElementById('sl-price').value;
+  const conv=+document.getElementById('sl-conv').value/100;
+  const bundles=+document.getElementById('sl-bundle').value;
+  const bprice=+document.getElementById('sl-bprice').value;
+  return Math.round((views/1000)*cpm)+Math.round(views*conv*price)+Math.round(bundles*bprice);
+}
+
+function calc(){
+  const views=+document.getElementById('sl-views').value;
+  const cpm=+document.getElementById('sl-cpm').value;
+  const price=+document.getElementById('sl-price').value;
+  const conv=+document.getElementById('sl-conv').value/100;
+  const bundles=+document.getElementById('sl-bundle').value;
+  const bprice=+document.getElementById('sl-bprice').value;
+  const ads=Math.round((views/1000)*cpm);
+  const lic=Math.round(views*conv*price);
+  const bun=Math.round(bundles*bprice);
+  const tot=ads+lic+bun;
+  document.getElementById('out-views').textContent=views>=1000000?(views/1000000).toFixed(1)+'M':Math.round(views/1000)+'K';
+  document.getElementById('out-cpm').textContent='$'+cpm.toFixed(1);
+  document.getElementById('out-price').textContent='$'+price;
+  document.getElementById('out-conv').textContent=conv*100+'%';
+  document.getElementById('out-bundle').textContent=bundles;
+  document.getElementById('out-bprice').textContent='$'+bprice;
+  document.getElementById('r-ads').textContent='$'+ads.toLocaleString();
+  document.getElementById('r-lic').textContent='$'+lic.toLocaleString();
+  document.getElementById('r-bun').textContent='$'+bun.toLocaleString();
+  document.getElementById('r-total').textContent='$'+tot.toLocaleString();
+  const pct=Math.round(lic/(tot||1)*100);
+  document.getElementById('insight-text').textContent='At '+Math.round(views/1000)+'K views/month with '+conv*100+'% conversion, licensing makes up '+pct+'% of total income. '+(bundles>20?'Your bundle volume is strong — this is where the real money compounds.':'Consider ramping up bundle offers — they scale without needing more views.');
+  if(chartInst){const base=tot;chartInst.data.datasets[0].data=Array.from({length:12},(_,i)=>Math.round(base*(1+i*0.18)));chartInst.update('none');}
+}
+
+let rStep=5;
+function simRun(){
+  const steps=document.querySelectorAll('#steps .step');
+  if(rStep>=steps.length){rStep=0;steps.forEach(s=>{s.classList.remove('sd','sr');const b=s.querySelector('.badge');b.className='badge bx';b.textContent='Waiting';});}
+  steps.forEach((s,i)=>{
+    s.classList.remove('sd','sr');
+    const b=s.querySelector('.badge');
+    if(i<rStep){s.classList.add('sd');b.className=i===1?'badge bp':'badge bg';b.textContent=i===1?'Routed':'Done';}
+    else if(i===rStep){s.classList.add('sr');b.className='badge bp';b.textContent='Running';}
+    else{b.className='badge bx';b.textContent=i===9?'Scheduled':i===11?'Awaiting you':'Waiting';}
+  });
+  sw('liverun',document.querySelectorAll('.ni')[5]);
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.ni')[5].classList.add('on');
+  rStep++;
+}
+</script>

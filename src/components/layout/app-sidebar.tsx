@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -22,7 +23,11 @@ import {
   Cpu,
   Flame,
   CreditCard,
-  Play
+  Play,
+  Calculator,
+  CalendarDays,
+  Terminal,
+  Server
 } from "lucide-react";
 
 import {
@@ -50,12 +55,15 @@ const workspaceNav = [
 
 const growthNav = [
   { title: "Growth Agents", icon: Cpu, url: "/growth/lab" },
+  { title: "Director Logic", icon: Terminal, url: "/growth/logic" },
   { title: "Niche Intel", icon: TrendingUp, url: "/strategy" },
+  { title: "Revenue Calc", icon: Calculator, url: "/strategy/calculator" },
   { title: "Analytics", icon: BarChart3, url: "/analytics" },
 ];
 
 const configNav = [
   { title: "API Keys", icon: Target, url: "/settings" },
+  { title: "Tech Stack", icon: Server, url: "/settings/stack" },
   { title: "Billing", icon: CreditCard, url: "/settings" },
 ];
 
