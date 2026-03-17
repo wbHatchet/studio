@@ -6,30 +6,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, 
-  Target, 
-  Video, 
+  Layers, 
+  Radio, 
+  Cpu, 
+  TrendingUp, 
+  Calculator, 
   BarChart3, 
   Settings, 
-  Radio,
-  Layers,
-  Search,
-  CheckCircle2,
-  TrendingUp,
+  CreditCard, 
+  ShieldCheck, 
+  Play, 
+  LogOut,
   Zap,
-  MessageSquare,
-  Mic2,
-  Share2,
-  Network,
-  Cpu,
-  Flame,
-  CreditCard,
-  Play,
-  Calculator,
-  CalendarDays,
-  Terminal,
-  Server,
-  ShieldCheck,
-  LogOut
+  MessageSquare
 } from "lucide-react";
 
 import {
@@ -47,26 +36,22 @@ import {
 import { useAuth } from "@/firebase";
 import { signOut } from "firebase/auth";
 
-const studioNav = [
-  { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
-];
-
-const workspaceNav = [
-  { title: "Job Queue", icon: Layers, url: "/projects", badge: "2" },
-  { title: "Live Pipeline", icon: Zap, url: "/review" },
-  { title: "AI Strategy Chat", icon: MessageSquare, url: "/chat" },
+const commandNav = [
+  { title: "Command Center", icon: LayoutDashboard, url: "/dashboard" },
+  { title: "Content Queue", icon: Layers, url: "/projects", badge: "12" },
+  { title: "Channel Manager", icon: Radio, url: "/channels" },
 ];
 
 const growthNav = [
-  { title: "Growth Agents", icon: Cpu, url: "/growth/lab" },
-  { title: "Director Logic", icon: Terminal, url: "/growth/logic" },
-  { title: "Niche Intel", icon: TrendingUp, url: "/strategy" },
-  { title: "Revenue Calc", icon: Calculator, url: "/strategy/calculator" },
-  { title: "Analytics", icon: BarChart3, url: "/analytics" },
+  { title: "AI Agent Controls", icon: Cpu, url: "/growth/lab" },
+  { title: "Live Analytics", icon: BarChart3, url: "/analytics" },
+  { title: "Revenue Tracker", icon: Calculator, url: "/strategy/calculator" },
+  { title: "Strategy Intel", icon: TrendingUp, url: "/strategy" },
+  { title: "Strategy Chat", icon: MessageSquare, url: "/chat" },
 ];
 
 const configNav = [
-  { title: "API Keys", icon: Target, url: "/settings" },
+  { title: "API Cluster", icon: Settings, url: "/settings" },
   { title: "Billing", icon: CreditCard, url: "/billing" },
   { title: "Admin", icon: ShieldCheck, url: "/admin" },
 ];
@@ -80,14 +65,14 @@ export function AppSidebar() {
       <SidebarHeader className="p-4 border-b border-border/50">
         <div className="flex items-center gap-3 px-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" className="text-background"><path d="M9 2L3 7v9h12V7L9 2z" fill="currentColor" stroke="currentColor" strokeWidth="0.5"/><path d="M6 16v-6h6v6" fill="currentColor" opacity="0.4"/><circle cx="9" cy="7" r="1.5" fill="currentColor"/></svg>
+            <Zap className="w-5 h-5 text-background fill-current" />
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-headline font-bold text-sm leading-tight uppercase tracking-tight">
-              AI Empire
+              AI Command
             </span>
             <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
-              Full automation stack
+              Industrial Grid Controller
             </span>
           </div>
         </div>
@@ -103,19 +88,9 @@ export function AppSidebar() {
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Operations</SidebarGroupLabel>
           <SidebarMenu>
-            {studioNav.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="h-9 rounded-lg">
-                  <Link href={item.url}>
-                    <item.icon className="h-4 w-4" />
-                    <span className="font-medium text-[11px]">{item.title}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-            {workspaceNav.map((item) => (
+            {commandNav.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="h-9 rounded-lg relative">
                   <Link href={item.url}>
@@ -134,7 +109,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Growth</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Growth Cluster</SidebarGroupLabel>
           <SidebarMenu>
             {growthNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -150,7 +125,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Config</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Infrastructure</SidebarGroupLabel>
           <SidebarMenu>
             {configNav.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -170,7 +145,7 @@ export function AppSidebar() {
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-[10px] font-bold text-foreground shrink-0 border border-border/50">U</div>
           <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-            <p className="text-[10px] font-bold text-foreground truncate uppercase">Your Account</p>
+            <p className="text-[10px] font-bold text-foreground truncate uppercase">Grid Admin</p>
             <div className="h-1 w-full bg-border/50 rounded-full mt-1 overflow-hidden">
               <div className="h-full bg-primary w-[68%] rounded-full" />
             </div>

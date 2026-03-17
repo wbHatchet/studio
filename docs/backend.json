@@ -15,51 +15,62 @@
       },
       "required": ["uid", "email"]
     },
-    "VideoIdea": {
-      "title": "VideoIdea",
-      "description": "Concept and niche strategy for a video asset.",
+    "Video": {
+      "title": "Video",
+      "description": "A video asset in the production pipeline.",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
         "title": { "type": "string" },
+        "channelId": { "type": "string" },
         "niche": { "type": "string" },
-        "status": { "type": "string", "enum": ["pending", "approved", "processed"] },
+        "status": { "type": "string", "enum": ["idea", "script", "music", "scene", "video", "thumbnail", "uploaded"] },
         "duration": { "type": "string" },
-        "ctr_prediction": { "type": "number" }
+        "metadata": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "title", "status"]
     },
-    "ChatMessage": {
-      "title": "ChatMessage",
-      "description": "AI Strategy chat messages.",
-      "type": "object",
-      "properties": {
-        "role": { "type": "string", "enum": ["user", "assistant"] },
-        "content": { "type": "string" },
-        "timestamp": { "type": "string", "format": "date-time" }
-      }
-    },
-    "TrendLog": {
-      "title": "TrendLog",
-      "description": "Viral signals mined from social platforms.",
+    "Channel": {
+      "title": "Channel",
+      "description": "A YouTube channel node managed by the system.",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
-        "subject": { "type": "string" },
-        "growth": { "type": "string" },
-        "confidence": { "type": "string" },
-        "platform": { "type": "string" }
+        "name": { "type": "string" },
+        "handle": { "type": "string" },
+        "niche": { "type": "string" },
+        "uploadFrequency": { "type": "string" },
+        "stats": { "type": "object" },
+        "status": { "type": "string", "enum": ["active", "warming", "paused"] }
       }
     },
-    "Asset": {
-      "title": "Asset",
-      "description": "Generic media asset (audio, image, video).",
+    "Analytics": {
+      "title": "Analytics",
+      "description": "Real-time performance data.",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["audio", "image", "video"] },
-        "storagePath": { "type": "string" },
-        "metadata": { "type": "object" }
+        "channelId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "views": { "type": "number" },
+        "ctr": { "type": "number" },
+        "watchTime": { "type": "number" },
+        "revenue": { "type": "number" },
+        "rpm": { "type": "number" }
+      }
+    },
+    "Task": {
+      "title": "Task",
+      "description": "An autonomous agent task in the queue.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string" },
+        "priority": { "type": "number" },
+        "agent": { "type": "string" },
+        "payload": { "type": "object" }
       }
     }
   },
@@ -70,20 +81,20 @@
         "definition": { "entityName": "UserProfile", "schema": { "$ref": "#/backend/entities/UserProfile" }, "description": "User profiles." }
       },
       {
-        "path": "/userProfiles/{userId}/chatHistory/{messageId}",
-        "definition": { "entityName": "ChatMessage", "schema": { "$ref": "#/backend/entities/ChatMessage" }, "description": "AI Strategy history." }
+        "path": "/userProfiles/{userId}/videos/{videoId}",
+        "definition": { "entityName": "Video", "schema": { "$ref": "#/backend/entities/Video" }, "description": "Production pipeline videos." }
       },
       {
-        "path": "/userProfiles/{userId}/videoIdeas/{ideaId}",
-        "definition": { "entityName": "VideoIdea", "schema": { "$ref": "#/backend/entities/VideoIdea" }, "description": "Content ideas queue." }
+        "path": "/userProfiles/{userId}/channels/{channelId}",
+        "definition": { "entityName": "Channel", "schema": { "$ref": "#/backend/entities/Channel" }, "description": "Managed YouTube nodes." }
       },
       {
-        "path": "/userProfiles/{userId}/trendLogs/{logId}",
-        "definition": { "entityName": "TrendLog", "schema": { "$ref": "#/backend/entities/TrendLog" }, "description": "Mined viral signals." }
+        "path": "/userProfiles/{userId}/analytics/{statId}",
+        "definition": { "entityName": "Analytics", "schema": { "$ref": "#/backend/entities/Analytics" }, "description": "Performance metrics." }
       },
       {
-        "path": "/userProfiles/{userId}/assets/{assetId}",
-        "definition": { "entityName": "Asset", "schema": { "$ref": "#/backend/entities/Asset" }, "description": "Production media assets." }
+        "path": "/userProfiles/{userId}/tasks/{taskId}",
+        "definition": { "entityName": "Task", "schema": { "$ref": "#/backend/entities/Task" }, "description": "Agent task queue." }
       }
     ]
   }

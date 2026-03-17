@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,7 +17,13 @@ import {
   Plus,
   ArrowUpRight,
   FileSpreadsheet,
-  Upload
+  Upload,
+  ArrowRight,
+  Brain,
+  Video,
+  ShieldCheck,
+  Globe,
+  Database
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
@@ -27,18 +34,6 @@ export default function DashboardPage() {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [logs, setLogs] = useState([
-    { time: "09:41", node: "INPUT", msg: 'Topic loaded: "ChatGPT secrets"', status: "ok" },
-    { time: "09:41", node: "TREND", msg: "Virality score: 91/100", status: "ok" },
-    { time: "09:42", node: "SCRIPT", msg: "112 words ready", status: "ag" },
-    { time: "09:44", node: "VOICE", msg: "Rachel 47s done", status: "ok" },
-    { time: "09:46", node: "MUSIC", msg: "Upbeat background ready", status: "ag" },
-    { time: "09:48", node: "IMAGE", msg: "1080×1920 generated", status: "ok" },
-    { time: "09:51", node: "VIDEO", msg: "9:16 MP4 composed", status: "ok" },
-    { time: "09:52", node: "QC", msg: "6/6 checks passed", status: "ok" },
-    { time: "09:52", node: "APPROVAL", msg: "Awaiting user review", status: "warn" },
-  ]);
-
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -51,17 +46,8 @@ export default function DashboardPage() {
       const jobs = await processExcelUpload(file);
       toast({
         title: "Bulk Intake Successful",
-        description: `Imported ${jobs.length} topics into the 20-agent pipeline.`,
+        description: `Imported ${jobs.length} topics into the Content Pipeline.`,
       });
-      setLogs(prev => [
-        { 
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
-          node: "EXCEL", 
-          msg: `Bulk intake: ${jobs.length} topics queued`, 
-          status: "ok" 
-        },
-        ...prev
-      ]);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -82,8 +68,8 @@ export default function DashboardPage() {
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
             <div className="flex-1">
-              <h1 className="font-headline font-bold text-xl tracking-tight uppercase text-primary">Dashboard</h1>
-              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Your AI Empire at a glance · 12 growth agents running</p>
+              <h1 className="font-headline font-bold text-xl tracking-tight uppercase text-primary">Command Center</h1>
+              <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest italic">Autonomous Media Empire Controller</p>
             </div>
             <div className="flex items-center gap-2">
               <input 
@@ -99,7 +85,7 @@ export default function DashboardPage() {
                 onClick={() => fileInputRef.current?.click()}
                 className="text-[10px] font-bold uppercase tracking-widest h-9 border-border/50"
               >
-                <FileSpreadsheet className="w-3 h-3 mr-2" /> Batch Import
+                <FileSpreadsheet className="w-3 h-3 mr-2 text-green-500" /> Bulk Intake
               </Button>
               <Button size="sm" className="bg-primary text-primary-foreground font-bold uppercase text-[10px] tracking-widest px-4 h-9 shadow-lg shadow-primary/20">
                 <Plus className="w-3 h-3 mr-2" /> New Project
@@ -108,81 +94,130 @@ export default function DashboardPage() {
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
+            {/* GLOBAL CONTENT PIPELINE */}
+            <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
+              <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
+                <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                  <Workflow className="w-3 h-3" /> Global Content Pipeline
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                  <PipelineStep label="Idea" count={120} active />
+                  <PipelineArrow />
+                  <PipelineStep label="Script" count={42} />
+                  <PipelineArrow />
+                  <PipelineStep label="Music" count={18} />
+                  <PipelineArrow />
+                  <PipelineStep label="Scene" count={12} />
+                  <PipelineArrow />
+                  <PipelineStep label="Video" count={8} />
+                  <PipelineArrow />
+                  <PipelineStep label="Thumbnail" count={5} />
+                  <PipelineArrow />
+                  <PipelineStep label="Uploaded" count={312} success />
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <MetricCard label="Monthly Views" value="720K" trend="+41% this month" trendUp />
-              <MetricCard label="Active Jobs" value="2" trend="Running now" />
-              <MetricCard label="Monthly Revenue" value="$21.6K" trend="+$6.3K vs Nov" trendUp />
-              <MetricCard label="Credits Left" value="6,400" trend="32% remaining" />
+              <MetricCard label="Monthly Network Views" value="84.2M" trend="+41% this month" trendUp />
+              <MetricCard label="Active Production Jobs" value="12" trend="Running now" />
+              <MetricCard label="Industrial AdSense" value="$21.6K" trend="+$6.3K vs Nov" trendUp />
+              <MetricCard label="Empire Credits" value="13,600" trend="68% remaining" />
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
+              {/* LIVE ANALYTICS HUB */}
               <Card className="bg-card border-border/50 overflow-hidden shadow-xl">
-                <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
+                <CardHeader className="bg-primary/5 py-4 border-b border-border/50 flex flex-row items-center justify-between">
                   <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
-                    <Activity className="w-3 h-3" /> Views Growth — 2026
+                    <Activity className="w-3 h-3" /> Live Analytics Dashboard
                   </CardTitle>
+                  <Button variant="ghost" size="sm" className="h-6 text-[8px] uppercase font-black">Full Report</Button>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <PerformanceChart />
+                  <div className="grid grid-cols-3 gap-4 mt-6">
+                    <div className="p-3 rounded-xl bg-secondary/30 border border-border/50 text-center">
+                      <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Avg. CTR</p>
+                      <p className="text-sm font-bold text-primary">12.4%</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-secondary/30 border border-border/50 text-center">
+                      <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Watch Time</p>
+                      <p className="text-sm font-bold text-blue-400">842K hr</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-secondary/30 border border-border/50 text-center">
+                      <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Network RPM</p>
+                      <p className="text-sm font-bold text-green-500">$5.40</p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
+              {/* CHANNEL CONTROL PANEL */}
               <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
                 <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
-                  <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest">Recent Jobs</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4 px-0">
-                  <div className="divide-y divide-border/50">
-                    <JobRow title="AI tools Short — 'ChatGPT secrets'" subtitle="Shorts · AI tools" status="Approval" statusType="warn" />
-                    <JobRow title="Halloween Lofi · 2hr" subtitle="Lofi · Halloween" status="Done" statusType="success" />
-                    <JobRow title="Finance facts #14" subtitle="Shorts · Finance" status="Running" statusType="active" pulse />
-                    <JobRow title="Billionaire habits #7" subtitle="Shorts · Luxury" status="Pending" statusType="muted" />
-                  </div>
-                  <div className="p-4 pt-2">
-                    <Button variant="outline" className="w-full text-[10px] uppercase font-bold h-9 border-border/50">+ New Project</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-3">
-              <Card className="lg:col-span-2 bg-card border-border/50 shadow-xl">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Growth Agents — All Active</CardTitle>
-                  <Button variant="ghost" size="sm" className="h-7 text-[9px] uppercase font-bold">Manage</Button>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                  <AgentMiniCard emoji="📈" title="Trend prediction" sub="Every 2h" status="On" />
-                  <AgentMiniCard emoji="🪝" title="Hook optimizer" sub="Per video" status="On" />
-                  <AgentMiniCard emoji="💰" title="Revenue agent" sub="Daily" status="On" />
-                </CardContent>
-              </Card>
-
-              <Card className="bg-card border-border/50 shadow-xl flex flex-col">
-                <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
-                  <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
-                    <Terminal className="w-3 h-3" /> Agent Logic Stream
+                  <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest flex items-center gap-2">
+                    <Radio className="w-3 h-3" /> Channel Control Panel
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 overflow-y-auto space-y-1 p-4 max-h-[250px] custom-scrollbar bg-black/20 font-mono text-[10px]">
-                  {logs.map((log, idx) => (
-                    <div key={idx} className="flex gap-2 group border-b border-border/20 py-1 last:border-0">
-                      <span className="text-muted-foreground shrink-0">[{log.time}]</span>
-                      <span className={cn(
-                        "font-bold shrink-0 w-16",
-                        log.status === 'ok' ? "text-green-500" : log.status === 'ag' ? "text-blue-400" : "text-amber-500"
-                      )}>{log.node}:</span>
-                      <span className="text-muted-foreground truncate">{log.msg}</span>
-                    </div>
-                  ))}
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border/50">
+                    <ChannelRow name="Harbor Moon Radio" niche="LoFi Study" freq="1 video/day" status="Active" views="12.4M" />
+                    <ChannelRow name="Midnight Coding" niche="Industrial Beats" freq="3 videos/week" status="Warming" views="2.1M" />
+                    <ChannelRow name="Deep Harbor Sleep" niche="LoFi Ambient" freq="1 video/day" status="Active" views="8.5M" />
+                  </div>
+                  <div className="p-4 bg-secondary/10 flex gap-2">
+                    <Button variant="outline" className="flex-1 text-[9px] uppercase font-bold h-8 border-border/50">+ Add Channel</Button>
+                    <Button variant="outline" className="flex-1 text-[9px] uppercase font-bold h-8 border-border/50"><Globe className="w-3 h-3 mr-2" /> Clone Node</Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
+
+            {/* AI AGENT CONTROL CENTER */}
+            <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
+              <CardHeader className="bg-primary/5 py-4 border-b border-border/50 flex flex-row items-center justify-between">
+                <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                  <Brain className="w-3 h-3" /> AI Agent Control Center
+                </CardTitle>
+                <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase font-bold">12 Agents Online</Badge>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <AgentControl emoji="📈" title="Trend Hunter" desc="Google Trends + VidIQ" active />
+                  <AgentControl emoji="🖼️" title="Thumbnail AI" desc="A/B Testing (Canva)" active />
+                  <AgentControl emoji="🚀" title="Shorts Traffic" desc="Cross-platform Distro" active />
+                  <AgentControl emoji="💰" title="Revenue Agent" desc="AdSense Optimization" active />
+                </div>
+              </CardContent>
+            </Card>
           </main>
         </SidebarInset>
       </div>
     </SidebarProvider>
   );
+}
+
+function PipelineStep({ label, count, active, success }: any) {
+  return (
+    <div className={cn(
+      "flex flex-col items-center gap-1 min-w-[80px] p-2 rounded-xl transition-all",
+      active && "bg-primary/10 border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.1)]",
+      success && "bg-green-500/5 border border-green-500/10"
+    )}>
+      <span className={cn(
+        "text-[10px] font-black uppercase tracking-widest",
+        active ? "text-primary" : success ? "text-green-500" : "text-muted-foreground"
+      )}>{label}</span>
+      <span className="text-xs font-mono font-bold">{count}</span>
+    </div>
+  );
+}
+
+function PipelineArrow() {
+  return <ArrowRight className="w-3 h-3 text-muted-foreground/30 shrink-0" />;
 }
 
 function MetricCard({ label, value, trend, trendUp }: any) {
@@ -202,44 +237,37 @@ function MetricCard({ label, value, trend, trendUp }: any) {
   );
 }
 
-function JobRow({ title, subtitle, status, statusType, pulse }: any) {
-  const statusColors: any = {
-    warn: "bg-amber-500/10 text-amber-500",
-    success: "bg-green-500/10 text-green-500",
-    active: "bg-blue-500/10 text-blue-400",
-    muted: "bg-secondary text-muted-foreground"
-  };
-  
-  const dotColors: any = {
-    warn: "bg-amber-500",
-    success: "bg-green-500",
-    active: "bg-primary",
-    muted: "bg-muted-foreground"
-  };
-
+function ChannelRow({ name, niche, freq, status, views }: any) {
   return (
-    <div className="flex items-center gap-3 p-3 hover:bg-secondary/20 transition-colors group">
-      <div className={cn("w-1.5 h-1.5 rounded-full shrink-0", dotColors[statusType], pulse && "animate-pulse")} />
+    <div className="flex items-center gap-4 p-4 hover:bg-secondary/20 transition-colors group">
+      <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center font-headline font-bold text-primary border border-border/50">{name[0]}</div>
       <div className="flex-1 min-w-0">
-        <p className="text-[11px] font-bold text-foreground truncate group-hover:text-primary transition-colors">{title}</p>
-        <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter">{subtitle}</p>
+        <p className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">{name}</p>
+        <p className="text-[9px] text-muted-foreground font-medium uppercase">{niche} • {freq}</p>
       </div>
-      <Badge variant="outline" className={cn("text-[8px] h-5 uppercase font-bold border-0", statusColors[statusType], pulse && "animate-pulse")}>
-        {status}
-      </Badge>
+      <div className="text-right shrink-0">
+        <p className="text-xs font-mono font-bold">{views}</p>
+        <Badge variant="outline" className={cn(
+          "text-[8px] h-4 uppercase font-black border-0 p-0",
+          status === 'Active' ? "text-green-500" : "text-blue-400"
+        )}>{status}</Badge>
+      </div>
     </div>
   );
 }
 
-function AgentMiniCard({ emoji, title, sub, status }: any) {
+function AgentControl({ emoji, title, desc, active }: any) {
   return (
-    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30 border border-border/50">
-      <span className="text-xl shrink-0">{emoji}</span>
+    <div className={cn(
+      "p-4 rounded-2xl border transition-all flex items-center gap-3",
+      active ? "bg-secondary/30 border-primary/20" : "bg-secondary/10 border-border/50 opacity-50"
+    )}>
+      <span className="text-2xl">{emoji}</span>
       <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold text-foreground truncate">{title}</p>
-        <p className="text-[9px] text-muted-foreground font-medium">{sub}</p>
+        <p className="text-[10px] font-bold text-foreground uppercase tracking-tight">{title}</p>
+        <p className="text-[9px] text-muted-foreground leading-none">{desc}</p>
       </div>
-      <Badge className="bg-green-500/20 text-green-500 text-[8px] h-4 uppercase">{status}</Badge>
+      <div className={cn("w-2 h-2 rounded-full", active ? "bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),0.5)]" : "bg-muted")} />
     </div>
   );
 }
