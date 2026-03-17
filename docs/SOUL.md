@@ -32,12 +32,12 @@ The Director follows these logic gates when processing jobs in the `jobs/` colle
 ## 3. Memory & Context Logic
 The Director manages state across the following Firestore collections:
 
-| Memory Layer | Collection | Purpose |
+| Memory Layer | Collection | Description |
 | :--- | :--- | :--- |
-| **Short-Term** | `jobs/` | Stores the exact logs and current step of a running project. |
-| **Long-Term** | `channels/` | Tracks historical performance (subs, views) to inform the **Revenue Maximizer** agent. |
-| **Global Intel** | `trendSignals/` | Shared memory of what is currently viral across the entire platform. |
-| **Correction Ledger** | `agentRuns/` | Records failures or "Simulated" runs to prevent repeating logic errors. |
+| **Active Memory** | `jobs/` | Real-time status of the 20-agent pipeline. |
+| **Institutional Memory** | `channels/` | Historical performance data used to calculate the "Viral Formula". |
+| **External Intel** | `trendSignals/` | Live "heat map" of viral topics across YouTube, TikTok, and Reddit. |
+| **Correction Ledger** | `agentRuns/` | A log of every agent's "Hallucination" or "Error" to avoid repeating mistakes. |
 
 ---
 

@@ -62,7 +62,7 @@
     },
     "Task": {
       "title": "Task",
-      "description": "An autonomous agent task in the queue.",
+      "description": "An autonomous agent task in the queue (Active Memory).",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
@@ -71,6 +71,31 @@
         "priority": { "type": "number" },
         "agent": { "type": "string" },
         "payload": { "type": "object" }
+      }
+    },
+    "TrendSignal": {
+      "title": "TrendSignal",
+      "description": "Live heat map data from social platforms (External Intel).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "source": { "type": "string" },
+        "topic": { "type": "string" },
+        "velocity": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "AgentRun": {
+      "title": "AgentRun",
+      "description": "Logs of agent executions including errors/hallucinations (Correction Ledger).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "agentId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "success": { "type": "boolean" },
+        "error": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
       }
     }
   },
@@ -86,7 +111,7 @@
       },
       {
         "path": "/userProfiles/{userId}/channels/{channelId}",
-        "definition": { "entityName": "Channel", "schema": { "$ref": "#/backend/entities/Channel" }, "description": "Managed YouTube nodes." }
+        "definition": { "entityName": "Channel", "schema": { "$ref": "#/backend/entities/Channel" }, "description": "Managed YouTube nodes (Institutional Memory)." }
       },
       {
         "path": "/userProfiles/{userId}/analytics/{statId}",
@@ -94,7 +119,15 @@
       },
       {
         "path": "/userProfiles/{userId}/tasks/{taskId}",
-        "definition": { "entityName": "Task", "schema": { "$ref": "#/backend/entities/Task" }, "description": "Agent task queue." }
+        "definition": { "entityName": "Task", "schema": { "$ref": "#/backend/entities/Task" }, "description": "Agent task queue (Active Memory)." }
+      },
+      {
+        "path": "/userProfiles/{userId}/trendSignals/{signalId}",
+        "definition": { "entityName": "TrendSignal", "schema": { "$ref": "#/backend/entities/TrendSignal" }, "description": "Live heat map data (External Intel)." }
+      },
+      {
+        "path": "/userProfiles/{userId}/agentRuns/{runId}",
+        "definition": { "entityName": "AgentRun", "schema": { "$ref": "#/backend/entities/AgentRun" }, "description": "Log of agent attempts (Correction Ledger)." }
       }
     ]
   }

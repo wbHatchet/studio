@@ -4,7 +4,7 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info } from "lucide-react";
+import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function DirectorLogicPage() {
@@ -24,7 +24,7 @@ export default function DirectorLogicPage() {
 
           <main className="p-6 md:p-8 space-y-8 max-w-6xl mx-auto w-full">
             {/* Core Personality */}
-            <div className="bg-primary/5 border border-primary/20 p-6 rounded-3xl space-y-4">
+            <div className="bg-primary/5 border border-primary/20 p-6 rounded-3xl space-y-4 shadow-[0_0_30px_rgba(var(--primary),0.05)]">
               <div className="flex items-center gap-3">
                 <BrainCircuit className="w-8 h-8 text-primary" />
                 <div>
@@ -33,8 +33,8 @@ export default function DirectorLogicPage() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed max-w-4xl">
-                The Director Agent is data-driven and decisive. Its primary directive is to **never stall**. If an upstream agent fails, 
-                the Director must pivot to alternative models or simulated states to ensure the 17-step pipeline completes.
+                The Director Agent is data-driven, decisive, and focused on virality. Its primary directive is to **never stall**. If an agent fails (e.g., Suno or DALL-E timeout), 
+                the Director must attempt an alternative model or move to a "simulation" state rather than breaking the pipeline.
               </p>
             </div>
 
@@ -59,17 +59,17 @@ export default function DirectorLogicPage() {
               />
               <LogicCard 
                 title="Autonomous Cadence" 
-                logic={`for channel in grid:\n  if uploads_today < target:\n    director.dispatch(channel, next_topic)\n# Triggered: Maintaining 3 videos/day.`}
+                logic={`for channel in grid:\n  if uploads_today < target:\n    director.dispatch(channel, next_topic)\n# Triggered: Maintaining relentless upload frequency.`}
                 icon={Zap}
-                desc="Maintains relentless upload frequency across the 20-channel grid."
+                desc="Maintains 3 videos/day across the 20-channel grid automatically."
               />
             </div>
 
             {/* Memory Architecture */}
-            <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
+            <Card className="bg-card border-border/50 shadow-xl overflow-hidden rounded-3xl">
               <CardHeader className="bg-primary/5 border-b border-border/50 py-4">
                 <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
-                  <Cpu className="w-4 h-4" /> Memory & Context Architecture
+                  <Database className="w-4 h-4" /> Memory & Context Architecture
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
@@ -77,30 +77,50 @@ export default function DirectorLogicPage() {
                   <TableHeader className="bg-secondary/10">
                     <TableRow className="border-border/50">
                       <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">Memory Layer</TableHead>
-                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10">Collection</TableHead>
-                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">Purpose</TableHead>
+                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10">Storage</TableHead>
+                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">Description</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow className="border-border/50">
-                      <TableCell className="px-6 py-4 font-bold text-xs">Short-Term</TableCell>
+                    <TableRow className="border-border/50 hover:bg-secondary/5 transition-colors">
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <Activity className="w-3 h-3 text-blue-400" />
+                          <span className="font-bold text-xs">Active Memory</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-mono text-[10px] text-primary">jobs/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground">Stores exact logs and current step of a running project.</TableCell>
+                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">Real-time status of the 20-agent pipeline.</TableCell>
                     </TableRow>
-                    <TableRow className="border-border/50">
-                      <TableCell className="px-6 py-4 font-bold text-xs">Long-Term</TableCell>
+                    <TableRow className="border-border/50 hover:bg-secondary/5 transition-colors">
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <History className="w-3 h-3 text-purple-400" />
+                          <span className="font-bold text-xs">Institutional Memory</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-mono text-[10px] text-primary">channels/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground">Tracks historical performance to inform revenue agents.</TableCell>
+                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">Historical performance data used to calculate the "Viral Formula".</TableCell>
                     </TableRow>
-                    <TableRow className="border-border/50">
-                      <TableCell className="px-6 py-4 font-bold text-xs">Global Intel</TableCell>
+                    <TableRow className="border-border/50 hover:bg-secondary/5 transition-colors">
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <Globe className="w-3 h-3 text-green-400" />
+                          <span className="font-bold text-xs">External Intel</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-mono text-[10px] text-primary">trendSignals/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground">Shared memory of viral signals across the platform.</TableCell>
+                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">Live "heat map" of viral topics across YouTube, TikTok, and Reddit.</TableCell>
                     </TableRow>
-                    <TableRow className="border-none">
-                      <TableCell className="px-6 py-4 font-bold text-xs">Correction Ledger</TableCell>
+                    <TableRow className="border-none hover:bg-secondary/5 transition-colors">
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="w-3 h-3 text-orange-400" />
+                          <span className="font-bold text-xs">Correction Ledger</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-mono text-[10px] text-primary">agentRuns/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground">Records failures to prevent repeating logic errors.</TableCell>
+                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">A log of every agent's "Hallucination" or "Error" to avoid repeating mistakes.</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -130,7 +150,7 @@ export default function DirectorLogicPage() {
 
 function LogicCard({ title, logic, icon: Icon, desc }: any) {
   return (
-    <Card className="bg-card border-border/50 shadow-lg overflow-hidden flex flex-col">
+    <Card className="bg-card border-border/50 shadow-lg overflow-hidden flex flex-col rounded-2xl">
       <CardHeader className="pb-3 border-b border-border/50 bg-secondary/10">
         <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-2">
           <Icon className="w-3 h-3 text-primary" /> {title}
@@ -150,10 +170,10 @@ function LogicCard({ title, logic, icon: Icon, desc }: any) {
 
 function PipelinePhase({ num, label, desc }: any) {
   return (
-    <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-2">
+    <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-2 group hover:border-primary/30 transition-all">
       <div className="flex justify-between items-center">
         <span className="text-[9px] font-mono font-bold text-primary">{num}</span>
-        <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+        <div className="w-1.5 h-1.5 rounded-full bg-primary/20 group-hover:bg-primary group-hover:shadow-[0_0_10px_rgba(var(--primary),0.5)] transition-all" />
       </div>
       <p className="text-[10px] font-bold uppercase tracking-tight">{label}</p>
       <p className="text-[9px] text-muted-foreground leading-relaxed">{desc}</p>
