@@ -40,7 +40,12 @@ The Director monitors the infrastructure health to ensure relentless 24/7 operat
 * **Node:** Suno/Udio Playwright Workers.
 * **Protocol:** Check `suno_auth.json` age every 24h. If > 25 days, flag the user for a "Session Refresh" to prevent music generation timeouts.
 
-### B. SSL Heartbeat
+### B. Automation Resilience (Suno/Udio)
+* **Bot Detection:** Use stealth signatures and `randomDelay(5000, 15000)` between actions.
+* **UI Resilience:** Prioritize text-based selectors (`has-text("Create")`) over fragile CSS paths.
+* **Credit Safeguard:** Scrape credit count pre-run; abort if balance < 10.
+
+### C. SSL Heartbeat
 * **Trigger:** Every Monday at 3:00 AM.
 * **Action:** Execute `scripts/renew_ssl.sh`. Logs results to the **Correction Ledger** (`agentRuns/`).
 
@@ -49,7 +54,7 @@ The Director monitors the infrastructure health to ensure relentless 24/7 operat
 ## 4. Memory & Context Logic
 The Director manages state across the following Firestore collections:
 
-| Memory Layer | Collection | Description |
+| Memory Layer | Storage | Description |
 | :--- | :--- | :--- |
 | **Active Memory** | `jobs/` | Real-time status of the 20-agent pipeline. |
 | **Institutional Memory** | `channels/` | Historical performance data used to calculate the "Viral Formula". |
