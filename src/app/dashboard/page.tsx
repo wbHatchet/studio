@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,20 +13,19 @@ import {
   Zap,
   Terminal,
   Activity,
-  Flame,
-  Star,
-  DollarSign,
   Plus,
-  Play,
   ArrowUpRight,
-  Target
+  FileSpreadsheet,
+  Upload
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
+import { processExcelUpload } from "@/lib/excel-parser";
 
 export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [logs, setLogs] = useState([
     { time: "09:41", node: "INPUT", msg: 'Topic loaded: "ChatGPT secrets"', status: "ok" },
@@ -42,27 +41,35 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setIsMounted(true);
-    const interval = setInterval(() => {
-      const nodes = ["KEYWORD", "SHORTS", "BOT", "MONEY", "SCALING", "QC"];
-      const messages = [
-        "Scanning VidIQ for gaps...",
-        "Syncing to TikTok...",
-        "Replying to fans...",
-        "Optimizing Affiliate links...",
-        "Cloning Asset Node #4...",
-        "Retention check complete"
-      ];
-      const randomIdx = Math.floor(Math.random() * nodes.length);
-      const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-      
-      setLogs(prev => [
-        { time: timeStr, node: nodes[randomIdx], msg: messages[randomIdx], status: Math.random() > 0.8 ? "ag" : "ok" },
-        ...prev.slice(0, 10)
-      ]);
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
+
+  const handleExcelImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const jobs = await processExcelUpload(file);
+      toast({
+        title: "Bulk Intake Successful",
+        description: `Imported ${jobs.length} topics into the 20-agent pipeline.`,
+      });
+      setLogs(prev => [
+        { 
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+          node: "EXCEL", 
+          msg: `Bulk intake: ${jobs.length} topics queued`, 
+          status: "ok" 
+        },
+        ...prev
+      ]);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Import Failed",
+        description: error.message,
+      });
+    }
+  };
 
   if (!isMounted) return null;
 
@@ -78,9 +85,26 @@ export default function DashboardPage() {
               <h1 className="font-headline font-bold text-xl tracking-tight uppercase text-primary">Dashboard</h1>
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Your AI Empire at a glance · 12 growth agents running</p>
             </div>
-            <Button size="sm" className="bg-primary text-primary-foreground font-bold uppercase text-[10px] tracking-widest px-4 h-9 shadow-lg shadow-primary/20">
-              <Plus className="w-3 h-3 mr-2" /> New Project
-            </Button>
+            <div className="flex items-center gap-2">
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleExcelImport} 
+                accept=".xlsx,.xls,.csv" 
+                className="hidden" 
+              />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => fileInputRef.current?.click()}
+                className="text-[10px] font-bold uppercase tracking-widest h-9 border-border/50"
+              >
+                <FileSpreadsheet className="w-3 h-3 mr-2" /> Batch Import
+              </Button>
+              <Button size="sm" className="bg-primary text-primary-foreground font-bold uppercase text-[10px] tracking-widest px-4 h-9 shadow-lg shadow-primary/20">
+                <Plus className="w-3 h-3 mr-2" /> New Project
+              </Button>
+            </div>
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
@@ -124,9 +148,7 @@ export default function DashboardPage() {
             <div className="grid gap-6 lg:grid-cols-3">
               <Card className="lg:col-span-2 bg-card border-border/50 shadow-xl">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <div>
-                    <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Growth Agents — All Active</CardTitle>
-                  </div>
+                  <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Growth Agents — All Active</CardTitle>
                   <Button variant="ghost" size="sm" className="h-7 text-[9px] uppercase font-bold">Manage</Button>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
@@ -155,16 +177,6 @@ export default function DashboardPage() {
                   ))}
                 </CardContent>
               </Card>
-            </div>
-
-            <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold text-amber-500 uppercase tracking-tight italic">"ChatGPT secrets" is ready for review</p>
-                <p className="text-[10px] text-muted-foreground">All 20 agents complete. Approve to publish to YouTube.</p>
-              </div>
-              <Button size="sm" className="bg-amber-500 text-white font-bold uppercase text-[9px] h-8 px-4 hover:bg-amber-600 transition-colors">
-                Review Now
-              </Button>
             </div>
           </main>
         </SidebarInset>
