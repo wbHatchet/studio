@@ -8,6 +8,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { executeSunoGeneration } from '@/services/suno-automation';
 
 // Input Schema
 const GenerateMusicPromptInputSchema = z.object({
@@ -35,6 +36,7 @@ const GenerateMusicPromptInputSchema = z.object({
     .optional()
     .describe('Any other specific instructions.'),
   apiEndpoint: z.string().optional().describe('Automation endpoint URL.'),
+  autoTrigger: z.boolean().default(true).describe('Whether to trigger Playwright automation.'),
 });
 export type GenerateMusicPromptInput = z.infer<typeof GenerateMusicPromptInputSchema>;
 
@@ -48,6 +50,7 @@ const GenerateMusicPromptOutputSchema = z.object({
     .describe('A human-readable summary.'),
   generationId: z.string().optional().describe('The automation task ID.'),
   status: z.string().optional().describe('The status of the task.'),
+  automationMessage: z.string().optional().describe('Log from the Playwright agent.'),
 });
 export type GenerateMusicPromptOutput = z.infer<typeof GenerateMusicPromptOutputSchema>;
 
@@ -61,7 +64,7 @@ const musicPromptGenerator = ai.definePrompt({
   name: 'musicPromptGenerator',
   input: {schema: GenerateMusicPromptInputSchema},
   output: {schema: GenerateMusicPromptOutputSchema},
-  prompt: `You are an expert music producer specializing in high-quality instrumental Lo-Fi tracks. 
+  prompt: `You are an expert music producer specializing in high-quality instrumental tracks. 
 
 {{#if referenceUrl}}
 Inspired by this reference: {{{referenceUrl}}}
@@ -90,29 +93,26 @@ const generateMusicPromptFlow = ai.defineFlow(
       throw new Error('Failed to generate music prompt output.');
     }
 
-    // Logic for autonomous generation trigger
-    if (input.apiEndpoint) {
+    // Industrial Automation Logic (Playwright)
+    if (input.autoTrigger) {
       try {
-        const res = await fetch(`${input.apiEndpoint}/api/generate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: output.musicGeneratorPrompt,
-            make_instrumental: true,
-            wait_audio: false
-          })
+        const automationResult = await executeSunoGeneration({
+          prompt: output.musicGeneratorPrompt,
+          makeInstrumental: true
         });
         
-        if (res.ok) {
-          const data = await res.json();
-          return { 
-            ...output, 
-            generationId: data.id || "triggered",
-            status: "Success"
-          };
-        }
-      } catch (e) {
-        console.error('Automation endpoint failed', e);
+        return {
+          ...output,
+          status: automationResult.status,
+          automationMessage: automationResult.message
+        };
+      } catch (e: any) {
+        console.error('Suno Automation Failed:', e.message);
+        return {
+          ...output,
+          status: 'ERROR',
+          automationMessage: `Automation failed: ${e.message}`
+        };
       }
     }
 
