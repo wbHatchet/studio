@@ -1,0 +1,580 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:12px;background:transparent}
+.app{display:grid;grid-template-columns:192px 1fr;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;min-height:700px}
+.sb{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.sb-top{padding:13px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:9px}
+.brand{width:28px;height:28px;border-radius:8px;background:#b5f23a;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-n{font-size:13px;font-weight:500}
+.brand-s{font-size:9px;color:var(--color-text-tertiary);margin-top:1px}
+.nav{padding:8px;flex:1}
+.ns{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.7px;color:var(--color-text-tertiary);padding:8px 8px 4px}
+.ni{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:var(--border-radius-md);font-size:11px;color:var(--color-text-secondary);cursor:pointer;margin-bottom:1px;transition:background 0.1s}
+.ni:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.ni.on{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
+.ni svg{width:13px;height:13px;flex-shrink:0;opacity:0.6}
+.ni.on svg{opacity:1}
+.nb{margin-left:auto;min-width:15px;height:15px;padding:0 3px;background:#f87171;color:#fff;border-radius:99px;font-size:9px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.run-btn{margin:0 8px 10px;padding:8px;border-radius:var(--border-radius-md);background:#b5f23a;color:#0a0a0f;border:none;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:500;width:calc(100% - 16px);display:flex;align-items:center;justify-content:center;gap:5px}
+.run-btn:hover{background:#8ec428}
+.sb-foot{padding:11px 14px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:7px}
+.av{width:26px;height:26px;border-radius:50%;background:var(--color-background-tertiary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.cr-bar{margin-top:3px;height:3px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden;width:100%}
+.cr-fill{height:100%;background:#b5f23a;border-radius:2px}
+.main{background:var(--color-background-primary);overflow-y:auto;max-height:700px}
+.view{display:none;padding:18px 22px}
+.view.on{display:block}
+.pt{font-size:16px;font-weight:500;margin-bottom:3px}
+.ps{font-size:11px;color:var(--color-text-secondary);margin-bottom:16px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px;margin-bottom:10px}
+.ct{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);margin-bottom:9px}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:500}
+.bv{background:#EAF3DE;color:#27500A}.bw{background:#FAEEDA;color:#633806}.bb{background:#E6F1FB;color:#0C447C}.bp{background:#EEEDFE;color:#3C3489}.bt{background:#E1F5EE;color:#085041}.br{background:#FCEBEB;color:#791F1F}.bx{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+.row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px}
+.row:last-child{border-bottom:none}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dg{background:#22c55e}.da{background:#f59e0b}.dr{background:#ef4444}.dx{background:var(--color-border-secondary)}.dv{background:#b5f23a}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px}
+.ml{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.mv{font-size:20px;font-weight:500}
+.md{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
+.md.up{color:#3B6D11}
+.step-el{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:4px}
+.step-el.done{border-color:#97C459;background:#EAF3DE08}
+.step-el.run{border-color:#b5f23a;background:#EAF3DE05}
+.snum{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary)}
+.step-el.done .snum{background:#22c55e;color:#fff;border-color:#22c55e}
+.step-el.run .snum{background:#b5f23a;color:#0a0a0f;border-color:#b5f23a}
+.sbody{flex:1}.sn{font-size:11px;font-weight:500}.sd{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.prog{height:3px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden;margin-top:4px}
+.pf{height:100%;background:#b5f23a;border-radius:2px}
+.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:11px;height:11px;border:1.5px solid rgba(181,242,58,0.2);border-top-color:#b5f23a;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:12px}
+.pbar{height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
+.pbf{height:100%;background:#b5f23a;border-radius:2px;transition:width 0.4s}
+.nc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:11px;cursor:pointer;transition:border-color 0.15s}
+.nc:hover{border-color:var(--color-border-secondary)}
+.nc.on{border:1.5px solid #b5f23a;background:#EAF3DE08}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 13px;border-radius:var(--border-radius-md);font-family:var(--font-sans);font-size:11px;font-weight:500;cursor:pointer;transition:all 0.12s;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-v{background:#b5f23a;color:#0a0a0f;border-color:#b5f23a}
+.btn-v:hover{background:#8ec428}
+.btn-g{background:transparent;color:var(--color-text-secondary);border:0.5px solid transparent}
+.btn-g:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.inp{width:100%;padding:8px 11px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);color:var(--color-text-primary);font-family:var(--font-sans);font-size:11px;outline:none}
+.inp:focus{border-color:#b5f23a}
+select.inp{cursor:pointer}
+.toggle{position:relative;display:inline-block;width:32px;height:18px}
+.toggle input{opacity:0;width:0;height:0}
+.tsl{position:absolute;cursor:pointer;inset:0;background:var(--color-border-tertiary);border-radius:18px;transition:0.2s}
+.tsl::before{content:'';position:absolute;height:12px;width:12px;left:3px;bottom:3px;background:var(--color-text-secondary);border-radius:50%;transition:0.2s}
+input:checked + .tsl{background:#8ec428}
+input:checked + .tsl::before{transform:translateX(14px);background:#fff}
+.agent-c{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px;margin-bottom:7px}
+.agent-c.on{border-color:rgba(181,242,58,0.3)}
+.chat-msg{display:flex;gap:8px;margin-bottom:12px;max-width:580px}
+.chat-msg.user{flex-direction:row-reverse;margin-left:auto}
+.chat-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.chat-bubble{padding:9px 12px;border-radius:var(--border-radius-lg);font-size:11px;line-height:1.6;max-width:420px}
+.ai-bubble{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary)}
+.user-bubble{background:#EAF3DE;border:0.5px solid #97C459}
+.logline{font-family:var(--font-mono);font-size:10px;padding:2px 0;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-tertiary)}
+.logline.ok{color:#3B6D11}.logline.err{color:#A32D2D}.logline.ag{color:#3C3489}
+</style>
+
+<div class="app">
+<div class="sb">
+  <div class="sb-top">
+    <div class="brand">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 7v9h12V7L9 2z" fill="#0a0a0f" stroke="#0a0a0f" stroke-width="0.5"/><path d="M6 16v-6h6v6" fill="#0a0a0f" opacity="0.4"/><circle cx="9" cy="7" r="1.5" fill="#0a0a0f"/></svg>
+    </div>
+    <div>
+      <div class="brand-n">AI Empire</div>
+      <div class="brand-s">Full automation stack</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="run-btn" onclick="sw('create')">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,1 13,8 3,15"/></svg>
+      New project
+    </button>
+    <div class="ns">Workspace</div>
+    <div class="ni on" id="ni-dash" onclick="sw('dash')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</div>
+    <div class="ni" id="ni-create" onclick="sw('create')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="3,1 13,8 3,15"/></svg>Create</div>
+    <div class="ni" id="ni-jobs" onclick="sw('jobs')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h9M2 12h6"/></svg>Job queue<span class="nb">2</span></div>
+    <div class="ni" id="ni-pipeline" onclick="sw('pipeline')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8h6M8 5v6"/></svg>Live pipeline</div>
+    <div class="ni" id="ni-chat" onclick="sw('chat')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12v8H9l-3 3v-3H2z"/></svg>AI chat</div>
+    <div class="ns" style="margin-top:4px">Growth</div>
+    <div class="ni" id="ni-agents" onclick="sw('agents')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="4" r="2.5"/><path d="M1 14c0-2.8 2.2-5 5-5s5 2.2 5 5"/><circle cx="12" cy="6" r="2"/><path d="M12 10c1.7 0 3 1.3 3 3"/></svg>Growth agents</div>
+    <div class="ni" id="ni-niches" onclick="sw('niches')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12l4-4 3 3 5-7"/></svg>Niche intel</div>
+    <div class="ni" id="ni-analytics" onclick="sw('analytics')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="8" width="3" height="6"/><rect x="6.5" y="5" width="3" height="9"/><rect x="11" y="2" width="3" height="12"/></svg>Analytics</div>
+    <div class="ns" style="margin-top:4px">Config</div>
+    <div class="ni" id="ni-apikeys" onclick="sw('apikeys')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="10" r="3.5"/><path d="M8.5 7.5l6-6M12 2l2 2M10 4l2 2"/></svg>API keys</div>
+    <div class="ni" id="ni-billing" onclick="sw('billing')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="10" rx="1.5"/><path d="M1 7h14"/></svg>Billing</div>
+  </div>
+  <div class="sb-foot">
+    <div class="av">U</div>
+    <div style="flex:1;overflow:hidden">
+      <div style="font-size:11px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Your account</div>
+      <div class="cr-bar"><div class="cr-fill" style="width:68%"></div></div>
+      <div style="font-size:9px;color:var(--color-text-tertiary);margin-top:2px">13,600 / 20,000 credits</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div class="view on" id="v-dash">
+  <div class="pt">Dashboard</div>
+  <div class="ps">Your AI Empire at a glance · 9 growth agents running</div>
+  <div class="four">
+    <div class="met"><div class="ml">Monthly views</div><div class="mv">720K</div><div class="md up">+41% this month</div></div>
+    <div class="met"><div class="ml">Active jobs</div><div class="mv" id="dash-jobs">2</div><div class="md">Running now</div></div>
+    <div class="met"><div class="ml">Monthly revenue</div><div class="mv">$21.6K</div><div class="md up">+$6.3K vs Nov</div></div>
+    <div class="met"><div class="ml">Credits left</div><div class="mv">6,400</div><div class="md">32% remaining</div></div>
+  </div>
+  <div class="two" style="margin-bottom:10px">
+    <div class="card">
+      <div class="ct">Views growth — 2026</div>
+      <div style="position:relative;height:140px"><canvas id="dash-chart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Recent jobs</div>
+      <div class="row"><div class="dot dv"></div><div style="flex:1"><div style="font-weight:500">AI tools Short — "ChatGPT secrets"</div><div style="font-size:10px;color:var(--color-text-tertiary)">Shorts · AI tools</div></div><span class="badge bw">Approval</span></div>
+      <div class="row"><div class="dot dg"></div><div style="flex:1"><div style="font-weight:500">Halloween Lofi · 2hr</div><div style="font-size:10px;color:var(--color-text-tertiary)">Lofi · Halloween</div></div><span class="badge bv">Done</span></div>
+      <div class="row"><div class="dot dv pulse"></div><div style="flex:1"><div style="font-weight:500">Finance facts #14</div><div style="font-size:10px;color:var(--color-text-tertiary)">Shorts · Finance</div></div><span class="badge bp pulse">Running</span></div>
+      <div class="row"><div class="dot dx"></div><div style="flex:1"><div style="font-weight:500">Billionaire habits #7</div><div style="font-size:10px;color:var(--color-text-tertiary)">Shorts · Luxury</div></div><span class="badge bx">Pending</span></div>
+      <button class="btn btn-v btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="sw('create')">+ New project</button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+      <div class="ct" style="margin-bottom:0">Growth agents — all active</div>
+      <button class="btn btn-sm" onclick="sw('agents')">Manage</button>
+    </div>
+    <div class="three">
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);display:flex;align-items:center;gap:7px"><span style="font-size:14px">📈</span><div style="flex:1"><div style="font-size:11px;font-weight:500">Trend prediction</div><div style="font-size:10px;color:var(--color-text-tertiary)">Every 2h</div></div><span class="badge bv" style="font-size:9px">On</span></div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);display:flex;align-items:center;gap:7px"><span style="font-size:14px">🪝</span><div style="flex:1"><div style="font-size:11px;font-weight:500">Hook optimizer</div><div style="font-size:10px;color:var(--color-text-tertiary)">Per video</div></div><span class="badge bv" style="font-size:9px">On</span></div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);display:flex;align-items:center;gap:7px"><span style="font-size:14px">💰</span><div style="flex:1"><div style="font-size:11px;font-weight:500">Revenue agent</div><div style="font-size:10px;color:var(--color-text-tertiary)">Daily</div></div><span class="badge bv" style="font-size:9px">On</span></div>
+    </div>
+  </div>
+  <div style="padding:12px 14px;background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:var(--border-radius-lg);display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div><div style="font-weight:500;color:#633806;font-size:12px;margin-bottom:2px">"ChatGPT secrets" is ready for review</div><div style="font-size:11px;color:#854F0B">All 20 agents complete. Approve to publish to YouTube.</div></div>
+    <button class="btn btn-v btn-sm" onclick="sw('pipeline')">Review now</button>
+  </div>
+</div>
+
+<!-- CREATE -->
+<div class="view" id="v-create">
+  <div class="pt">Create project</div>
+  <div class="ps">20-agent AI pipeline — idea to YouTube in minutes</div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:16px">
+    <div id="ct-shorts" onclick="pickType('shorts',this)" style="border:1px solid #b5f23a;background:#EAF3DE08;border-radius:var(--border-radius-lg);padding:13px;cursor:pointer;position:relative"><div style="position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:#b5f23a;display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#0a0a0f" stroke-width="2"><path d="M2 6l3 3 5-5"/></svg></div><div style="font-size:18px;margin-bottom:8px">▶️</div><div style="font-weight:500;font-size:12px;margin-bottom:2px">YouTube Short</div><div style="font-size:11px;color:var(--color-text-secondary)">45–60s AI-generated</div></div>
+    <div onclick="pickType('lofi',this)" style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px;cursor:pointer"><div style="font-size:18px;margin-bottom:8px">🎵</div><div style="font-weight:500;font-size:12px;margin-bottom:2px">Lofi channel video</div><div style="font-size:11px;color:var(--color-text-secondary)">30min–3hr atmospheric</div></div>
+    <div onclick="pickType('beats',this)" style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px;cursor:pointer"><div style="font-size:18px;margin-bottom:8px">🎚️</div><div style="font-weight:500;font-size:12px;margin-bottom:2px">Type beat video</div><div style="font-size:11px;color:var(--color-text-secondary)">Beat + artwork + SEO</div></div>
+    <div onclick="pickType('series',this)" style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px;cursor:pointer"><div style="font-size:18px;margin-bottom:8px">🗂️</div><div style="font-weight:500;font-size:12px;margin-bottom:2px">Series batch</div><div style="font-size:11px;color:var(--color-text-secondary)">2–20 videos at once</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">Topic or idea</div>
+    <input class="inp" placeholder="e.g. &quot;5 AI tools that replace your job&quot;" id="create-topic">
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+    <div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">Niche</div>
+      <select class="inp"><option>AI tools</option><option>Finance</option><option>Body facts</option><option>Luxury/billionaires</option><option>History mystery</option></select></div>
+    <div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">AI voice</div>
+      <select class="inp"><option>Rachel (warm)</option><option>Adam (deep)</option><option>Bella (energetic)</option></select></div>
+  </div>
+  <div style="padding:9px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:12px;display:flex;align-items:center;gap:8px">
+    <input type="checkbox" id="auto-pub" style="width:12px;height:12px;cursor:pointer;accent-color:#b5f23a">
+    <label for="auto-pub" style="font-size:11px;cursor:pointer">Auto-publish — skip approval gate</label>
+  </div>
+  <button class="btn btn-v" onclick="launchPipeline()" id="launch-btn" style="font-size:12px;padding:9px 20px">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="3,1 13,8 3,15"/></svg>
+    Launch 20-agent pipeline
+  </button>
+</div>
+
+<!-- JOBS -->
+<div class="view" id="v-jobs">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+    <div><div class="pt" style="margin-bottom:2px">Job queue</div><div class="ps" style="margin-bottom:0">5 total projects</div></div>
+    <button class="btn btn-v btn-sm" onclick="sw('create')">+ New</button>
+  </div>
+  <div style="display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap">
+    <button style="padding:3px 10px;border-radius:99px;border:0.5px solid #b5f23a;background:#EAF3DE10;color:#27500A;font-size:10px;cursor:pointer;font-family:var(--font-sans)">All (5)</button>
+    <button style="padding:3px 10px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:transparent;color:var(--color-text-secondary);font-size:10px;cursor:pointer;font-family:var(--font-sans)">Running (1)</button>
+    <button style="padding:3px 10px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:transparent;color:var(--color-text-secondary);font-size:10px;cursor:pointer;font-family:var(--font-sans)">Approval (2)</button>
+    <button style="padding:3px 10px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:transparent;color:var(--color-text-secondary);font-size:10px;cursor:pointer;font-family:var(--font-sans)">Done (2)</button>
+  </div>
+  <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden">
+    <table style="width:100%;border-collapse:collapse;font-size:11px">
+      <thead><tr style="background:var(--color-background-secondary)"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Title</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Type</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Status</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Progress</th></tr></thead>
+      <tbody>
+        <tr onclick="sw('pipeline')" style="cursor:pointer"><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;color:var(--color-text-primary)">"ChatGPT secrets"</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Shorts</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge bw">Approval</span></td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:6px"><div class="pbar" style="width:65px"><div class="pbf" style="width:95%"></div></div><span style="font-size:10px">95%</span></div></td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;color:var(--color-text-primary)">Finance facts #14</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Shorts</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge bp pulse">Running</span></td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:6px"><div class="pbar" style="width:65px"><div class="pbf" style="width:55%"></div></div><span style="font-size:10px">55%</span></div></td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;color:var(--color-text-primary)">Halloween Lofi 2hr</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Lofi</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge bv">Done</span></td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:6px"><div class="pbar" style="width:65px"><div class="pbf" style="width:100%"></div></div><span style="font-size:10px">100%</span></div></td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;color:var(--color-text-primary)">Billionaire habits #7</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Shorts</td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge bx">Pending</span></td><td style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:6px"><div class="pbar" style="width:65px"><div class="pbf" style="width:0%"></div></div><span style="font-size:10px">0%</span></div></td></tr>
+        <tr><td style="padding:9px 12px;font-weight:500;color:var(--color-text-primary)">Body facts series ×5</td><td style="padding:9px 12px;color:var(--color-text-secondary)">Batch</td><td style="padding:9px 12px"><span class="badge bw">Approval</span></td><td style="padding:9px 12px"><div style="display:flex;align-items:center;gap:6px"><div class="pbar" style="width:65px"><div class="pbf" style="width:92%"></div></div><span style="font-size:10px">92%</span></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LIVE PIPELINE -->
+<div class="view" id="v-pipeline">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <button class="btn btn-g btn-sm" style="padding:5px 7px" onclick="sw('jobs')"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg></button>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:1px"><div style="font-size:14px;font-weight:500">"ChatGPT secrets" — YouTube Short</div><span class="badge bw">Needs approval</span></div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">20 agents · AI tools niche</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:5px"><span>19 of 20 agents complete</span><span>95%</span></div>
+    <div class="pbar" style="height:5px;margin-bottom:5px"><div class="pbf" style="width:95%"></div></div>
+    <div style="font-size:10px;color:var(--color-text-tertiary)">All agents done — awaiting your approval to publish</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 260px;gap:12px;align-items:start">
+    <div id="pipeline-steps">
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">📋 Excel input</div><div class="sd">Topic loaded: "ChatGPT secrets"</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">📈 Trend prediction</div><div class="sd">Virality score: 91/100</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">🎯 Niche analysis</div><div class="sd">AI tools — CPM $10–$20, high demand</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">✍️ Script writing</div><div class="sd">112 word script generated</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">🪝 Hook optimizer</div><div class="sd">"Wait — ChatGPT can do WHAT?"</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">🎙️ Voice generation</div><div class="sd">Rachel · 47s voiceover ready</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">🎵 Music generation</div><div class="sd">Upbeat background · 47s MP3</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">🎨 Image generation</div><div class="sd">AI dashboard visual · 1080×1920</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">🎬 Video composition</div><div class="sd">9:16 MP4 · 47s · 1080p</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">📝 Metadata</div><div class="sd">"ChatGPT Secrets Nobody Uses #shorts" · 20 tags</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el done"><div class="snum">✓</div><div class="sbody"><div class="sn">✅ Quality control</div><div class="sd">6/6 checks passed</div></div><span class="badge bv" style="font-size:9px">Done</span></div>
+      <div class="step-el run" id="approval-step"><div class="snum">19</div><div class="sbody"><div class="sn">👤 Approval agent</div><div class="sd">Awaiting your review</div></div><span class="badge bw" id="appr-badge">Awaiting</span></div>
+      <div class="step-el" id="upload-step"><div class="snum">20</div><div class="sbody"><div class="sn">▶️ YouTube upload</div><div class="sd">Will publish after approval</div></div><span class="badge bx" id="upload-badge">Pending</span></div>
+    </div>
+    <div>
+      <div class="card" style="border:0.5px solid #EF9F27;background:#FAEEDA10;margin-bottom:10px">
+        <div style="font-weight:500;color:#633806;margin-bottom:5px;font-size:12px">Ready for review</div>
+        <div style="font-size:11px;color:#854F0B;margin-bottom:10px;line-height:1.6">All 20 agents complete. Approve to upload to YouTube.</div>
+        <div style="display:flex;gap:7px" id="appr-btns">
+          <button style="flex:1;padding:7px;border-radius:var(--border-radius-md);border:none;background:#22c55e;color:#fff;font-family:var(--font-sans);font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onclick="approveJob()"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l2.5 2.5L10 3"/></svg>Approve</button>
+          <button style="padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-danger);font-family:var(--font-sans);font-size:11px;cursor:pointer" onclick="rejectJob()"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:10px">
+        <div class="ct">Generated metadata</div>
+        <div style="font-size:11px;font-weight:500;margin-bottom:4px">ChatGPT Secrets Nobody Uses #shorts</div>
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:7px;line-height:1.6">5 ChatGPT features that will save you hours every week. These AI tools tips will transform your workflow…</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge bx" style="font-size:9px">#chatgpt</span><span class="badge bx" style="font-size:9px">#aitools</span><span class="badge bx" style="font-size:9px">#shorts</span><span class="badge bx" style="font-size:9px">+17 more</span></div>
+      </div>
+      <div class="card">
+        <div class="ct">Activity log</div>
+        <div style="max-height:120px;overflow-y:auto" id="log-box">
+          <div class="logline ok">[09:41] Input: "ChatGPT secrets" loaded</div>
+          <div class="logline" style="color:var(--color-text-tertiary)">[09:41] Trend agent: virality 91/100</div>
+          <div class="logline" style="color:#3C3489">[09:42] Script: 112 words ready</div>
+          <div class="logline ok">[09:44] Voice: Rachel 47s done</div>
+          <div class="logline" style="color:#3C3489">[09:46] Music: upbeat beat ready</div>
+          <div class="logline ok">[09:48] Image: 1080×1920 generated</div>
+          <div class="logline ok">[09:51] Video: 9:16 MP4 composed</div>
+          <div class="logline ok">[09:52] QC: 6/6 checks passed</div>
+          <div class="logline" style="color:#854F0B">[09:52] Approval: awaiting user</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENTS -->
+<div class="view" id="v-agents">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+    <div><div class="pt" style="margin-bottom:2px">Growth agents</div><div class="ps" style="margin-bottom:0">9 agents · 7 active · 2 paused</div></div>
+    <button class="btn btn-v btn-sm">Run all</button>
+  </div>
+  <div id="agents-list">
+    <div class="agent-c on"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📈</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Trend prediction</span><span class="badge bv" style="font-size:9px">Active</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Every 2h · Virality target &gt;80/100</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+    <div class="agent-c on"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:#FAEEDA;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🪝</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Hook optimizer</span><span class="badge bv" style="font-size:9px">Active</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Per video · Swipe rate target &lt;20%</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+    <div class="agent-c on"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🖼️</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Thumbnail A/B optimizer</span><span class="badge bv" style="font-size:9px">Active</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Per video + 24h check · CTR target &gt;8%</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+    <div class="agent-c on"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📊</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Retention analyzer</span><span class="badge bv" style="font-size:9px">Active</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Daily · AVD target &gt;50%</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+    <div class="agent-c on"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🚀</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Multi-platform republisher</span><span class="badge bv" style="font-size:9px">Active</span></div><div style="font-size:10px;color:var(--color-text-secondary)">After upload · 5× reach target</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+    <div class="agent-c on"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:#FAEEDA;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">💰</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Revenue maximizer</span><span class="badge bv" style="font-size:9px">Active</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Daily · +$5–50/video target</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+    <div class="agent-c"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">💬</div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span style="font-size:12px;font-weight:500">Comment engagement bot</span><span class="badge bx" style="font-size:9px">Paused</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Every 30m · Engagement target &gt;5%</div></div><label class="toggle"><input type="checkbox" onchange="toggleAgent(this)"><span class="tsl"></span></label><button class="btn btn-sm" style="padding:5px 7px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="2,1 10,6 2,11"/></svg></button></div></div>
+  </div>
+</div>
+
+<!-- NICHE INTEL -->
+<div class="view" id="v-niches">
+  <div class="pt">Niche intelligence</div>
+  <div class="ps">7 fastest-growing niches in 2026 — click to explore</div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px">
+    <div class="nc on" onclick="pickNiche(0,this)"><div style="font-size:18px;margin-bottom:6px">🤖</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">AI tools</div><div style="font-size:10px;color:#0F6E56">$10–$20 CPM</div></div>
+    <div class="nc" onclick="pickNiche(1,this)"><div style="font-size:18px;margin-bottom:6px">🧬</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">Body facts</div><div style="font-size:10px;color:var(--color-text-tertiary)">$6–$12 CPM</div></div>
+    <div class="nc" onclick="pickNiche(2,this)"><div style="font-size:18px;margin-bottom:6px">💰</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">Luxury/billionaires</div><div style="font-size:10px;color:var(--color-text-tertiary)">$7–$15 CPM</div></div>
+    <div class="nc" onclick="pickNiche(3,this)"><div style="font-size:18px;margin-bottom:6px">🧠</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">Micro-learning</div><div style="font-size:10px;color:var(--color-text-tertiary)">$5–$10 CPM</div></div>
+    <div class="nc" onclick="pickNiche(4,this)"><div style="font-size:18px;margin-bottom:6px">⚡</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">Transformation</div><div style="font-size:10px;color:var(--color-text-tertiary)">$4–$9 CPM</div></div>
+    <div class="nc" onclick="pickNiche(5,this)"><div style="font-size:18px;margin-bottom:6px">🍳</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">Food & cooking</div><div style="font-size:10px;color:var(--color-text-tertiary)">$3–$7 CPM</div></div>
+    <div class="nc" onclick="pickNiche(6,this)"><div style="font-size:18px;margin-bottom:6px">🔮</div><div style="font-weight:500;font-size:11px;margin-bottom:2px">Mystery & history</div><div style="font-size:10px;color:var(--color-text-tertiary)">$4–$8 CPM</div></div>
+  </div>
+  <div class="card" id="niche-detail">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div style="font-weight:500;font-size:13px;margin-bottom:6px" id="niche-name">AI tools & automation</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.7" id="niche-desc">Highest CPM on YouTube. Every new AI tool is a new video. Endless content, massive interest from software companies paying premium ad rates.</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px">Example shorts</div>
+        <div id="niche-examples">
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:4px;font-size:11px"><span style="width:14px;height:14px;border-radius:50%;background:#EAF3DE;color:#27500A;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">1</span>"5 AI tools that replace your job"</div>
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:4px;font-size:11px"><span style="width:14px;height:14px;border-radius:50%;background:#EAF3DE;color:#27500A;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">2</span>"AI that writes emails for you"</div>
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px"><span style="width:14px;height:14px;border-radius:50%;background:#EAF3DE;color:#27500A;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">3</span>"ChatGPT secrets nobody uses"</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:8px">Niche scorecard</div>
+        <div id="niche-scores">
+          <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:3px"><span>CPM potential</span><span style="color:#27500A;font-weight:500">$10–$20</span></div><div class="pbar"><div class="pbf" style="width:92%"></div></div></div>
+          <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:3px"><span>Growth rate</span><span style="color:#27500A;font-weight:500">Explosive</span></div><div class="pbar"><div class="pbf" style="width:96%;background:#534AB7"></div></div></div>
+          <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:3px"><span>Competition (low = better)</span><span style="color:#633806;font-weight:500">Medium</span></div><div class="pbar"><div class="pbf" style="width:50%;background:#BA7517"></div></div></div>
+          <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:3px"><span>AI-friendliness</span><span style="color:#27500A;font-weight:500">Perfect</span></div><div class="pbar"><div class="pbf" style="width:98%"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:3px"><span>Retention score</span><span style="color:#085041;font-weight:500">High</span></div><div class="pbar"><div class="pbf" style="width:82%;background:#1D9E75"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="view" id="v-analytics">
+  <div class="pt">Analytics</div>
+  <div class="ps">Network performance · all channels</div>
+  <div class="four">
+    <div class="met"><div class="ml">Total views</div><div class="mv">720K</div><div class="md up">+41% Dec</div></div>
+    <div class="met"><div class="ml">Avg CTR</div><div class="mv">8.4%</div><div class="md up">+2.1% A/B</div></div>
+    <div class="met"><div class="ml">Avg retention</div><div class="mv">54%</div><div class="md up">+8% this mo</div></div>
+    <div class="met"><div class="ml">Monthly revenue</div><div class="mv">$21.6K</div><div class="md up">+$6.3K vs Nov</div></div>
+  </div>
+  <div class="card">
+    <div class="ct">Monthly views + revenue growth</div>
+    <div style="position:relative;height:190px"><canvas id="analytics-chart"></canvas></div>
+    <div style="display:flex;gap:14px;margin-top:8px;justify-content:center">
+      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:#b5f23a;display:inline-block"></span>Views</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:#fbbf24;display:inline-block"></span>Revenue ($)</span>
+    </div>
+  </div>
+</div>
+
+<!-- API KEYS -->
+<div class="view" id="v-apikeys">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+    <div><div class="pt" style="margin-bottom:2px">API keys</div><div class="ps" style="margin-bottom:0">7 of 14 APIs configured · MVP ready</div></div>
+    <button class="btn btn-v btn-sm">Save all</button>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:5px"><span>7 / 14 APIs configured</span><span style="color:#27500A">MVP: 7/7</span></div>
+    <div class="pbar"><div class="pbf" style="width:50%;background:#22c55e"></div></div>
+  </div>
+  <div style="margin-bottom:16px">
+    <div style="font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.6px;color:var(--color-text-tertiary);margin-bottom:7px">Core AI</div>
+    <div style="border:0.5px solid #97C459;border-radius:var(--border-radius-lg);padding:12px;margin-bottom:7px;background:#EAF3DE08">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+        <div style="width:26px;height:26px;border-radius:7px;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:1px"><span style="font-size:11px;font-weight:500">OpenAI</span><span class="badge bv" style="font-size:9px">MVP</span><span class="badge" style="font-size:9px;background:#FCEBEB;color:#791F1F">Required</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Scripts, hooks, metadata, image prompts</div></div>
+        <span style="font-size:11px;color:#3B6D11;display:flex;align-items:center;gap:4px"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l2.5 2.5L10 3"/></svg>Connected</span>
+      </div>
+      <div style="display:flex;gap:7px"><input class="inp" type="password" value="sk-••••••••••••••••" style="flex:1"><button class="btn btn-sm" style="padding:5px 9px">Test</button></div>
+    </div>
+    <div style="border:0.5px solid #97C459;border-radius:var(--border-radius-lg);padding:12px;margin-bottom:7px;background:#EAF3DE08">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+        <div style="width:26px;height:26px;border-radius:7px;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧠</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:1px"><span style="font-size:11px;font-weight:500">Anthropic (Claude)</span><span class="badge bv" style="font-size:9px">MVP</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Strategy, analysis, AI chat assistant</div></div>
+        <span style="font-size:11px;color:#3B6D11;display:flex;align-items:center;gap:4px"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l2.5 2.5L10 3"/></svg>Connected</span>
+      </div>
+      <div style="display:flex;gap:7px"><input class="inp" type="password" value="sk-ant-••••••••••••" style="flex:1"><button class="btn btn-sm" style="padding:5px 9px">Test</button></div>
+    </div>
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+        <div style="width:26px;height:26px;border-radius:7px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🎬</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:1px"><span style="font-size:11px;font-weight:500">Runway ML</span><span class="badge bx" style="font-size:9px">Optional</span></div><div style="font-size:10px;color:var(--color-text-secondary)">Image → video animation</div></div>
+        <span style="font-size:11px;color:var(--color-text-tertiary)">Not set</span>
+      </div>
+      <div style="display:flex;gap:7px"><input class="inp" placeholder="RUNWAY_API_KEY" style="flex:1"><button class="btn btn-sm" style="padding:5px 9px">Test</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- BILLING -->
+<div class="view" id="v-billing">
+  <div class="pt">Billing</div>
+  <div class="ps">Manage your plan and credits</div>
+  <div class="card" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">Current plan</div><div style="display:flex;align-items:baseline;gap:9px"><span style="font-size:20px;font-weight:500">Pro</span><span class="badge bv">$49/month</span></div></div>
+    <div style="flex:1;min-width:180px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:5px"><span>Credits used this month</span><span>13,600 / 20,000</span></div><div class="pbar" style="height:6px"><div class="pbf" style="width:68%;background:#BA7517"></div></div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:3px">68% of monthly credits used</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px"><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px">Free</div><div style="font-size:22px;font-weight:500;margin-bottom:3px">$0</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:12px">1,000 credits · 1 channel</div><button class="btn btn-sm" style="width:100%;justify-content:center">Downgrade</button></div>
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px"><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px">Starter</div><div style="font-size:22px;font-weight:500;margin-bottom:3px">$19<span style="font-size:11px;font-weight:400;color:var(--color-text-secondary)">/mo</span></div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:12px">5,000 credits · 3 channels</div><button class="btn btn-sm" style="width:100%;justify-content:center">Downgrade</button></div>
+    <div style="border:1.5px solid #b5f23a;border-radius:var(--border-radius-lg);padding:14px;background:#EAF3DE08;position:relative"><div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#b5f23a;color:#0a0a0f;padding:2px 10px;border-radius:99px;font-size:9px;font-weight:600;white-space:nowrap">Current</div><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;margin-top:6px">Pro</div><div style="font-size:22px;font-weight:500;margin-bottom:3px">$49<span style="font-size:11px;font-weight:400;color:var(--color-text-secondary)">/mo</span></div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:12px">20,000 credits · 10 channels</div><button class="btn btn-sm" style="width:100%;justify-content:center;background:var(--color-background-secondary)">Current plan</button></div>
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px"><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px">Empire</div><div style="font-size:22px;font-weight:500;margin-bottom:3px">$99<span style="font-size:11px;font-weight:400;color:var(--color-text-secondary)">/mo</span></div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:12px">60,000 credits · 50 channels</div><button class="btn btn-v btn-sm" style="width:100%;justify-content:center">Upgrade</button></div>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div class="view" id="v-chat">
+  <div class="pt" style="margin-bottom:3px">AI strategy assistant</div>
+  <div class="ps">Powered by Claude — ask anything about your empire</div>
+  <div id="chat-msgs" style="margin-bottom:12px">
+    <div class="chat-msg">
+      <div class="chat-av" style="background:#EAF3DE;color:#27500A">AI</div>
+      <div class="chat-bubble ai-bubble">Hi! I'm your AI Empire assistant. Ask me anything about YouTube automation, niche selection, growth strategy, or the pipeline setup.</div>
+    </div>
+    <div class="chat-msg user">
+      <div class="chat-av" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">U</div>
+      <div class="chat-bubble user-bubble">What's the best niche for AI-automated YouTube channels in 2026?</div>
+    </div>
+    <div class="chat-msg">
+      <div class="chat-av" style="background:#EAF3DE;color:#27500A">AI</div>
+      <div class="chat-bubble ai-bubble">The top niche right now is <strong>AI Tools & Automation</strong> — CPM of $10–$20 (highest on YouTube), endless content ideas since every new AI tool is a new video, and software companies pay premium ad rates. Start with one micro-niche like "ChatGPT productivity hacks" before expanding. Combine with the Finance niche on a second channel for maximum revenue. Series content (e.g. "AI tool of the week #1–#20") compounds far better than one-offs.</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+    <button class="btn btn-sm" style="font-size:10px" onclick="addChat('How do I scale to 10 channels?')">Scale to 10 channels?</button>
+    <button class="btn btn-sm" style="font-size:10px" onclick="addChat('Write a viral hook for a finance short')">Write a finance hook</button>
+    <button class="btn btn-sm" style="font-size:10px" onclick="addChat('Best series format for YouTube Shorts?')">Best series format?</button>
+  </div>
+  <div style="display:flex;gap:7px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:9px 12px">
+    <input id="chat-inp" class="inp" placeholder="Ask about strategy, niches, scripts, growth…" style="border:none;background:transparent;padding:0;flex:1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}">
+    <button class="btn btn-v btn-sm" onclick="sendChat()" style="padding:5px 9px;flex-shrink:0"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const VIEWS=[0,0,1200,4800,14000,38000,82000,156000,241000,380000,510000,720000];
+const REV=[0,0,36,144,420,1140,2460,4680,7230,11400,15300,21600];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let dashChart=null,analyticsChart=null;
+let approved=false;
+
+function sw(id) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('v-'+id).classList.add('on');
+  const ni=document.getElementById('ni-'+id);
+  if(ni) ni.classList.add('on');
+  if(id==='dash'&&!dashChart) setTimeout(buildDashChart,80);
+  if(id==='analytics'&&!analyticsChart) setTimeout(buildAnalyticsChart,80);
+}
+
+function buildDashChart(){
+  const ctx=document.getElementById('dash-chart');
+  if(!ctx)return;
+  dashChart=new Chart(ctx,{type:'line',data:{labels:MONTHS,datasets:[{data:VIEWS,borderColor:'#b5f23a',backgroundColor:'rgba(181,242,58,0.08)',tension:0.4,pointRadius:1.5,fill:true,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#888780'}},y:{grid:{color:'rgba(128,128,128,0.06)'},ticks:{font:{size:9},color:'#888780',callback:v=>v>=1000?Math.round(v/1000)+'K':v}}}}});
+}
+
+function buildAnalyticsChart(){
+  const ctx=document.getElementById('analytics-chart');
+  if(!ctx)return;
+  analyticsChart=new Chart(ctx,{type:'bar',data:{labels:MONTHS,datasets:[{data:VIEWS.map(v=>Math.round(v/1000)),backgroundColor:'rgba(181,242,58,0.5)',borderRadius:3,label:'Views (K)',yAxisID:'y'},{data:REV,backgroundColor:'rgba(251,191,36,0.5)',borderRadius:3,label:'Revenue ($)',yAxisID:'r'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#888780'}},y:{grid:{color:'rgba(128,128,128,0.06)'},ticks:{font:{size:9},color:'#888780',callback:v=>v+'K'}},r:{position:'right',grid:{display:false},ticks:{font:{size:9},color:'#888780',callback:v=>'$'+v}}}}});
+}
+
+function pickType(id,el){
+  document.querySelectorAll('[id^="ct-"]').forEach(e=>{e.style.border='0.5px solid var(--color-border-tertiary)';e.style.background='transparent';const chk=e.querySelector('div[style*="border-radius:50"]');if(chk)chk.style.display='none';});
+  el.style.border='1px solid #b5f23a';el.style.background='#EAF3DE08';
+}
+
+function launchPipeline(){
+  const btn=document.getElementById('launch-btn');
+  btn.innerHTML='<span class="spin"></span> Launching…';
+  btn.disabled=true;
+  setTimeout(()=>{sw('pipeline');},1200);
+}
+
+function approveJob(){
+  if(approved)return;
+  approved=true;
+  document.getElementById('appr-btns').innerHTML='<div style="font-size:11px;color:#3B6D11;display:flex;align-items:center;gap:5px"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l2.5 2.5L10 3"/></svg>Approved — uploading to YouTube…</div>';
+  document.getElementById('approval-step').className='step-el done';
+  document.getElementById('appr-badge').className='badge bv';
+  document.getElementById('appr-badge').textContent='Done';
+  const logBox=document.getElementById('log-box');
+  setTimeout(()=>{
+    document.getElementById('upload-step').className='step-el run';
+    document.getElementById('upload-badge').className='badge bp pulse';
+    document.getElementById('upload-badge').textContent='Uploading';
+    logBox.innerHTML+='<div class="logline" style="color:#3C3489">[09:54] Upload agent: posting to YouTube</div>';
+    setTimeout(()=>{
+      document.getElementById('upload-step').className='step-el done';
+      document.getElementById('upload-badge').className='badge bv';
+      document.getElementById('upload-badge').textContent='Live';
+      logBox.innerHTML+='<div class="logline ok">[09:56] Live: youtube.com/shorts/dQw4w9WgXcQ</div>';
+    },2500);
+  },800);
+}
+
+function rejectJob(){
+  document.getElementById('appr-btns').innerHTML='<div style="font-size:11px;color:var(--color-text-tertiary)">Rejected and discarded.</div>';
+  document.getElementById('approval-step').className='step-el';
+  document.getElementById('appr-badge').className='badge br';
+  document.getElementById('appr-badge').textContent='Rejected';
+}
+
+function toggleAgent(cb){
+  const card=cb.closest('.agent-c');
+  card.classList.toggle('on',cb.checked);
+  const badge=card.querySelector('.badge');
+  if(cb.checked){badge.className='badge bv';badge.style.fontSize='9px';badge.textContent='Active';}
+  else{badge.className='badge bx';badge.style.fontSize='9px';badge.textContent='Paused';}
+}
+
+const NICHE_DATA=[
+  {name:'AI tools & automation',desc:'Highest CPM on YouTube. Every new AI tool is a new video. Endless content from software companies paying premium ad rates.',ex:['"5 AI tools that replace your job"','"AI that writes emails for you"','"ChatGPT secrets nobody uses"'],cpm:'$10–$20',grow:96,comp:50,ai:98,ret:82},
+  {name:'Body & health facts',desc:'High-retention curiosity hooks. "What happens if…" format is instantly compelling. Excellent for serialized content.',ex:['"What if you stop drinking water"','"What happens in your brain during sleep"','"Why your body shakes before falling"'],cpm:'$6–$12',grow:78,comp:28,ai:84,ret:92},
+  {name:'Luxury & billionaires',desc:'Aspiration + curiosity = most viral emotional combo. Jeff Bezos, yachts, daily routines hit 100K–5M views regularly.',ex:['"Jeff Bezos daily routine"','"Inside a $400M yacht"','"Habits of billionaires before 6am"'],cpm:'$7–$15',grow:88,comp:50,ai:80,ret:84},
+  {name:'Micro-learning & facts',desc:'Viewers prefer quick-learning formats. Psychology tricks, science facts, money habits in 60 seconds performs extremely well.',ex:['"3 psychology tricks nobody taught you"','"History in 30 seconds: Rome"','"Why rich people never pay retail"'],cpm:'$5–$10',grow:74,comp:26,ai:96,ret:76},
+  {name:'Transformation videos',desc:'Algorithm specifically rewards before→after content. Clean room, weight loss, wealth transformation all perform highly.',ex:['"Dirty room → clean in 60 seconds"','"$0 to first $10K (my journey)"','"30 days waking at 5am"'],cpm:'$4–$9',grow:86,comp:48,ai:74,ret:90},
+  {name:'Food & cooking',desc:'Most-watched format globally. Language-agnostic visuals. Street food, dessert builds, food hacks are perennial performers.',ex:['"Ramen from scratch in 60 seconds"','"Street food that costs $1 but tastes $100"'],cpm:'$3–$7',grow:60,comp:80,ai:58,ret:72},
+  {name:'Mystery & history',desc:'Storytelling Shorts create binge-watch loops. Unsolved mysteries, lost civilisations, wild historical facts trigger curiosity.',ex:['"Unsolved disappearance of Roanoke"','"Most disturbing thing Julius Caesar did"'],cpm:'$4–$8',grow:74,comp:30,ai:82,ret:95},
+];
+
+function pickNiche(i,el){
+  document.querySelectorAll('.nc').forEach(n=>n.classList.remove('on'));
+  el.classList.add('on');
+  const n=NICHE_DATA[i];
+  document.getElementById('niche-name').textContent=n.name;
+  document.getElementById('niche-desc').textContent=n.desc;
+  document.getElementById('niche-examples').innerHTML=n.ex.map((e,j)=>`<div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:4px;font-size:11px"><span style="width:14px;height:14px;border-radius:50%;background:#EAF3DE;color:#27500A;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">${j+1}</span>${e}</div>`).join('');
+  const colors=['#b5f23a','#534AB7','#BA7517','#b5f23a','#1D9E75'];
+  const labels=['CPM potential ('+n.cpm+')','Growth rate','Competition (low=better)','AI-friendliness','Retention score'];
+  const vals=[Math.round(n.grow*0.95),n.grow,100-n.comp,n.ai,n.ret];
+  document.getElementById('niche-scores').innerHTML=labels.map((l,j)=>`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-bottom:3px"><span>${l}</span><span style="font-weight:500">${vals[j]}/100</span></div><div class="pbar"><div class="pbf" style="width:${vals[j]}%;background:${colors[j]}"></div></div></div>`).join('');
+}
+
+const CHAT_RESPONSES={
+  'How do I scale to 10 channels?':'Scale by replicating your best-performing niche across channels. Start with 1 proven channel, then clone the workflow: same agents, same pipeline, different niche. Use the series batch feature to batch-create 5 videos at once. With 10 channels × 2 shorts/day = 600 videos/month fully automated. Target niches: AI tools, Finance, Body facts, Luxury, History — each gets its own channel.',
+  'Write a viral hook for a finance short':'Here are 3 hooks optimized for under-20% swipe rate:\n\n1. "You\'re losing $340 every month and you don\'t know it."\n2. "This one financial habit separates the rich from everyone else."\n3. "The bank doesn\'t want you to know this trick — here\'s why."\n\nHook #1 is usually strongest — it creates instant personal relevance (the viewer thinks "wait, am I?").',
+  'Best series format for YouTube Shorts?':'"Rich Habits #1–#20" is the most proven series format in 2026. Number your episodes — viewers actively seek missing episodes. Mix 3-4 niches in one channel (body facts, money tips, AI tools, psychology) and alternate them. This cross-niche approach creates binge loops: a viewer watches a body facts video, then gets recommended your money tips video. Series outperform one-offs by 400× based on scrapes of 53 channels.',
+};
+
+function addChat(msg){document.getElementById('chat-inp').value=msg;}
+
+function sendChat(){
+  const inp=document.getElementById('chat-inp');
+  const msg=inp.value.trim(); if(!msg)return;
+  inp.value='';
+  const box=document.getElementById('chat-msgs');
+  box.innerHTML+=`<div class="chat-msg user"><div class="chat-av" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">U</div><div class="chat-bubble user-bubble">${msg}</div></div>`;
+  const resp=CHAT_RESPONSES[msg]||`Great question about "${msg}". In the AI Empire system, this is handled automatically by the growth agents — specifically the trend prediction and niche analysis agents work together to surface the best opportunities. Configure your Anthropic API key for live Claude responses with personalized strategy.`;
+  setTimeout(()=>{
+    box.innerHTML+=`<div class="chat-msg"><div class="chat-av" style="background:#EAF3DE;color:#27500A">AI</div><div class="chat-bubble ai-bubble">${resp.replace(/\n/g,'<br>')}</div></div>`;
+    box.scrollTop=box.scrollHeight;
+  },600);
+}
+
+setTimeout(buildDashChart,300);
+</script>

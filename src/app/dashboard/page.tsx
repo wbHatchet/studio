@@ -1,36 +1,24 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { StatCard } from "@/components/dashboard/stat-card";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { 
   TrendingUp, 
   Workflow, 
   Zap,
   Terminal,
-  Layers,
-  Server,
-  Network,
+  Activity,
   Flame,
   Star,
-  Activity,
-  Cpu,
-  Sparkles,
-  Repeat,
-  Youtube,
-  Music,
-  ImageIcon,
-  Video,
-  BarChart3,
-  Search,
-  MessageSquare,
-  Share2,
   DollarSign,
+  Plus,
+  Play,
+  ArrowUpRight,
   Target
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
@@ -39,166 +27,207 @@ import { useToast } from "@/hooks/use-toast";
 export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
-  const [renderCluster, setRenderCluster] = useState<{id: number, status: string, load: number}[]>([]);
   
   const [logs, setLogs] = useState([
-    { node: "KEYWORD-INTEL", status: "Scanning VidIQ for 'ADHD Coding' gaps...", progress: 100 },
-    { node: "TREND-PREDICT", status: "Emerging: 'Dark Academia Study' rising 42%", progress: 85 },
-    { node: "SHORTS-TRAFFIC", status: "Extracting viral clips from Render #42", progress: 42 },
-    { node: "THUMBNAIL-AI", status: "Canva API: Rotating Variant B for CTR boost", progress: 100 },
-    { node: "RETENTION-AGENT", status: "Analyzing drop-off at 0:12 in Lofi #8", progress: 100 },
-    { node: "SCALING-NODE", status: "Cloning winning 'Rainy Cafe' to 5 channels", progress: 15 },
+    { time: "09:41", node: "INPUT", msg: 'Topic loaded: "ChatGPT secrets"', status: "ok" },
+    { time: "09:41", node: "TREND", msg: "Virality score: 91/100", status: "ok" },
+    { time: "09:42", node: "SCRIPT", msg: "112 words ready", status: "ag" },
+    { time: "09:44", node: "VOICE", msg: "Rachel 47s done", status: "ok" },
+    { time: "09:46", node: "MUSIC", msg: "Upbeat background ready", status: "ag" },
+    { time: "09:48", node: "IMAGE", msg: "1080×1920 generated", status: "ok" },
+    { time: "09:51", node: "VIDEO", msg: "9:16 MP4 composed", status: "ok" },
+    { time: "09:52", node: "QC", msg: "6/6 checks passed", status: "ok" },
+    { time: "09:52", node: "APPROVAL", msg: "Awaiting user review", status: "warn" },
   ]);
 
   useEffect(() => {
     setIsMounted(true);
-    setRenderCluster(Array.from({ length: 48 }, (_, i) => ({
-      id: i + 1,
-      status: Math.random() > 0.1 ? "Running" : "Idle",
-      load: Math.floor(Math.random() * 100),
-    })));
-
     const interval = setInterval(() => {
-      const agents = ["KEYWORD-INTEL", "SHORTS-TRAFFIC", "ENGAGEMENT-BOT", "MONETIZATION-AGENT", "SCALING-NODE", "RETENTION-AGENT"];
-      const statuses = [
-        "Mining Keyword Gaps...",
-        "Syncing Shorts to TikTok...",
-        "Replying to Top Fans...",
-        "Optimizing Affiliate Stack...",
-        "Cloning Asset Node...",
-        "Analyzing Watch Time..."
+      const nodes = ["KEYWORD", "SHORTS", "BOT", "MONEY", "SCALING", "QC"];
+      const messages = [
+        "Scanning VidIQ for gaps...",
+        "Syncing to TikTok...",
+        "Replying to fans...",
+        "Optimizing Affiliate links...",
+        "Cloning Asset Node #4...",
+        "Retention check complete"
       ];
-      const randomIdx = Math.floor(Math.random() * agents.length);
+      const randomIdx = Math.floor(Math.random() * nodes.length);
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
       
       setLogs(prev => [
-        { node: agents[randomIdx], status: statuses[randomIdx], progress: Math.floor(Math.random() * 100) },
-        ...prev.slice(0, 6)
+        { time: timeStr, node: nodes[randomIdx], msg: messages[randomIdx], status: Math.random() > 0.8 ? "ag" : "ok" },
+        ...prev.slice(0, 10)
       ]);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  const growthAgents = [
-    { name: "Keyword Intel", icon: Search, status: "Active", color: "text-blue-400" },
-    { name: "Shorts Traffic", icon: Share2, status: "Active", color: "text-purple-400" },
-    { name: "Thumbnail AI", icon: ImageIcon, status: "Active", color: "text-amber-400" },
-    { name: "Retention", icon: Activity, status: "Active", color: "text-red-400" },
-    { name: "Engagement", icon: MessageSquare, status: "Active", color: "text-green-400" },
-    { name: "Scaling", icon: Network, status: "Active", color: "text-cyan-400" }
-  ];
 
   if (!isMounted) return null;
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-background selection:bg-primary/30">
         <AppSidebar />
-        <SidebarInset className="bg-background text-foreground">
+        <SidebarInset className="bg-background">
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4 backdrop-blur-md bg-background/80 sticky top-0 z-50">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <div className="flex flex-col">
-              <h1 className="font-headline font-bold text-xl tracking-tight flex items-center gap-2 text-primary uppercase">
-                12-Agent Growth Engine <span className="text-foreground text-xs font-mono bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">v1.1M</span>
-              </h1>
-              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest text-primary flex items-center gap-2">
-                <Flame className="w-3 h-3 text-orange-500" /> CAPACITY: 1,800 VIDEOS/MO | 20 CHANNELS
-              </span>
+            <div className="flex-1">
+              <h1 className="font-headline font-bold text-xl tracking-tight uppercase text-primary">Dashboard</h1>
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Your AI Empire at a glance · 12 growth agents running</p>
             </div>
+            <Button size="sm" className="bg-primary text-primary-foreground font-bold uppercase text-[10px] tracking-widest px-4 h-9 shadow-lg shadow-primary/20">
+              <Plus className="w-3 h-3 mr-2" /> New Project
+            </Button>
           </header>
           
           <main className="flex-1 space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Monthly Network Reach" value="100M+" icon={TrendingUp} trend="420%" trendType="positive" />
-              <StatCard label="Daily Production Node" value="60" icon={Layers} />
-              <StatCard label="Scaling Grid Assets" value="20 CH" icon={Network} />
-              <StatCard label="Revenue Velocity" value="$80K/mo" icon={DollarSign} />
+              <MetricCard label="Monthly Views" value="720K" trend="+41% this month" trendUp />
+              <MetricCard label="Active Jobs" value="2" trend="Running now" />
+              <MetricCard label="Monthly Revenue" value="$21.6K" trend="+$6.3K vs Nov" trendUp />
+              <MetricCard label="Credits Left" value="6,400" trend="32% remaining" />
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-3">
-              <Card className="lg:col-span-2 bg-card border-primary/10 overflow-hidden shadow-2xl relative">
-                <CardHeader className="bg-primary/5 py-4 border-b border-primary/10">
-                  <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                    <Star className="w-3 h-3" /> Autonomous Growth Agents (12 Nodes Active)
+            <div className="grid gap-6 lg:grid-cols-2">
+              <Card className="bg-card border-border/50 overflow-hidden shadow-xl">
+                <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
+                  <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                    <Activity className="w-3 h-3" /> Views Growth — 2026
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {growthAgents.map((agent) => (
-                      <div key={agent.name} className="p-4 rounded-2xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-center space-y-2">
-                        <agent.icon className={cn("w-6 h-6 mx-auto", agent.color)} />
-                        <p className={cn("text-[10px] font-bold uppercase tracking-tighter", agent.color)}>{agent.name}</p>
-                        <p className="text-[8px] text-muted-foreground font-mono">SYNCED</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-card border-border/50 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
-                    <Server className="w-4 h-4 text-primary" /> FFmpeg Cluster Load
-                  </CardTitle>
-                  <CardDescription>Industrial-Scale 1,800/mo Throughput</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-6 gap-1">
-                    {renderCluster.map((node) => (
-                      <div 
-                        key={node.id} 
-                        className={`aspect-square rounded-sm border flex flex-col items-center justify-center gap-0.5 transition-all ${
-                          node.status === "Running" ? "bg-green-500/10 border-green-500/30 text-green-500" : "bg-secondary border-border text-muted-foreground"
-                        }`}
-                      >
-                        <span className="text-[6px] font-bold">N{node.id}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="lg:col-span-4 bg-card border-border/50 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="font-headline text-lg flex items-center gap-2 text-primary">
-                    <Workflow className="w-5 h-5" />
-                    Growth Sequence (Trend &rarr; Scale)
-                  </CardTitle>
-                  <CardDescription>12-Agent autonomous network control</CardDescription>
-                </CardHeader>
-                <CardContent>
                   <PerformanceChart />
                 </CardContent>
               </Card>
 
-              <Card className="lg:col-span-3 bg-card border-border/50 shadow-lg flex flex-col">
-                <CardHeader>
-                  <CardTitle className="font-headline text-lg flex items-center gap-2">
-                    <Terminal className="w-5 h-5 text-primary" />
-                    Agent Logic Stream (Firebase)
-                  </CardTitle>
-                  <CardDescription>12-Agent Cluster Execution Logs</CardDescription>
+              <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
+                <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
+                  <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest">Recent Jobs</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 overflow-y-auto space-y-3 max-h-[350px] pr-2 custom-scrollbar">
-                  {logs.map((job, idx) => (
-                    <div key={idx} className="group flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all">
-                      <div className="space-y-1">
-                        <p className="text-[11px] font-bold uppercase tracking-tight">{job.status}</p>
-                        <p className="text-[9px] text-muted-foreground font-mono uppercase">{job.node}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[11px] font-mono font-bold text-primary">{job.progress}%</span>
-                      </div>
+                <CardContent className="pt-4 px-0">
+                  <div className="divide-y divide-border/50">
+                    <JobRow title="AI tools Short — 'ChatGPT secrets'" subtitle="Shorts · AI tools" status="Approval" statusType="warn" />
+                    <JobRow title="Halloween Lofi · 2hr" subtitle="Lofi · Halloween" status="Done" statusType="success" />
+                    <JobRow title="Finance facts #14" subtitle="Shorts · Finance" status="Running" statusType="active" pulse />
+                    <JobRow title="Billionaire habits #7" subtitle="Shorts · Luxury" status="Pending" statusType="muted" />
+                  </div>
+                  <div className="p-4 pt-2">
+                    <Button variant="outline" className="w-full text-[10px] uppercase font-bold h-9 border-border/50">+ New Project</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-3">
+              <Card className="lg:col-span-2 bg-card border-border/50 shadow-xl">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <div>
+                    <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Growth Agents — All Active</CardTitle>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-7 text-[9px] uppercase font-bold">Manage</Button>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                  <AgentMiniCard emoji="📈" title="Trend prediction" sub="Every 2h" status="On" />
+                  <AgentMiniCard emoji="🪝" title="Hook optimizer" sub="Per video" status="On" />
+                  <AgentMiniCard emoji="💰" title="Revenue agent" sub="Daily" status="On" />
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card border-border/50 shadow-xl flex flex-col">
+                <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
+                  <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                    <Terminal className="w-3 h-3" /> Agent Logic Stream
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 overflow-y-auto space-y-1 p-4 max-h-[250px] custom-scrollbar bg-black/20 font-mono text-[10px]">
+                  {logs.map((log, idx) => (
+                    <div key={idx} className="flex gap-2 group border-b border-border/20 py-1 last:border-0">
+                      <span className="text-muted-foreground shrink-0">[{log.time}]</span>
+                      <span className={cn(
+                        "font-bold shrink-0 w-16",
+                        log.status === 'ok' ? "text-green-500" : log.status === 'ag' ? "text-blue-400" : "text-amber-500"
+                      )}>{log.node}:</span>
+                      <span className="text-muted-foreground truncate">{log.msg}</span>
                     </div>
                   ))}
                 </CardContent>
               </Card>
             </div>
+
+            <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold text-amber-500 uppercase tracking-tight italic">"ChatGPT secrets" is ready for review</p>
+                <p className="text-[10px] text-muted-foreground">All 20 agents complete. Approve to publish to YouTube.</p>
+              </div>
+              <Button size="sm" className="bg-amber-500 text-white font-bold uppercase text-[9px] h-8 px-4 hover:bg-amber-600 transition-colors">
+                Review Now
+              </Button>
+            </div>
           </main>
         </SidebarInset>
       </div>
     </SidebarProvider>
+  );
+}
+
+function MetricCard({ label, value, trend, trendUp }: any) {
+  return (
+    <Card className="bg-secondary/30 border-border/50 shadow-md">
+      <CardContent className="p-4">
+        <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest mb-1">{label}</p>
+        <div className="text-2xl font-headline font-bold text-foreground">{value}</div>
+        <p className={cn(
+          "text-[9px] font-bold mt-1 uppercase",
+          trendUp ? "text-green-500" : "text-muted-foreground"
+        )}>
+          {trend}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function JobRow({ title, subtitle, status, statusType, pulse }: any) {
+  const statusColors: any = {
+    warn: "bg-amber-500/10 text-amber-500",
+    success: "bg-green-500/10 text-green-500",
+    active: "bg-blue-500/10 text-blue-400",
+    muted: "bg-secondary text-muted-foreground"
+  };
+  
+  const dotColors: any = {
+    warn: "bg-amber-500",
+    success: "bg-green-500",
+    active: "bg-primary",
+    muted: "bg-muted-foreground"
+  };
+
+  return (
+    <div className="flex items-center gap-3 p-3 hover:bg-secondary/20 transition-colors group">
+      <div className={cn("w-1.5 h-1.5 rounded-full shrink-0", dotColors[statusType], pulse && "animate-pulse")} />
+      <div className="flex-1 min-w-0">
+        <p className="text-[11px] font-bold text-foreground truncate group-hover:text-primary transition-colors">{title}</p>
+        <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter">{subtitle}</p>
+      </div>
+      <Badge variant="outline" className={cn("text-[8px] h-5 uppercase font-bold border-0", statusColors[statusType], pulse && "animate-pulse")}>
+        {status}
+      </Badge>
+    </div>
+  );
+}
+
+function AgentMiniCard({ emoji, title, sub, status }: any) {
+  return (
+    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30 border border-border/50">
+      <span className="text-xl shrink-0">{emoji}</span>
+      <div className="flex-1 min-w-0">
+        <p className="text-[10px] font-bold text-foreground truncate">{title}</p>
+        <p className="text-[9px] text-muted-foreground font-medium">{sub}</p>
+      </div>
+      <Badge className="bg-green-500/20 text-green-500 text-[8px] h-4 uppercase">{status}</Badge>
+    </div>
   );
 }

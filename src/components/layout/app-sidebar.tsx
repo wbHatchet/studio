@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -19,7 +18,10 @@ import {
   MessageSquare,
   Mic2,
   Share2,
-  Network
+  Network,
+  Cpu,
+  Flame,
+  CreditCard
 } from "lucide-react";
 
 import {
@@ -36,88 +38,78 @@ import {
 } from "@/components/ui/sidebar";
 
 const studioNav = [
-  { title: "Network Command Center", icon: LayoutDashboard, url: "/dashboard" },
+  { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
 ];
 
-const intelligenceNav = [
-  { title: "Viral Signals (12-Agent)", icon: TrendingUp, url: "/growth/signals" },
-  { title: "Keyword Intelligence", icon: Target, url: "/strategy" },
-];
-
-const productionNav = [
-  { title: "Production Queue", icon: Layers, url: "/projects" },
-  { title: "Voice Architect", icon: Mic2, url: "/production/voice" },
-  { title: "Visuals Director", icon: Video, url: "/production/visuals" },
-  { title: "SEO Metadata Hub", icon: Search, url: "/seo" },
-  { title: "Approval & Publish", icon: CheckCircle2, url: "/review" },
+const workspaceNav = [
+  { title: "Job Queue", icon: Layers, url: "/projects", badge: "2" },
+  { title: "Live Pipeline", icon: Zap, url: "/review" },
+  { title: "AI Strategy Chat", icon: MessageSquare, url: "/chat" },
 ];
 
 const growthNav = [
-  { title: "Viral Replication (Lab)", icon: Zap, url: "/growth/lab" },
-  { title: "Shorts & Multi-Platform", icon: Share2, url: "/growth/repurpose" },
-  { title: "Engagement Cluster", icon: MessageSquare, url: "/growth/engagement" },
+  { title: "Growth Agents", icon: Cpu, url: "/growth/lab" },
+  { title: "Niche Intel", icon: TrendingUp, url: "/strategy" },
+  { title: "Analytics", icon: BarChart3, url: "/analytics" },
 ];
 
-const analyticsNav = [
-  { title: "Retention & Monetization", icon: BarChart3, url: "/analytics" },
-  { title: "Managed Channel Grid", icon: Radio, url: "/channels" },
+const configNav = [
+  { title: "API Keys", icon: Target, url: "/settings" },
+  { title: "Billing", icon: CreditCard, url: "/settings" },
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-sidebar-border">
-      <SidebarHeader className="p-4">
+    <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-border/50">
+      <SidebarHeader className="p-4 border-b border-border/50">
         <div className="flex items-center gap-3 px-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 border border-primary/30">
-            <Network className="h-6 w-6" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" className="text-background"><path d="M9 2L3 7v9h12V7L9 2z" fill="currentColor" stroke="currentColor" strokeWidth="0.5"/><path d="M6 16v-6h6v6" fill="currentColor" opacity="0.4"/><circle cx="9" cy="7" r="1.5" fill="currentColor"/></svg>
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="font-headline font-bold text-base leading-tight">
-              12-Agent Engine
+            <span className="font-headline font-bold text-sm leading-tight uppercase tracking-tight">
+              AI Empire
             </span>
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-primary">
-              Hyper-Scale v1.1M
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
+              Full automation stack
             </span>
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent className="px-2">
+      
+      <SidebarContent className="px-2 pt-4">
+        <div className="px-4 mb-4">
+          <button className="w-full bg-primary text-primary-foreground font-bold uppercase text-[10px] py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/10">
+            <Play className="w-3 h-3 fill-current" /> New Project
+          </button>
+        </div>
+
         <SidebarGroup>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Workspace</SidebarGroupLabel>
           <SidebarMenu>
             {studioNav.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.url}
-                  tooltip={item.title}
-                  className="h-10 rounded-xl"
-                >
+                <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="h-9 rounded-lg">
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
-                    <span className="font-medium">{item.title}</span>
+                    <span className="font-medium text-[11px]">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
-          </SidebarMenu>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Intelligence Layer</SidebarGroupLabel>
-          <SidebarMenu>
-            {intelligenceNav.map((item) => (
+            {workspaceNav.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.url}
-                  tooltip={item.title}
-                  className="h-10 rounded-xl"
-                >
+                <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="h-9 rounded-lg relative">
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
-                    <span className="font-medium">{item.title}</span>
+                    <span className="font-medium text-[11px]">{item.title}</span>
+                    {item.badge && (
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 min-w-[15px] h-3.5 bg-red-500 text-white rounded-full text-[8px] font-bold flex items-center justify-center px-1">
+                        {item.badge}
+                      </span>
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -126,40 +118,14 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Content Factory</SidebarGroupLabel>
-          <SidebarMenu>
-            {productionNav.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.url}
-                  tooltip={item.title}
-                  className="h-10 rounded-xl"
-                >
-                  <Link href={item.url}>
-                    <item.icon className="h-4 w-4" />
-                    <span className="font-medium">{item.title}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Growth Cluster</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Growth</SidebarGroupLabel>
           <SidebarMenu>
             {growthNav.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname.startsWith(item.url)}
-                  tooltip={item.title}
-                  className="h-10 rounded-xl"
-                >
+                <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="h-9 rounded-lg">
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
-                    <span className="font-medium">{item.title}</span>
+                    <span className="font-medium text-[11px]">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -168,19 +134,14 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-[10px] tracking-widest uppercase px-4 py-3">Performance Hub</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-bold text-[9px] tracking-widest uppercase px-4 py-2">Config</SidebarGroupLabel>
           <SidebarMenu>
-            {analyticsNav.map((item) => (
+            {configNav.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.url}
-                  tooltip={item.title}
-                  className="h-10 rounded-xl"
-                >
+                <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="h-9 rounded-lg">
                   <Link href={item.url}>
                     <item.icon className="h-4 w-4" />
-                    <span className="font-medium">{item.title}</span>
+                    <span className="font-medium text-[11px]">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -188,17 +149,18 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Settings" className="h-10 rounded-xl hover:bg-sidebar-accent">
-              <Link href="/settings">
-                <Settings className="h-4 w-4" />
-                <span className="font-medium">Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+
+      <SidebarFooter className="p-4 border-t border-border/50">
+        <div className="flex items-center gap-3">
+          <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-[10px] font-bold text-foreground shrink-0 border border-border/50">U</div>
+          <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
+            <p className="text-[10px] font-bold text-foreground truncate uppercase">Your Account</p>
+            <div className="h-1 w-full bg-border/50 rounded-full mt-1 overflow-hidden">
+              <div className="h-full bg-primary w-[68%] rounded-full" />
+            </div>
+            <p className="text-[8px] text-muted-foreground mt-1 uppercase font-bold tracking-tighter">13.6K / 20K Credits</p>
+          </div>
+        </div>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

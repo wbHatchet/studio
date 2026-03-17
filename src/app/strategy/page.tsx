@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -6,215 +5,125 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, Target, TrendingUp, Layers, BookOpen, DollarSign, Zap, Brain, Search, Activity } from "lucide-react";
-import { aiNicheStrategy } from "@/ai/flows/ai-niche-strategy";
 import { Badge } from "@/components/ui/badge";
+import { Target, Search, BarChart3, TrendingUp, Zap, Sparkles, Brain, Award, Activity } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
 
-export default function StrategyPage() {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    youtubeTrends: "High chatter about AI job replacement tools and dark psychology tricks. 30s twist/loop formats are dominating the FYP.",
-    competitionAnalysis: "Gaps identified in 'Future Tech' and 'Money Facts' for global audiences. Language-agnostic visual satiation is scaling fast.",
-    keywordData: "Searches for 'AI website builder' and 'manipulation hacks' up 300% week-over-month.",
-    includeFastestTo1M: true
-  });
+const NICHE_DATA = [
+  { name: 'AI tools & automation', emoji: '🤖', desc: 'Highest CPM on YouTube. Every new AI tool is a video. Massive interest from software companies.', ex: ['"5 AI tools that replace your job"', '"AI that writes emails for you"', '"ChatGPT secrets nobody uses"'], cpm: '$10–$20', grow: 96, comp: 50, ai: 98, ret: 82 },
+  { name: 'Body & health facts', emoji: '🧬', desc: 'High-retention curiosity hooks. "What happens if..." format is instantly compelling.', ex: ['"What if you stop drinking water"', '"What happens in your brain during sleep"'], cpm: '$6–$12', grow: 78, comp: 28, ai: 84, ret: 92 },
+  { name: 'Luxury & billionaires', emoji: '💰', desc: 'Aspiration + curiosity = most viral emotional combo. Jeff Bezos, yachts, daily routines.', ex: ['"Jeff Bezos daily routine"', '"Inside a $400M yacht"'], cpm: '$7–$15', grow: 88, comp: 50, ai: 80, ret: 84 },
+  { name: 'Micro-learning & facts', emoji: '🧠', desc: 'Viewers prefer quick-learning. Psychology tricks, science facts, money habits in 60s.', ex: ['"3 psychology tricks for status"', '"History in 30 seconds: Rome"'], cpm: '$5–$10', grow: 74, comp: 26, ai: 96, ret: 76 },
+  { name: 'Transformation', emoji: '⚡', desc: 'Algorithm specifically rewards before→after content. Clean room, wealth transformation.', ex: ['"Dirty room → clean in 60 seconds"', '"$0 to first $10K journey"'], cpm: '$4–$9', grow: 86, comp: 48, ai: 74, ret: 90 },
+];
 
-  async function handleAnalyze() {
-    setLoading(true);
-    try {
-      const output = await aiNicheStrategy(formData);
-      setResult(output);
-      toast({ title: "Blueprint Intelligence Calibrated", description: "Network targets set for $1M/year growth." });
-    } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "Strategy discovery failed." });
-    } finally {
-      setLoading(false);
-    }
-  }
+export default function NicheIntelPage() {
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const activeNiche = NICHE_DATA[selectedIdx];
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <SidebarInset className="bg-background">
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Intelligence Hub (12-Agent Cluster)</h1>
+            <div className="flex-1">
+              <h1 className="font-headline font-bold text-xl uppercase text-primary">Niche Intelligence</h1>
+              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">7 fastest-growing niches in 2026 — click to explore</p>
+            </div>
           </header>
 
-          <main className="p-6 md:p-8 space-y-8">
-            <div className="grid gap-8 lg:grid-cols-2">
-              <div className="space-y-6">
-                <Card className="bg-card">
-                  <CardHeader>
-                    <CardTitle className="font-headline text-lg flex items-center gap-2">
-                      <Search className="w-5 h-5 text-primary" />
-                      Keyword Intelligence Agent
-                    </CardTitle>
-                    <CardDescription>Scans Google Trends & VidIQ for low-competition gaps</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Trending Keywords (VidIQ Scan)</Label>
-                      <Input 
-                        placeholder="Search volumes, CTR trends..."
-                        value={formData.keywordData}
-                        onChange={(e) => setFormData({...formData, keywordData: e.target.value})}
-                        className="bg-secondary/30"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Trend Prediction Signals</Label>
-                      <Textarea 
-                        placeholder="Paste trend snippets..."
-                        value={formData.youtubeTrends}
-                        onChange={(e) => setFormData({...formData, youtubeTrends: e.target.value})}
-                        className="min-h-[100px] bg-secondary/30"
-                      />
-                    </div>
-                    <Button 
-                      className="w-full bg-primary text-primary-foreground font-bold h-12 shadow-lg uppercase tracking-widest text-[10px]"
-                      onClick={handleAnalyze}
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Calibrating Intel...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="mr-2 h-4 w-4" />
-                          Execute Market Analysis
-                        </>
-                      )}
-                    </Button>
-                  </CardContent>
-                </Card>
+          <main className="p-6 md:p-8 space-y-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {NICHE_DATA.map((niche, idx) => (
+                <button 
+                  key={niche.name}
+                  onClick={() => setSelectedIdx(idx)}
+                  className={cn(
+                    "p-4 rounded-2xl border transition-all text-center group",
+                    selectedIdx === idx 
+                      ? "border-primary bg-primary/10 shadow-lg shadow-primary/10" 
+                      : "border-border/50 hover:border-primary/30 bg-secondary/20"
+                  )}
+                >
+                  <span className="text-2xl mb-2 block">{niche.emoji}</span>
+                  <p className="text-[10px] font-bold uppercase text-foreground leading-tight">{niche.name}</p>
+                  <p className={cn(
+                    "text-[9px] mt-1 font-bold",
+                    selectedIdx === idx ? "text-primary" : "text-green-500/70"
+                  )}>{niche.cpm} CPM</p>
+                </button>
+              ))}
+            </div>
 
-                <Card className="bg-primary/5 border-primary/20 shadow-xl overflow-hidden">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                      <Activity className="w-3 h-3" /> Retention Blueprint (95%+ Target)
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 border border-primary/20 rounded-xl bg-background/50 space-y-1">
-                        <p className="text-[10px] font-bold text-primary uppercase">0-2s: Shock Hook</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Stop the scroll immediately."</p>
-                      </div>
-                      <div className="p-3 border border-border/50 rounded-xl bg-secondary/30 space-y-1">
-                        <p className="text-[10px] font-bold text-foreground uppercase">2-10s: Curiosity Gap</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Force viewer to stay."</p>
-                      </div>
-                      <div className="p-3 border border-border/50 rounded-xl bg-secondary/30 space-y-1">
-                        <p className="text-[10px] font-bold text-foreground uppercase">10-20s: Value Reveal</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Fast dopamine hits."</p>
-                      </div>
-                      <div className="p-3 border border-primary/20 rounded-xl bg-background/50 space-y-1">
-                        <p className="text-[10px] font-bold text-primary uppercase">20-30s: Twist + Loop</p>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">"Trigger binge-watching."</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div className="space-y-6">
-                {!result && !loading && (
-                  <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
-                    <Target className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium">Growth Engine Idle</p>
-                    <p className="text-sm text-muted-foreground">Ready to scan for viral high-CPM content gaps.</p>
+            <Card className="bg-card border-border/50 shadow-2xl overflow-hidden">
+              <div className="grid md:grid-cols-2">
+                <div className="p-8 space-y-6 border-r border-border/50">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-headline font-bold text-foreground">{activeNiche.name}</h2>
+                    <p className="text-xs leading-relaxed text-muted-foreground italic">"{activeNiche.desc}"</p>
                   </div>
-                )}
 
-                {result && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                    <Card className="bg-card border-primary/20">
-                      <CardHeader className="bg-primary/5 flex flex-row items-center justify-between">
-                        <CardTitle className="flex items-center gap-2 text-primary font-headline text-lg">
-                          <Layers className="w-5 h-5" />
-                          Network Asset Scoring
-                        </CardTitle>
-                        <Badge variant="outline" className="border-primary/20 text-primary uppercase font-mono text-[10px]">BLUEPRINT_V12</Badge>
-                      </CardHeader>
-                      <CardContent className="pt-6 space-y-6">
-                        {result.suggestedMicroNiches.map((niche: any, idx: number) => (
-                          <div key={idx} className="space-y-2 p-4 rounded-xl bg-secondary/20 border border-border">
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <h4 className="font-bold text-sm">{niche.name}</h4>
-                                <p className="text-[10px] text-primary font-bold uppercase">{niche.growthFormat}</p>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-mono font-bold text-green-500">{niche.cpmEstimate} CPM</span>
-                                <Badge className="bg-primary text-primary-foreground text-[9px] uppercase">
-                                  Index: {niche.score}
-                                </Badge>
-                              </div>
-                            </div>
-                            <Progress value={niche.score} className="h-1.5" />
-                          </div>
-                        ))}
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-card border-blue-500/20">
-                      <CardHeader className="bg-blue-500/5">
-                        <CardTitle className="flex items-center gap-2 text-blue-400 font-headline text-lg">
-                          <BookOpen className="w-5 h-5" />
-                          Trend Prediction Node
-                        </CardTitle>
-                        <CardDescription>Binge-watch behavior triggers algorithm amplification</CardDescription>
-                      </CardHeader>
-                      <CardContent className="pt-6 space-y-4">
-                        {result.serializedSeriesIdeas.map((series: any, idx: number) => (
-                          <div key={idx} className="p-3 rounded-lg border border-blue-500/10 bg-blue-500/5">
-                            <p className="text-xs font-bold text-blue-400">{series.seriesTitle}</p>
-                            <p className="text-[11px] text-muted-foreground italic leading-relaxed mt-1">"{series.concept}"</p>
-                          </div>
-                        ))}
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-card">
-                      <CardHeader>
-                        <CardTitle className="font-headline text-lg flex items-center gap-2">
-                          <DollarSign className="w-5 h-5 text-green-500" /> Monetization Forecast
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="grid grid-cols-3 gap-4">
-                        <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">AdSense</p>
-                          <p className="text-sm font-bold text-primary mt-1">$20K/mo</p>
+                  <div className="space-y-3">
+                    <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Example Shorts Strategy</p>
+                    <div className="space-y-2">
+                      {activeNiche.ex.map((ex, i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30 border border-border/50 text-[11px] font-medium">
+                          <span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[9px] font-bold">{i+1}</span>
+                          {ex}
                         </div>
-                        <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Affiliate</p>
-                          <p className="text-sm font-bold text-green-500 mt-1">$30K/mo</p>
-                        </div>
-                        <div className="p-3 rounded-xl bg-secondary/30 text-center">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase">Sponsors</p>
-                          <p className="text-sm font-bold text-orange-400 mt-1">$30K/mo</p>
-                        </div>
-                      </CardContent>
-                    </Card>
+                      ))}
+                    </div>
                   </div>
-                )}
+                </div>
+
+                <div className="p-8 bg-secondary/10 space-y-6">
+                  <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Niche Scorecard (Algorithm Index)</p>
+                  <div className="space-y-5">
+                    <ScoreRow label="CPM Potential" value={activeNiche.cpm} progress={activeNiche.grow * 0.9} color="bg-primary" />
+                    <ScoreRow label="Growth Rate" value="Explosive" progress={activeNiche.grow} color="bg-blue-400" />
+                    <ScoreRow label="Competition (Low = Better)" value="Medium" progress={100 - activeNiche.comp} color="bg-amber-500" />
+                    <ScoreRow label="AI-Friendliness" value="Perfect" progress={activeNiche.ai} color="bg-primary" />
+                    <ScoreRow label="Retention Index" value="High" progress={activeNiche.ret} color="bg-green-500" />
+                  </div>
+                </div>
               </div>
+            </Card>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="bg-primary/5 border-primary/20 p-6">
+                <Target className="w-6 h-6 text-primary mb-3" />
+                <h3 className="text-[11px] font-bold uppercase text-primary mb-1">Profit Validation</h3>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">System only pushes ideas with &gt;$8 CPM potential and &lt;10K competitor average sub count.</p>
+              </Card>
+              <Card className="bg-blue-400/5 border-blue-400/20 p-6">
+                <Brain className="w-6 h-6 text-blue-400 mb-3" />
+                <h3 className="text-[11px] font-bold uppercase text-blue-400 mb-1">Agent Strategy</h3>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">Director Agent uses "Curiosity Gaps" to force retention scores above the 90% viral threshold.</p>
+              </Card>
+              <Card className="bg-amber-500/5 border-amber-500/20 p-6">
+                <Zap className="w-6 h-6 text-amber-500 mb-3" />
+                <h3 className="text-[11px] font-bold uppercase text-amber-500 mb-1">Viral Replication</h3>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">If any niche node hits 1M views, the system autonomously deploys 10 micro-niche sub-channels.</p>
+              </Card>
             </div>
           </main>
         </SidebarInset>
       </div>
     </SidebarProvider>
+  );
+}
+
+function ScoreRow({ label, value, progress, color }: any) {
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-end text-[10px] font-bold uppercase">
+        <span className="text-muted-foreground">{label}</span>
+        <span className="text-foreground">{value}</span>
+      </div>
+      <Progress value={progress} className={cn("h-1.5 bg-border/50", color)} />
+    </div>
   );
 }
