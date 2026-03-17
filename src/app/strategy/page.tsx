@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Target, Search, BarChart3, TrendingUp, Zap, Sparkles, Brain, Award, Activity } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 const NICHE_DATA = [
   { name: 'AI tools & automation', emoji: '🤖', desc: 'Highest CPM on YouTube. Every new AI tool is a video. Massive interest from software companies.', ex: ['"5 AI tools that replace your job"', '"AI that writes emails for you"', '"ChatGPT secrets nobody uses"'], cpm: '$10–$20', grow: 96, comp: 50, ai: 98, ret: 82 },
