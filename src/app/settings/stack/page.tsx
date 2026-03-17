@@ -13,6 +13,7 @@ const STACK = [
   { name: 'Claude / GPT-4o', desc: 'AI models powering Director + Prompt agents (model-agnostic).', badge: 'Active' },
   { name: 'Suno AI', desc: 'Music generation node triggered via Playwright automation.', badge: 'Active' },
   { name: 'FFmpeg Node', desc: 'MP3 + artwork → 1080p MP4 with high-retention zoom effects.', badge: 'Active' },
+  { name: 'Zapier / n8n', desc: 'Distribution orchestration and multi-platform trigger layer.', badge: 'Active' },
   { name: 'YouTube Data API', desc: 'Handles industrial-scale upload, metadata, and scheduling.', badge: 'Active' },
   { name: 'AWS S3 / GCS', desc: 'Asset storage—hosting MP3, JPG, and MP4 buffer blobs.', badge: 'Active' },
 ];
@@ -64,7 +65,8 @@ export default function TechStackPage() {
                 <BuildStep num="3" label="Build Lobster YAML pipeline — Deterministic step order" />
                 <BuildStep num="4" label="Connect Suno via Playwright browser automation" />
                 <BuildStep num="5" label="Add DALL-E image agent + FFmpeg zoom scripts" />
-                <BuildStep num="6" label="Connect YouTube Data API for scheduled publishing" />
+                <BuildStep num="6" label="Connect Zapier/n8n for multi-platform distribution" />
+                <BuildStep num="7" label="Connect YouTube Data API for scheduled publishing" />
               </CardContent>
             </Card>
           </main>

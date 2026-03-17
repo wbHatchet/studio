@@ -18,7 +18,8 @@ import {
   Play, 
   LogOut,
   Zap,
-  MessageSquare
+  MessageSquare,
+  Key
 } from "lucide-react";
 
 import {
@@ -51,9 +52,10 @@ const growthNav = [
 ];
 
 const configNav = [
-  { title: "API Cluster", icon: Settings, url: "/settings" },
+  { title: "API Keys", icon: Key, url: "/apikeys" },
   { title: "Billing", icon: CreditCard, url: "/billing" },
   { title: "Admin", icon: ShieldCheck, url: "/admin" },
+  { title: "Grid Config", icon: Settings, url: "/settings" },
 ];
 
 export function AppSidebar() {

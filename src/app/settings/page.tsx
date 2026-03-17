@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,9 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers, Terminal, Search, Share2, Youtube, Mic2 } from "lucide-react";
+import { Music, Info, Cpu, Zap, Video, HardDrive, Server, Layers, Terminal, Search, Share2, Youtube, Mic2, ShieldAlert } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const { toast } = useToast();
@@ -31,7 +33,7 @@ export default function SettingsPage() {
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Command Grid Configuration</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Grid Configuration</h1>
           </header>
 
           <main className="p-6 md:p-8">
@@ -39,7 +41,6 @@ export default function SettingsPage() {
               <Tabs defaultValue="core" className="space-y-6">
                 <TabsList className="bg-secondary/50 p-1 border border-border/50 rounded-xl">
                   <TabsTrigger value="core" className="gap-2 font-bold uppercase text-[10px] tracking-widest"><Cpu className="w-4 h-4" /> Command Brain</TabsTrigger>
-                  <TabsTrigger value="apis" className="gap-2 font-bold uppercase text-[10px] tracking-widest"><Terminal className="w-4 h-4" /> API Cluster</TabsTrigger>
                   <TabsTrigger value="storage" className="gap-2 font-bold uppercase text-[10px] tracking-widest"><HardDrive className="w-4 h-4" /> Asset Storage</TabsTrigger>
                   <TabsTrigger value="media" className="gap-2 font-bold uppercase text-[10px] tracking-widest"><Video className="w-4 h-4" /> Production</TabsTrigger>
                 </TabsList>
@@ -68,33 +69,30 @@ export default function SettingsPage() {
                       </div>
                     </CardContent>
                   </Card>
+
+                  <Card className="bg-secondary/10 border-dashed border-border/50 p-6 rounded-2xl flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <ShieldAlert className="w-8 h-8 text-orange-400" />
+                      <div>
+                        <h4 className="text-sm font-bold uppercase tracking-tight">Manage Credentials</h4>
+                        <p className="text-[10px] text-muted-foreground uppercase font-medium">API Keys, OAuth Secrets, and Webhook URLs have moved to the Registry.</p>
+                      </div>
+                    </div>
+                    <Link href="/apikeys">
+                      <Button variant="outline" className="text-[10px] font-bold uppercase h-9 border-border/50 px-6">Open Registry</Button>
+                    </Link>
+                  </Card>
                 </TabsContent>
 
-                <TabsContent value="apis" className="space-y-6">
+                <TabsContent value="storage" className="space-y-6">
                   <Card className="bg-card border-border/50">
                     <CardHeader>
-                      <CardTitle className="font-headline text-primary uppercase text-sm tracking-widest">Industrial API Stack</CardTitle>
+                      <CardTitle className="font-headline text-primary uppercase text-sm tracking-widest">Bucket Configuration</CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-6 md:grid-cols-2">
+                    <CardContent className="space-y-4">
                       <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2"><Zap className="w-3 h-3" /> OpenAI (Scripting)</Label>
-                        <Input type="password" value="************************" className="bg-secondary/30 font-mono" readOnly />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2"><Mic2 className="w-3 h-3" /> ElevenLabs (Voice)</Label>
-                        <Input type="password" value="************************" className="bg-secondary/30 font-mono" readOnly />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2"><Search className="w-3 h-3" /> Apify (Trends)</Label>
-                        <Input type="password" placeholder="Token..." className="bg-secondary/30 font-mono" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2"><Share2 className="w-3 h-3" /> Repurpose.io (Dist)</Label>
-                        <Input type="password" placeholder="API Key..." className="bg-secondary/30 font-mono" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2"><Youtube className="w-3 h-3" /> YouTube Data API v3</Label>
-                        <Input type="password" placeholder="OAuth Secret..." className="bg-secondary/30 font-mono" />
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">GCS Asset Bucket</Label>
+                        <Input value="video-assets-factory-prod" className="bg-secondary/30 font-mono" readOnly />
                       </div>
                     </CardContent>
                   </Card>
