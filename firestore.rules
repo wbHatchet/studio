@@ -8,9 +8,18 @@ service cloud.firestore {
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
+    function isSystemWorker() {
+      return request.resource.data.apiKey == 'INDUSTRIAL_SYSTEM_KEY_2026';
+    }
 
     match /userProfiles/{userId} {
       allow get, list, create, update, delete: if isOwner(userId);
+
+      match /agentRuns/{runId} {
+        allow read: if isOwner(userId);
+        // Allow the system log-alert API or background workers to create logs
+        allow create: if isOwner(userId) || isSystemWorker();
+      }
 
       match /videoIdeas/{ideaId} {
         allow read, write: if isOwner(userId);

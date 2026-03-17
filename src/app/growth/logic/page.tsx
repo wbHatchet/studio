@@ -1,13 +1,31 @@
+
 "use client";
 
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle, Workflow, Trash2 } from "lucide-react";
+import { BrainCircuit, Repeat, ArrowUpRight, Zap, Cpu, ShieldCheck, Database, Server, Info, History, Activity, Globe, AlertTriangle, Workflow, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase";
+import { collection, query, orderBy, limit } from "firebase/firestore";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 export default function DirectorLogicPage() {
+  const { user } = useUser();
+  const db = useFirestore();
+
+  const ledgerQuery = useMemoFirebase(() => {
+    if (!db || !user) return null;
+    return query(
+      collection(db, "userProfiles", user.uid, "agentRuns"),
+      orderBy("timestamp", "desc"),
+      limit(10)
+    );
+  }, [db, user]);
+
+  const { data: recentRuns, isLoading } = useCollection(ledgerQuery);
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#0a0a0f]">
@@ -37,6 +55,59 @@ export default function DirectorLogicPage() {
                 the Director must attempt an alternative model or move to a "simulation" state rather than breaking the pipeline.
               </p>
             </div>
+
+            {/* LIVE CORRECTION LEDGER */}
+            <Card className="bg-card border-border/50 shadow-xl overflow-hidden rounded-3xl">
+              <CardHeader className="bg-orange-500/5 border-b border-border/50 py-4 flex flex-row items-center justify-between">
+                <CardTitle className="text-[10px] font-bold uppercase text-orange-400 flex items-center gap-2 tracking-widest">
+                  <AlertTriangle className="w-4 h-4" /> Live Correction Ledger (Firestore)
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-[8px] font-black uppercase text-muted-foreground">Streaming logs</span>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader className="bg-secondary/10">
+                    <TableRow className="border-border/50">
+                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">Timestamp</TableHead>
+                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10">Agent Node</TableHead>
+                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10">Status</TableHead>
+                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">System Message</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {isLoading && (
+                      <TableRow><TableCell colSpan={4} className="text-center py-8 text-[10px] uppercase font-bold text-muted-foreground animate-pulse">Initializing Ledger Stream...</TableCell></TableRow>
+                    )}
+                    {recentRuns?.map((run: any) => (
+                      <TableRow key={run.id} className="border-border/50 hover:bg-secondary/5 transition-colors">
+                        <TableCell className="px-6 py-3 font-mono text-[9px] text-muted-foreground">
+                          {run.timestamp?.toDate ? format(run.timestamp.toDate(), "HH:mm:ss") : "Pending..."}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-[8px] font-black uppercase border-border/50">{run.agentId}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          {run.success ? (
+                            <div className="flex items-center gap-1 text-green-500 font-bold text-[9px] uppercase"><CheckCircle2 className="w-3 h-3" /> OK</div>
+                          ) : (
+                            <div className="flex items-center gap-1 text-destructive font-bold text-[9px] uppercase"><XCircle className="w-3 h-3" /> ERR</div>
+                          )}
+                        </TableCell>
+                        <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed italic">
+                          "{run.message || "System trace nominal."}"
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {!isLoading && (!recentRuns || recentRuns.length === 0) && (
+                      <TableRow><TableCell colSpan={4} className="text-center py-8 text-[10px] uppercase font-bold text-muted-foreground">No ledger entries detected.</TableCell></TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <LogicCard 
@@ -108,68 +179,6 @@ export default function DirectorLogicPage() {
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Memory Architecture */}
-            <Card className="bg-card border-border/50 shadow-xl overflow-hidden rounded-3xl">
-              <CardHeader className="bg-primary/5 border-b border-border/50 py-4">
-                <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
-                  <Database className="w-4 h-4" /> Memory & Context Architecture
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <Table>
-                  <TableHeader className="bg-secondary/10">
-                    <TableRow className="border-border/50">
-                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">Memory Layer</TableHead>
-                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10">Storage</TableHead>
-                      <TableHead className="text-[9px] font-black uppercase tracking-widest h-10 px-6">Description</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="border-border/50 hover:bg-secondary/5 transition-colors">
-                      <TableCell className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <Activity className="w-3 h-3 text-blue-400" />
-                          <span className="font-bold text-xs">Active Memory</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-[10px] text-primary">jobs/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">Real-time status of the 20-agent pipeline.</TableCell>
-                    </TableRow>
-                    <TableRow className="border-border/50 hover:bg-secondary/5 transition-colors">
-                      <TableCell className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <History className="w-3 h-3 text-purple-400" />
-                          <span className="font-bold text-xs">Institutional Memory</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-[10px] text-primary">channels/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">Historical performance data used to calculate the "Viral Formula".</TableCell>
-                    </TableRow>
-                    <TableRow className="border-border/50 hover:bg-secondary/5 transition-colors">
-                      <TableCell className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <Globe className="w-3 h-3 text-green-400" />
-                          <span className="font-bold text-xs">External Intel</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-[10px] text-primary">trendSignals/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">Live "heat map" of viral topics across YouTube, TikTok, and Reddit.</TableCell>
-                    </TableRow>
-                    <TableRow className="border-none hover:bg-secondary/5 transition-colors">
-                      <TableCell className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className="w-3 h-3 text-orange-400" />
-                          <span className="font-bold text-xs">Correction Ledger</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-[10px] text-primary">agentRuns/</TableCell>
-                      <TableCell className="px-6 text-[10px] text-muted-foreground leading-relaxed">A log of every agent's "Hallucination" or "Error" to avoid repeating mistakes.</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
               </CardContent>
             </Card>
           </main>
