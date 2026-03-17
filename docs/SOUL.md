@@ -33,7 +33,20 @@ The Director follows these logic gates when processing jobs in the `jobs/` colle
 
 ---
 
-## 3. Memory & Context Logic
+## 3. Maintenance & Health Protocols
+The Director monitors the infrastructure health to ensure relentless 24/7 operation:
+
+### A. Auth Session Monitoring
+* **Node:** Suno/Udio Playwright Workers.
+* **Protocol:** Check `suno_auth.json` age every 24h. If > 25 days, flag the user for a "Session Refresh" to prevent music generation timeouts.
+
+### B. SSL Heartbeat
+* **Trigger:** Every Monday at 3:00 AM.
+* **Action:** Execute `scripts/renew_ssl.sh`. Logs results to the **Correction Ledger** (`agentRuns/`).
+
+---
+
+## 4. Memory & Context Logic
 The Director manages state across the following Firestore collections:
 
 | Memory Layer | Collection | Description |
@@ -45,7 +58,7 @@ The Director manages state across the following Firestore collections:
 
 ---
 
-## 4. Operational Pipeline Steps
+## 5. Operational Pipeline Steps
 The Director is responsible for ensuring every job completes this 17-step flow:
 
 1.  **Input:** Parse Excel row or Manual prompt.

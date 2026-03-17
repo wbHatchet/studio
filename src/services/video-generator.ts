@@ -1,6 +1,9 @@
+import { exec } from 'child_process';
+import path from 'path';
+
 /**
- * Industrial FFmpeg Video Generator configuration.
- * Optimized for high-retention Shorts with subtle animation to bypass "static content" flags.
+ * Industrial Video Generator Service.
+ * Bridges the Node.js worker logic with optimized shell scripts for high-performance rendering.
  */
 
 export interface RenderConfig {
@@ -9,27 +12,29 @@ export interface RenderConfig {
   outputPath: string;
 }
 
-export const generateVideoRenderCommand = (config: RenderConfig) => {
-  // This command provides a Ken Burns zoom effect:
-  // - scale=8000:-1: high res scaling for zoom quality
-  // - zoompan: subtle zoom (0.0005) centered on the frame
-  // - s=1080x1920: standard vertical Shorts resolution
-  const filterGraph = `scale=8000:-1,zoompan=z='min(zoom+0.0005,1.5)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920`;
+export async function executeRender(config: RenderConfig): Promise<string> {
+  const scriptPath = path.join(process.cwd(), 'scripts', 'assemble_video.sh');
   
-  return {
-    inputs: [
-      { path: config.imagePath, options: ['-loop 1'] },
-      { path: config.audioPath }
-    ],
-    options: [
-      '-vf', filterGraph,
-      '-c:v', 'libx264',
-      '-tune', 'stillimage',
-      '-c:a', 'aac',
-      '-b:a', '192k',
-      '-pix_fmt', 'yuv420p',
-      '-shortest'
-    ],
-    output: config.outputPath
-  };
+  return new Promise((resolve, reject) => {
+    // Calling the high-retention zoom script via child_process
+    exec(`bash ${scriptPath} "${config.imagePath}" "${config.audioPath}" "${config.outputPath}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`FFmpeg Render Error: ${error.message}`);
+        return reject(error);
+      }
+      if (stderr && !stderr.includes('ffmpeg version')) {
+        console.warn(`FFmpeg Render Warning: ${stderr}`);
+      }
+      
+      console.log(`FFmpeg Render Successful: ${config.outputPath}`);
+      resolve(config.outputPath);
+    });
+  });
+}
+
+/**
+ * Returns the filter graph configuration for manual fluent-ffmpeg usage if needed.
+ */
+export const getRetentionFilterGraph = () => {
+  return "scale=8000:-1,zoompan=z='min(zoom+0.0005,1.5)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920";
 };
