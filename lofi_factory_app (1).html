@@ -1,0 +1,574 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px;background:transparent}
+.app{display:grid;grid-template-columns:200px 1fr;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;min-height:680px}
+.sb{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.sb-top{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:9px}
+.logo-dot{width:26px;height:26px;border-radius:7px;background:#7c3aed;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-dot svg{width:14px;height:14px}
+.logo-name{font-size:14px;font-weight:500}
+.nav{padding:8px;flex:1}
+.nl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.6px;color:var(--color-text-tertiary);padding:8px 8px 4px}
+.na{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);cursor:pointer;margin-bottom:1px;transition:background 0.1s}
+.na:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.na.on{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
+.na svg{width:14px;height:14px;flex-shrink:0;opacity:0.6}
+.na.on svg{opacity:1}
+.new-btn{margin:0 8px 10px;padding:8px;border-radius:var(--border-radius-md);background:#7c3aed;color:#fff;border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;font-weight:500;width:calc(100% - 16px);display:flex;align-items:center;justify-content:center;gap:6px}
+.new-btn:hover{background:#6d28d9}
+.sb-foot{padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.av{width:26px;height:26px;border-radius:50%;background:var(--color-background-tertiary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.av-info{flex:1;overflow:hidden}
+.av-name{font-size:11px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.av-plan{font-size:10px;color:var(--color-text-tertiary)}
+.main{background:var(--color-background-primary);overflow-y:auto;max-height:680px}
+.view{display:none;padding:20px 24px}
+.view.on{display:block}
+.ph{margin-bottom:20px}
+.pt{font-size:17px;font-weight:500;margin-bottom:3px}
+.ps{font-size:12px;color:var(--color-text-secondary)}
+.mets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
+.ml{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px}
+.mv{font-size:22px;font-weight:500}
+.md{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
+.md.up{color:#3B6D11}
+.two{display:grid;grid-template-columns:1fr 300px;gap:14px;align-items:start}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px}
+.ct{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px;color:var(--color-text-tertiary);margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:500}
+.bg{background:#EAF3DE;color:#27500A}.ba{background:#FAEEDA;color:#633806}.bb{background:#E6F1FB;color:#0C447C}.bp{background:#EEEDFE;color:#3C3489}.bx{background:var(--color-background-secondary);color:var(--color-text-tertiary)}.br{background:#FCEBEB;color:#791F1F}
+.row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.row:last-child{border-bottom:none}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dg{background:#639922}.da{background:#EF9F27}.dp{background:#7c3aed}.dx{background:var(--color-border-secondary)}.dr{background:#E24B4A}
+.step{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:4px}
+.step.done{border-color:#97C459}
+.step.run{border-color:#AFA9EC}
+.step.err{border-color:#F09595}
+.sn{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.step.done .sn{background:#639922;color:#fff;border-color:#639922}
+.step.run .sn{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.step.err .sn{background:#E24B4A;color:#fff;border-color:#E24B4A}
+.sb2{flex:1}
+.sname{font-size:12px;font-weight:500}
+.sdesc{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.prog{height:3px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden;margin-top:5px}
+.pf{height:100%;background:#7c3aed;border-radius:2px}
+.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp{width:11px;height:11px;border:1.5px solid #AFA9EC;border-top-color:#7c3aed;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle}
+.niche-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.nc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px;cursor:pointer;transition:border-color 0.15s}
+.nc:hover{border-color:var(--color-border-secondary)}
+.nc.sel{border-color:#7c3aed;background:#EEEDFE}
+.nc-icon{font-size:22px;margin-bottom:8px}
+.nc-name{font-size:12px;font-weight:500;margin-bottom:3px}
+.nc-sub{font-size:11px;color:var(--color-text-tertiary)}
+.tabs{display:flex;gap:0;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:3px;margin-bottom:18px}
+.tab{flex:1;padding:7px;border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);transition:all 0.12s;display:flex;align-items:center;justify-content:center;gap:4px}
+.tab.on{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:var(--border-radius-md);font-family:var(--font-sans);font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);transition:all 0.12s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-p{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.btn-p:hover{background:#6d28d9}
+.btn-s{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.btn-d{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger)}
+.input{width:100%;padding:9px 12px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);color:var(--color-text-primary);font-family:var(--font-sans);font-size:12px;outline:none}
+.input:focus{border-color:#7c3aed}
+.logline{font-family:var(--font-mono);font-size:10px;padding:2px 0;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-tertiary)}
+.logline.ok{color:#3B6D11}
+.logline.err{color:#A32D2D}
+.logline.ag{color:#3C3489}
+.pbar{height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
+.pbar-f{height:100%;background:#7c3aed;border-radius:2px;transition:width 0.4s}
+select.input{cursor:pointer}
+</style>
+
+<div class="app">
+<div class="sb">
+  <div class="sb-top">
+    <div class="logo-dot">
+      <svg viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M8 2v6M5 5l3-3 3 3M4 10a4 4 0 0 0 8 0"/></svg>
+    </div>
+    <span class="logo-name">Lofi Factory</span>
+  </div>
+  <div class="nav">
+    <button class="new-btn" onclick="sw('new')">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>
+      New project
+    </button>
+    <div class="nl">Main</div>
+    <div class="na on" id="nav-dash"  onclick="sw('dash')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</div>
+    <div class="na" id="nav-new"   onclick="sw('new')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h4v4H3zM9 9h4v4H9z"/><circle cx="11" cy="5" r="3"/></svg>New project</div>
+    <div class="na" id="nav-jobs"  onclick="sw('jobs')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h9M2 12h6"/></svg>Job queue</div>
+    <div class="na" id="nav-job"   onclick="sw('job')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8h6M8 5v6"/></svg>Live pipeline</div>
+    <div class="na" id="nav-ch"    onclick="sw('ch')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M5 2l3 2 3-2"/></svg>Channels</div>
+    <div class="nl" style="margin-top:6px">Analytics</div>
+    <div class="na" id="nav-anal"  onclick="sw('anal')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12l4-4 3 3 5-7"/></svg>Analytics</div>
+    <div class="na" id="nav-set"   onclick="sw('set')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>Settings</div>
+  </div>
+  <div class="sb-foot">
+    <div class="av">U</div>
+    <div class="av-info"><div class="av-name">Your account</div><div class="av-plan">Free plan</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div class="view on" id="v-dash">
+  <div class="ph"><div class="pt">Dashboard</div><div class="ps">Lofi factory overview</div></div>
+  <div class="mets">
+    <div class="met"><div class="ml">Channels</div><div class="mv">3</div><div class="md up">+1 this week</div></div>
+    <div class="met"><div class="ml">Videos uploaded</div><div class="mv">24</div><div class="md up">+8 this month</div></div>
+    <div class="met"><div class="ml">Total views</div><div class="mv">142K</div><div class="md up">+28K vs last month</div></div>
+    <div class="met"><div class="ml">Active jobs</div><div class="mv" id="active-jobs-count">1</div><div class="md">Right now</div></div>
+  </div>
+  <div class="two">
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="ct">Views this week</div>
+        <div style="position:relative;height:160px"><canvas id="dash-chart"></canvas></div>
+      </div>
+      <div style="padding:12px 16px;background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-lg);display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div style="font-weight:500;color:var(--color-text-warning);font-size:12px;margin-bottom:2px">Halloween Lofi — ready for review</div>
+          <div style="font-size:11px;color:var(--color-text-secondary)">All 13 agents complete. Approve to publish to YouTube.</div>
+        </div>
+        <button class="btn btn-p btn-sm" onclick="sw('job')" style="padding:6px 12px;font-size:11px;flex-shrink:0">Review now</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Recent jobs</div>
+      <div class="row"><div class="dot dg"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">Tokyo Night Lofi · 1hr</div><div style="font-size:10px;color:var(--color-text-tertiary)">Uploaded 2 days ago</div></div><span class="badge bg">Done</span></div>
+      <div class="row"><div class="dot da"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">Halloween Lofi · 2hr</div><div style="font-size:10px;color:var(--color-text-tertiary)">Awaiting approval</div></div><span class="badge ba">Approval</span></div>
+      <div class="row"><div class="dot dp"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">Ghibli Forest Lofi · 1hr</div><div style="font-size:10px;color:var(--color-text-tertiary)">Running now</div></div><span class="badge bp pulse">Running</span></div>
+      <div class="row"><div class="dot dx"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">Winter Cozy Lofi · 3hr</div><div style="font-size:10px;color:var(--color-text-tertiary)">Queued</div></div><span class="badge bx">Pending</span></div>
+      <button class="btn btn-p" onclick="sw('new')" style="width:100%;justify-content:center;margin-top:12px;font-size:11px">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>
+        New project
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW PROJECT -->
+<div class="view" id="v-new">
+  <div class="ph"><div class="pt">New project</div><div class="ps">Create an automated lofi YouTube channel</div></div>
+
+  <div class="tabs" id="wizard-tabs">
+    <div class="tab on" id="t0">1 · Pick niche</div>
+    <div class="tab"    id="t1">2 · Upload Excel</div>
+    <div class="tab"    id="t2">3 · Configure</div>
+    <div class="tab"    id="t3">4 · Launch</div>
+  </div>
+
+  <div id="w0">
+    <div style="font-size:12px;font-weight:500;margin-bottom:12px">Choose your channel niche</div>
+    <div class="niche-grid" id="niche-grid">
+      <div class="nc sel" onclick="pickNiche(this,'Halloween Lofi','🎃')">
+        <div class="nc-icon">🎃</div>
+        <div class="nc-name">Halloween Lofi</div>
+        <div class="nc-sub">Cozy · Pumpkin Cafe</div>
+      </div>
+      <div class="nc" onclick="pickNiche(this,'Tokyo Night','🌃')">
+        <div class="nc-icon">🌃</div>
+        <div class="nc-name">Tokyo Night Lofi</div>
+        <div class="nc-sub">Dreamy · Rainy Street</div>
+      </div>
+      <div class="nc" onclick="pickNiche(this,'Studio Ghibli','🌿')">
+        <div class="nc-icon">🌿</div>
+        <div class="nc-name">Studio Ghibli Lofi</div>
+        <div class="nc-sub">Peaceful · Forest Cottage</div>
+      </div>
+      <div class="nc" onclick="pickNiche(this,'Winter Cozy','❄️')">
+        <div class="nc-icon">❄️</div>
+        <div class="nc-name">Winter Cozy Lofi</div>
+        <div class="nc-sub">Warm · Fireplace</div>
+      </div>
+      <div class="nc" onclick="pickNiche(this,'Midnight Jazz','🎷')">
+        <div class="nc-icon">🎷</div>
+        <div class="nc-name">Midnight Jazz Cafe</div>
+        <div class="nc-sub">Sophisticated · Paris</div>
+      </div>
+      <div class="nc" onclick="pickNiche(this,'Space Lofi','🌌')">
+        <div class="nc-icon">🌌</div>
+        <div class="nc-name">Space & Stars Lofi</div>
+        <div class="nc-sub">Cosmic · Observatory</div>
+      </div>
+    </div>
+    <button class="btn btn-p" onclick="wStep(1)">Continue <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h6M8 5l3 3-3 3"/></svg></button>
+  </div>
+
+  <div id="w1" style="display:none">
+    <div style="border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:36px 24px;text-align:center;cursor:pointer;margin-bottom:16px" onclick="wStep(2)">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.5" style="margin:0 auto 10px;display:block"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <div style="font-weight:500;margin-bottom:4px;font-size:13px">Drop your Excel file here</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary)">.xlsx · .xls · .csv — columns: theme, mood, scene, title</div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn" onclick="wStep(0)" style="font-size:11px">Back</button>
+      <button class="btn btn-p" onclick="wStep(2)" style="font-size:11px">Skip — use preset</button>
+    </div>
+  </div>
+
+  <div id="w2" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">Video duration</div>
+        <select class="input"><option>30 minutes (~8 tracks)</option><option selected>1 hour (~15 tracks)</option><option>2 hours (~30 tracks)</option><option>3 hours (~45 tracks)</option></select></div>
+      <div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">Upload schedule</div>
+        <select class="input"><option>Upload immediately</option><option>Tonight 9 PM</option><option>Tomorrow 8 AM</option></select></div>
+      <div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">YouTube channel ID</div>
+        <input class="input" placeholder="UCxxxxxxxxxxxxxxxx"></div>
+      <div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">Custom title (optional)</div>
+        <input class="input" placeholder="Halloween Lofi · Study Beats 2026"></div>
+    </div>
+    <div style="padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:14px;display:flex;align-items:center;gap:10px">
+      <input type="checkbox" id="ap" style="width:13px;height:13px;cursor:pointer">
+      <label for="ap" style="font-size:12px;cursor:pointer">Auto-publish — skip approval gate and upload immediately</label>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn" onclick="wStep(1)" style="font-size:11px">Back</button>
+      <button class="btn btn-p" onclick="wStep(3)" style="font-size:11px">Review & launch <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h6M8 5l3 3-3 3"/></svg></button>
+    </div>
+  </div>
+
+  <div id="w3" style="display:none">
+    <div class="card" style="margin-bottom:14px">
+      <div class="ct">Launch summary</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px">Niche</div><div style="font-size:13px;font-weight:500" id="sum-niche">Halloween Lofi 🎃</div></div>
+        <div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px">Duration</div><div style="font-size:13px;font-weight:500">1 hour</div></div>
+        <div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px">Agents</div><div style="font-size:13px;font-weight:500">13 agents</div></div>
+        <div><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px">Est. time</div><div style="font-size:13px;font-weight:500">10–20 min</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px">
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">📋 Excel parser</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🎨 Channel branding</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🧠 Music prompts</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🎵 Beat generation</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🎚️ Audio arrangement</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🖼️ Visual prompts</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🌅 Image generation</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🎞️ Animation</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">🎬 Video composer</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">📝 Metadata</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">✅ Quality control</div>
+      <div style="padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11px;display:flex;align-items:center;gap:6px">📤 YouTube upload</div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn" onclick="wStep(2)" style="font-size:11px">Back</button>
+      <button class="btn btn-p" onclick="launchPipeline()" id="launch-btn" style="font-size:12px;padding:9px 20px">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="3,2 13,8 3,14"/></svg>
+        Launch pipeline
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JOB QUEUE -->
+<div class="view" id="v-jobs">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+    <div class="ph" style="margin-bottom:0"><div class="pt">Job queue</div><div class="ps">4 total jobs</div></div>
+    <button class="btn btn-p" onclick="sw('new')" style="font-size:11px;padding:7px 13px">+ New project</button>
+  </div>
+  <div style="display:flex;gap:6px;margin-bottom:14px">
+    <button style="padding:4px 11px;border-radius:99px;border:0.5px solid #AFA9EC;background:#EEEDFE;color:#3C3489;font-size:11px;cursor:pointer;font-family:var(--font-sans)">All (4)</button>
+    <button style="padding:4px 11px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:transparent;color:var(--color-text-secondary);font-size:11px;cursor:pointer;font-family:var(--font-sans)">Running (1)</button>
+    <button style="padding:4px 11px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:transparent;color:var(--color-text-secondary);font-size:11px;cursor:pointer;font-family:var(--font-sans)">Approval (1)</button>
+    <button style="padding:4px 11px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:transparent;color:var(--color-text-secondary);font-size:11px;cursor:pointer;font-family:var(--font-sans)">Done (1)</button>
+  </div>
+  <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:var(--color-background-secondary)"><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Title</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Niche</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Status</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">Progress</th></tr></thead>
+      <tbody>
+        <tr style="cursor:pointer" onclick="sw('job')"><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500">Halloween Lofi · 2hr</td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Halloween</td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge ba">Approval</span></td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:7px"><div class="pbar" style="width:70px"><div class="pbar-f" style="width:92%"></div></div><span style="font-size:11px">92%</span></div></td></tr>
+        <tr><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500">Ghibli Forest · 1hr</td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Ghibli</td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge bp pulse">Running</span></td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:7px"><div class="pbar" style="width:70px"><div class="pbar-f" style="width:54%"></div></div><span style="font-size:11px">54%</span></div></td></tr>
+        <tr><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500">Tokyo Night · 1hr</td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)">Tokyo</td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><span class="badge bg">Done</span></td><td style="padding:11px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="display:flex;align-items:center;gap:7px"><div class="pbar" style="width:70px"><div class="pbar-f" style="width:100%"></div></div><span style="font-size:11px">100%</span></div></td></tr>
+        <tr><td style="padding:11px 12px;font-weight:500">Winter Cozy · 3hr</td><td style="padding:11px 12px;color:var(--color-text-secondary)">Winter</td><td style="padding:11px 12px"><span class="badge bx">Pending</span></td><td style="padding:11px 12px"><div style="display:flex;align-items:center;gap:7px"><div class="pbar" style="width:70px"><div class="pbar-f" style="width:0%"></div></div><span style="font-size:11px">0%</span></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LIVE PIPELINE -->
+<div class="view" id="v-job">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+    <button class="btn" onclick="sw('jobs')" style="padding:6px 8px;font-size:11px">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+    </button>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+        <div style="font-size:15px;font-weight:500">Halloween Lofi · 2 Hours</div>
+        <span class="badge ba">Needs approval</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-tertiary)">Job ID: jb_8f3k2x · Niche: Halloween Lofi</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:7px"><span>12 of 13 agents complete</span><span>92%</span></div>
+    <div class="pbar" style="height:6px;margin-bottom:6px"><div class="pbar-f" style="width:92%;background:#7c3aed"></div></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary)">All agents complete — awaiting your approval to upload to YouTube</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start">
+    <div id="pipeline-steps">
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">📋 Excel parser agent</div><div class="sdesc">3 rows read — Halloween theme, Cozy mood, Pumpkin Cafe</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🎨 Channel branding agent</div><div class="sdesc">Channel name: "Pumpkin Study Beats" — branding ready</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🧠 Music prompt agent</div><div class="sdesc">30 Suno prompts generated with mood progression</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🎵 Beat generation agent</div><div class="sdesc">28 MP3 tracks downloaded from Suno AI</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🎚️ Audio arrangement agent</div><div class="sdesc">2hr playlist with 3s crossfades arranged</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🖼️ Visual prompt agent</div><div class="sdesc">Main scene + thumbnail + banner prompts ready</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🌅 Image generation agent</div><div class="sdesc">DALL-E 3 — cozy pumpkin cafe anime scene generated</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🎞️ Animation agent</div><div class="sdesc">Ken Burns 2hr loop + particle overlay configured</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">🎬 Video composer agent</div><div class="sdesc">1080p MP4 · 2hr · audio+animation+waveform merged</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">📝 Metadata agent</div><div class="sdesc">"Cozy Halloween Lofi 🎃 Pumpkin Cafe Study Beats" · 20 tags</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step done"><div class="sn">✓</div><div class="sb2"><div class="sname">✅ Quality control agent</div><div class="sdesc">6/6 checks passed — all assets valid</div></div><span class="badge bg" style="flex-shrink:0">Done</span></div>
+      <div class="step run"  id="approval-step"><div class="sn">12</div><div class="sb2"><div class="sname">👤 Approval agent</div><div class="sdesc">Awaiting your review and approval</div></div><span class="badge ba" style="flex-shrink:0" id="approval-badge">Awaiting</span></div>
+      <div class="step"      id="upload-step"><div class="sn">13</div><div class="sb2"><div class="sname">📤 YouTube upload agent</div><div class="sdesc">Will upload with full metadata after approval</div></div><span class="badge bx" style="flex-shrink:0" id="upload-badge">Pending</span></div>
+    </div>
+
+    <div>
+      <div class="card" style="border-color:#EF9F27;background:#FAEEDA20;margin-bottom:12px">
+        <div style="font-size:12px;font-weight:500;color:#633806;margin-bottom:6px">Video ready for review</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.6">All 12 agents completed. Approve to upload to YouTube, or reject to discard.</div>
+        <div style="display:flex;gap:7px" id="approval-btns">
+          <button class="btn btn-s" style="flex:1;justify-content:center;font-size:11px;padding:7px" onclick="approveJob()">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 4.5"/></svg>
+            Approve
+          </button>
+          <button class="btn btn-d" style="font-size:11px;padding:7px 10px" onclick="rejectJob()">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="ct">Generated metadata</div>
+        <div style="font-size:12px;font-weight:500;margin-bottom:5px">Cozy Halloween Lofi 🎃 Pumpkin Cafe Study Beats · 2 Hours</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;line-height:1.6">Relax with cozy pumpkin cafe lofi beats. Perfect for studying, relaxing, and focus sessions…</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">
+          <span class="badge bx" style="font-size:10px">#lofi</span>
+          <span class="badge bx" style="font-size:10px">#halloween</span>
+          <span class="badge bx" style="font-size:10px">#studybeats</span>
+          <span class="badge bx" style="font-size:10px">#pumpkin</span>
+          <span class="badge bx" style="font-size:10px">+16 more</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ct">Activity log</div>
+        <div style="max-height:140px;overflow-y:auto" id="log-box">
+          <div class="logline ok">[09:41] Excel agent: 3 rows loaded</div>
+          <div class="logline ag">[09:41] Branding agent: calling Claude</div>
+          <div class="logline ok">[09:42] Channel: "Pumpkin Study Beats"</div>
+          <div class="logline ag">[09:42] Prompt agent: 30 Suno prompts</div>
+          <div class="logline ag">[09:44] Music agent: submitting to Suno</div>
+          <div class="logline ok">[09:57] Track 28/28 downloaded</div>
+          <div class="logline ag">[09:57] Image agent: calling DALL-E 3</div>
+          <div class="logline ok">[09:59] Artwork: main scene + thumbnail</div>
+          <div class="logline ag">[09:59] Video composer: FFmpeg rendering</div>
+          <div class="logline ok">[10:11] Video: 1080p MP4 · 2hr complete</div>
+          <div class="logline ag">[10:11] Metadata agent: calling Claude</div>
+          <div class="logline ok">[10:12] Metadata: title + 20 tags ready</div>
+          <div class="logline ok">[10:12] QC: 6/6 checks passed</div>
+          <div class="logline ag">[10:12] Approval agent: awaiting user</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHANNELS -->
+<div class="view" id="v-ch">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+    <div class="ph" style="margin-bottom:0"><div class="pt">Channels</div><div class="ps">3 YouTube channels</div></div>
+    <button class="btn btn-p" onclick="sw('new')" style="font-size:11px;padding:7px 13px">+ New channel</button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px">
+      <div style="font-size:24px;margin-bottom:10px">🌃</div>
+      <div style="font-weight:500;margin-bottom:3px;font-size:13px">Tokyo Night Lofi</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:12px">Tokyo Night · Dreamy</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px">
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">8</div><div style="font-size:10px;color:var(--color-text-tertiary)">Videos</div></div>
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">84K</div><div style="font-size:10px;color:var(--color-text-tertiary)">Views</div></div>
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">1.2K</div><div style="font-size:10px;color:var(--color-text-tertiary)">Subs</div></div>
+      </div>
+      <span class="badge bg">Active</span>
+    </div>
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px">
+      <div style="font-size:24px;margin-bottom:10px">🎃</div>
+      <div style="font-weight:500;margin-bottom:3px;font-size:13px">Pumpkin Study Beats</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:12px">Halloween Lofi · Cozy</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px">
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">11</div><div style="font-size:10px;color:var(--color-text-tertiary)">Videos</div></div>
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">58K</div><div style="font-size:10px;color:var(--color-text-tertiary)">Views</div></div>
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">880</div><div style="font-size:10px;color:var(--color-text-tertiary)">Subs</div></div>
+      </div>
+      <span class="badge bg">Active</span>
+    </div>
+    <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px">
+      <div style="font-size:24px;margin-bottom:10px">🌿</div>
+      <div style="font-weight:500;margin-bottom:3px;font-size:13px">Ghibli Study Beats</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:12px">Studio Ghibli · Peaceful</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px">
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">5</div><div style="font-size:10px;color:var(--color-text-tertiary)">Videos</div></div>
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">18K</div><div style="font-size:10px;color:var(--color-text-tertiary)">Views</div></div>
+        <div style="text-align:center"><div style="font-size:14px;font-weight:500">340</div><div style="font-size:10px;color:var(--color-text-tertiary)">Subs</div></div>
+      </div>
+      <span class="badge ba">Growing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="view" id="v-anal">
+  <div class="ph"><div class="pt">Analytics</div><div class="ps">Cross-channel performance</div></div>
+  <div class="mets">
+    <div class="met"><div class="ml">Total views</div><div class="mv">142K</div><div class="md up">+34% vs last month</div></div>
+    <div class="met"><div class="ml">Watch time</div><div class="mv">8,400hr</div><div class="md up">+28% growth</div></div>
+    <div class="met"><div class="ml">Total subs</div><div class="mv">2.4K</div><div class="md up">+420 this month</div></div>
+    <div class="met"><div class="ml">Est. revenue</div><div class="mv">$312</div><div class="md up">$3 CPM avg</div></div>
+  </div>
+  <div class="card">
+    <div class="ct">Monthly views — all channels</div>
+    <div style="position:relative;height:200px"><canvas id="anal-chart"></canvas></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="view" id="v-set">
+  <div class="ph"><div class="pt">Settings</div><div class="ps">API keys and automation config</div></div>
+  <div style="max-width:540px;display:flex;flex-direction:column;gap:14px">
+    <div class="card">
+      <div class="ct">API keys</div>
+      <div style="margin-bottom:12px"><div style="font-size:11px;font-weight:500;margin-bottom:5px">Anthropic (Claude) <span class="badge bg" style="font-size:10px;margin-left:4px">Connected</span></div><input class="input" type="password" value="sk-ant-api03-••••••••••••••••" readonly></div>
+      <div style="margin-bottom:12px"><div style="font-size:11px;font-weight:500;margin-bottom:5px">Suno AI</div><input class="input" placeholder="suno_api_key_here…"></div>
+      <div style="margin-bottom:14px"><div style="font-size:11px;font-weight:500;margin-bottom:5px">YouTube Data API v3</div><input class="input" placeholder="AIzaSy…"></div>
+      <button class="btn btn-p" style="font-size:11px">Save keys</button>
+    </div>
+    <div class="card">
+      <div class="ct">Automation defaults</div>
+      <div style="margin-bottom:10px"><div style="font-size:11px;font-weight:500;margin-bottom:5px">Default video duration</div><select class="input"><option>30 minutes</option><option selected>1 hour</option><option>2 hours</option></select></div>
+      <div style="margin-bottom:10px"><div style="font-size:11px;font-weight:500;margin-bottom:5px">Default upload time</div><select class="input"><option>Immediately</option><option selected>Tonight 9 PM</option><option>Tomorrow 8 AM</option></select></div>
+      <button class="btn btn-p" style="font-size:11px">Save defaults</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function sw(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  document.querySelectorAll('.na').forEach(n => n.classList.remove('on'));
+  document.getElementById('v-' + id).classList.add('on');
+  const nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('on');
+}
+
+let selectedNiche = 'Halloween Lofi 🎃';
+function pickNiche(el, name, icon) {
+  document.querySelectorAll('.nc').forEach(n => n.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedNiche = name + ' ' + icon;
+}
+
+let wizStep = 0;
+function wStep(n) {
+  document.getElementById('w' + wizStep).style.display = 'none';
+  document.querySelectorAll('.tabs .tab').forEach((t, i) => { t.classList.toggle('on', i === n); });
+  wizStep = n;
+  document.getElementById('w' + n).style.display = 'block';
+  if (n === 3) {
+    const el = document.getElementById('sum-niche');
+    if (el) el.textContent = selectedNiche;
+  }
+}
+
+function launchPipeline() {
+  const btn = document.getElementById('launch-btn');
+  btn.innerHTML = '<span class="sp"></span> Launching…';
+  btn.disabled = true;
+  setTimeout(() => { sw('job'); }, 1200);
+}
+
+let approved = false;
+function approveJob() {
+  if (approved) return;
+  approved = true;
+  document.getElementById('approval-btns').innerHTML = '<div style="font-size:12px;color:#3B6D11;font-weight:500;display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 4.5"/></svg> Approved — uploading to YouTube…</div>';
+  document.getElementById('approval-step').className = 'step done';
+  document.getElementById('approval-badge').className = 'badge bg';
+  document.getElementById('approval-badge').textContent = 'Done';
+  setTimeout(() => {
+    document.getElementById('upload-step').className = 'step run';
+    document.getElementById('upload-badge').className = 'badge bp pulse';
+    document.getElementById('upload-badge').textContent = 'Uploading';
+    document.getElementById('log-box').innerHTML += '<div class="logline ag">[10:14] Upload agent: sending to YouTube</div>';
+    setTimeout(() => {
+      document.getElementById('upload-step').className = 'step done';
+      document.getElementById('upload-badge').className = 'badge bg';
+      document.getElementById('upload-badge').textContent = 'Live';
+      document.getElementById('log-box').innerHTML += '<div class="logline ok">[10:16] Upload complete: youtube.com/watch?v=xxx</div>';
+      document.querySelector('.pbar-f').style.width = '100%';
+    }, 2500);
+  }, 800);
+}
+
+function rejectJob() {
+  if (!confirm('Reject and discard this video?')) return;
+  document.getElementById('approval-step').className = 'step err';
+  document.getElementById('approval-badge').className = 'badge br';
+  document.getElementById('approval-badge').textContent = 'Rejected';
+  document.getElementById('approval-btns').innerHTML = '<div style="font-size:11px;color:var(--color-text-secondary)">Video rejected and discarded.</div>';
+}
+
+new Chart(document.getElementById('dash-chart'), {
+  type: 'line',
+  data: {
+    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    datasets: [{
+      data: [1200,1900,1500,2800,3200,4100,3600],
+      borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.08)',
+      tension: 0.4, pointRadius: 2, fill: true, borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#888' } },
+      y: { grid: { color: 'rgba(128,128,128,0.08)' }, ticks: { font: { size: 10 }, color: '#888' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('anal-chart'), {
+  type: 'bar',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [
+      { label: 'Tokyo Night', data: [0,0,0,4200,8100,12300,15400,18200,22100,26800,31200,38400], backgroundColor: '#378ADD' },
+      { label: 'Halloween',   data: [0,0,0,0,0,0,0,3200,6800,12400,18900,24600], backgroundColor: '#7c3aed' },
+      { label: 'Ghibli',      data: [0,0,0,0,0,0,0,0,0,4100,8200,14800], backgroundColor: '#34d399' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, color: '#888' } },
+      y: { stacked: true, grid: { color: 'rgba(128,128,128,0.08)' }, ticks: { font: { size: 10 }, color: '#888', callback: v => v >= 1000 ? Math.round(v/1000)+'K' : v } }
+    }
+  }
+});
+</script>

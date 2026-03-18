@@ -1,243 +1,156 @@
-
 "use client";
 
 import { useState } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
+  ChevronLeft, 
   CheckCircle2, 
-  XCircle, 
+  Clock, 
   Play, 
   Pause, 
-  Volume2,
-  Youtube,
-  Edit3,
+  Volume2, 
+  Youtube, 
+  Check, 
+  X, 
+  Monitor,
+  Activity,
   Zap,
-  Clock,
-  Send,
-  Loader2,
-  HardDrive,
-  Terminal,
-  Code2,
-  Activity
+  CheckCircle,
+  AlertCircle
 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+
+const STEPS = [
+  { id: 1, label: "Excel Parser Agent", desc: "3 rows read — Halloween theme, Cozy mood", done: true },
+  { id: 2, label: "Branding Agent", desc: "Channel name: 'Pumpkin Study Beats'", done: true },
+  { id: 3, label: "Music Prompt Agent", desc: "30 Suno prompts generated", done: true },
+  { id: 4, label: "Beat Generation Agent", desc: "28 tracks downloaded from Suno", done: true },
+  { id: 5, label: "Arrangement Agent", desc: "2hr playlist arranged", done: true },
+  { id: 6, label: "Visual Prompt Agent", desc: "Main scene + thumbnail prompts", done: true },
+  { id: 7, label: "Image Generation Agent", desc: "DALL-E 3 — cozy cafe anime scene", done: true },
+  { id: 8, label: "Animation Agent", desc: "Ken Burns 2hr loop configured", done: true },
+  { id: 9, label: "Video Composer Agent", desc: "1080p MP4 · 2hr merged", done: true },
+  { id: 10, label: "Metadata Agent", desc: "Title + 20 tags ready", done: true },
+  { id: 11, label: "Quality Control Agent", desc: "6/6 checks passed", done: true },
+  { id: 12, label: "Approval Agent", desc: "Awaiting your review", done: false, running: true },
+  { id: 13, label: "YouTube Upload Agent", desc: "Pending approval", done: false },
+];
 
 export default function ReviewPage() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
-  const { toast } = useToast();
-
-  const handlePublish = async () => {
-    setIsPublishing(true);
-    setTimeout(() => {
-      setIsPublishing(false);
-      toast({
-        title: "YouTube API: Sequence Triggered",
-        description: "Asset slotted into the 10-20/day upload sequence. GCS blob synced.",
-      });
-    }, 2000);
-  };
-
-  const mockApiPayload = {
-    part: "snippet,status",
-    body: {
-      snippet: {
-        title: "[FREE] 6LACK x Drake Type Beat - \"Midnight Confessions\"",
-        description: "💵 Purchase This Beat: [Link]\n🔥 BUY 1 GET 2 FREE!\nBPM: 140 | KEY: F Minor\n#6LACK #Drake #TypeBeat2026",
-        tags: ["6lack type beat", "drake type beat", "free type beat 2026", "midnight confessions"]
-      },
-      status: {
-        privacyStatus: "public"
-      }
-    },
-    media_body: "video-assets-factory/videos/video1.mp4"
-  };
-
-  const mockRenderConfig = {
-    audio_path: "video-assets-factory/music/drake_rb_01.mp3",
-    image_path: "video-assets-factory/thumbnails/vintage_60s.jpg",
-    filter_graph: "[0:v]scale=1280x720,curves=vintage,vignette[bg];[1:a]showwaves=s=1280x720[waves];[bg][waves]overlay,noise[outv]",
-    output_path: "video-assets-factory/videos/video1.mp4"
-  };
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <SidebarInset className="bg-background">
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">Approval & Factory Distribution</h1>
+            <Link href="/projects">
+              <Button variant="ghost" size="icon" className="h-8 w-8"><ChevronLeft className="w-4 h-4" /></Button>
+            </Link>
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <h1 className="font-headline font-bold text-xl tracking-tight text-primary">Halloween Lofi · 2 Hours</h1>
+                <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 uppercase text-[9px] font-bold">Needs Approval</Badge>
+              </div>
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest italic">Job ID: jb_8f3k2x · Niche: Halloween Lofi</p>
+            </div>
           </header>
 
-          <main className="p-6 md:p-8 space-y-8">
-            <div className="max-w-6xl mx-auto grid gap-8 lg:grid-cols-3">
-              <div className="lg:col-span-2 space-y-6">
-                <Card className="bg-black border-border/50 overflow-hidden aspect-video relative group shadow-2xl rounded-3xl">
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all">
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className="h-16 w-16 rounded-full bg-primary text-primary-foreground hover:scale-110 transition-transform shadow-[0_0_30px_rgba(var(--primary),0.4)]"
-                      onClick={() => setIsPlaying(!isPlaying)}
-                    >
-                      {isPlaying ? <Pause className="h-8 w-8" /> : <Play className="h-8 w-8 ml-1" />}
-                    </Button>
-                  </div>
-                  <img 
-                    src="https://picsum.photos/seed/review1/1280/720" 
-                    alt="Preview" 
-                    className="w-full h-full object-cover opacity-80"
-                  />
-                  <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                    <div className="flex items-center justify-between text-white">
-                      <div className="flex items-center gap-4">
-                        <Volume2 className="w-4 h-4 opacity-70" />
-                        <span className="text-[10px] font-mono tracking-widest uppercase text-primary">video-assets-factory/videos/video1.mp4</span>
+          <main className="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
+            <Card className="bg-card border-border/50 shadow-sm overflow-hidden">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-center text-[10px] font-bold uppercase text-muted-foreground tracking-widest">
+                  <span>12 of 13 agents complete</span>
+                  <span>92%</span>
+                </div>
+                <Progress value={92} className="h-1.5 bg-secondary" />
+                <p className="text-[10px] text-muted-foreground text-center italic">All agents complete — awaiting your approval to upload to YouTube</p>
+              </CardContent>
+            </Card>
+
+            <div className="grid gap-8 lg:grid-cols-3">
+              {/* STEPS TIMELINE */}
+              <div className="lg:col-span-2 space-y-3">
+                {STEPS.map((step) => (
+                  <div 
+                    key={step.id} 
+                    className={cn(
+                      "flex items-start gap-4 p-3 rounded-xl border transition-all",
+                      step.done ? "border-green-500/20 bg-green-500/5" : step.running ? "border-primary bg-primary/5" : "border-border/50 bg-secondary/10"
+                    )}
+                  >
+                    <div className={cn(
+                      "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0",
+                      step.done ? "bg-green-500 text-white" : step.running ? "bg-primary text-white" : "bg-secondary text-muted-foreground border border-border/50"
+                    )}>
+                      {step.done ? <Check className="w-3.5 h-3.5" /> : step.id}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-bold">{step.label}</p>
+                        {step.done && <Badge className="bg-green-500/10 text-green-500 border-none text-[8px] uppercase">Done</Badge>}
+                        {step.running && <Badge className="bg-primary/10 text-primary border-none text-[8px] uppercase animate-pulse">Awaiting</Badge>}
                       </div>
-                      <span className="text-[10px] font-mono">00:15 / 00:30 (FFmpeg Render: OK)</span>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{step.desc}</p>
                     </div>
                   </div>
-                </Card>
-
-                <Tabs defaultValue="metadata" className="w-full">
-                  <TabsList className="bg-secondary/50 w-full justify-start border border-border/50 rounded-2xl p-1 h-auto overflow-x-auto custom-scrollbar">
-                    <TabsTrigger value="metadata" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest">Metadata</TabsTrigger>
-                    <TabsTrigger value="factory" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest flex gap-2"><Activity className="w-3 h-3" /> Factory Logic</TabsTrigger>
-                    <TabsTrigger value="api" className="rounded-xl py-2 px-6 font-bold uppercase text-[10px] tracking-widest flex gap-2"><Code2 className="w-3 h-3" /> API Payload</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="metadata" className="mt-4 space-y-4 m-0">
-                    <Card className="bg-card border-border/50 rounded-2xl">
-                      <CardContent className="pt-6 space-y-4">
-                        <div className="space-y-1">
-                          <Label className="text-[10px] uppercase text-muted-foreground font-bold tracking-widest">YouTube Optimized Title</Label>
-                          <p className="text-lg font-headline font-bold text-foreground">{mockApiPayload.body.snippet.title}</p>
-                        </div>
-                        <div className="space-y-1">
-                          <Label className="text-[10px] uppercase text-muted-foreground font-bold tracking-widest">SEO Description Block</Label>
-                          <div className="p-4 rounded-xl bg-secondary/30 border border-border/50 font-mono text-[10px] leading-relaxed text-muted-foreground whitespace-pre-wrap">
-                            {mockApiPayload.body.snippet.description}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="factory" className="mt-4 m-0 space-y-4">
-                    <Card className="bg-card border-border/50 rounded-2xl">
-                      <CardHeader className="bg-primary/5 py-4">
-                        <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                          <Terminal className="w-3 h-3" /> FFmpeg Visualizer Config
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <pre className="text-[10px] font-mono bg-black/90 p-4 rounded-xl text-blue-400 overflow-auto max-h-[300px] custom-scrollbar">
-                          {JSON.stringify(mockRenderConfig, null, 2)}
-                        </pre>
-                        <div className="mt-4 p-3 rounded-lg bg-secondary/30 border border-border/50 text-[9px] uppercase font-bold text-muted-foreground italic leading-relaxed">
-                          &quot;Logic: [0:v] curves=vintage &rarr; [1:a] showwaves &rarr; overlay &rarr; noise&quot;
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="api" className="mt-4 m-0">
-                    <Card className="bg-card border-border/50 rounded-2xl">
-                      <CardHeader className="bg-primary/5 py-4">
-                        <CardTitle className="text-xs font-bold uppercase text-primary flex items-center gap-2">
-                          <Terminal className="w-3 h-3" /> JSON Payload Preview
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <pre className="text-[10px] font-mono bg-black/90 p-4 rounded-xl text-green-400 overflow-auto max-h-[300px] custom-scrollbar">
-                          {JSON.stringify(mockApiPayload, null, 2)}
-                        </pre>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
+                ))}
               </div>
 
+              {/* REVIEW SIDEBAR */}
               <div className="space-y-6">
-                <Card className="bg-card border-primary/20 shadow-xl overflow-hidden rounded-3xl">
-                  <div className="h-1.5 w-full bg-primary/20">
-                    <div className="h-full bg-primary w-2/3 animate-pulse" />
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="font-headline text-lg flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-primary" />
-                      Factory Approval
-                    </CardTitle>
-                    <CardDescription>Triggering n8n &rarr; YouTube automated sequence</CardDescription>
+                <Card className="bg-amber-500/5 border-amber-500/20 border shadow-lg overflow-hidden">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xs font-bold uppercase text-amber-600 tracking-widest">Video ready for review</CardTitle>
+                    <CardDescription className="text-[10px] leading-relaxed">All 12 agents completed. Approve to upload to YouTube, or reject to discard.</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="p-4 rounded-2xl bg-green-500/5 border border-green-500/10 flex items-start gap-3">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-[10px] font-bold uppercase text-green-500">YouTube v3 Ready</p>
-                        <p className="text-[10px] text-muted-foreground">Snippet and Status parameters validated for API insert.</p>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-3">
-                      <HardDrive className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-[10px] font-bold uppercase text-blue-500">video-assets-factory</p>
-                        <p className="text-[10px] text-muted-foreground">Destination bucket mapped. n8n visualizer node sync: ACTIVE.</p>
-                      </div>
-                    </div>
+                  <CardContent className="flex gap-2">
+                    <Button className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold h-10 text-[10px] uppercase">
+                      <Check className="mr-2 w-4 h-4" /> Approve
+                    </Button>
+                    <Button variant="outline" className="bg-destructive/10 text-destructive border-destructive/20 h-10 px-4">
+                      <X className="w-4 h-4" />
+                    </Button>
                   </CardContent>
-                  <CardFooter className="flex flex-col gap-3">
-                    <Button 
-                      className="w-full bg-primary text-primary-foreground font-bold h-14 text-base shadow-[0_0_20px_rgba(var(--primary),0.3)] hover:scale-105 transition-all rounded-2xl"
-                      onClick={handlePublish}
-                      disabled={isPublishing}
-                    >
-                      {isPublishing ? (
-                        <>
-                          <Loader2 className="animate-spin mr-2" />
-                          API_INSERT_PENDING...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4 mr-2" />
-                          Approve & Publish (n8n Hook)
-                        </>
-                      )}
-                    </Button>
-                    <Button variant="outline" className="w-full text-destructive border-destructive/20 hover:bg-destructive/10 text-[10px] font-bold uppercase tracking-widest rounded-2xl h-10">
-                      <XCircle className="w-3 h-3 mr-2" /> Kill Factory Process
-                    </Button>
-                  </CardFooter>
                 </Card>
 
-                <Card className="bg-card border-border/50 rounded-2xl shadow-md">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">n8n Execution Logs</CardTitle>
+                <Card className="bg-card border-border/50 shadow-sm">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Generated Metadata</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-secondary/30">
-                      <div className="flex items-center gap-2">
-                        <Activity className="w-3 h-3 text-primary" />
-                        <span className="text-[10px] font-bold">Visualizer_Hook</span>
-                      </div>
-                      <Badge variant="outline" className="text-[8px] bg-green-500/10 text-green-500 border-green-500/20">SUCCESS</Badge>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <p className="text-xs font-bold">Cozy Halloween Lofi 🎃 Pumpkin Cafe Study Beats · 2 Hours</p>
+                      <p className="text-[10px] text-muted-foreground mt-2 leading-relaxed italic">Relax with cozy pumpkin cafe lofi beats. Perfect for studying, relaxing, and focus sessions…</p>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-secondary/30">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-3 h-3 text-primary" />
-                        <span className="text-[10px] font-bold">GPT4o_Prompt_Gen</span>
-                      </div>
-                      <Badge variant="outline" className="text-[8px] bg-blue-500/10 text-blue-400 border-blue-500/20">ACTIVE</Badge>
+                    <div className="flex flex-wrap gap-1">
+                      {["#lofi", "#halloween", "#studybeats", "#pumpkin"].map(tag => (
+                        <Badge key={tag} variant="secondary" className="text-[8px] bg-secondary text-muted-foreground font-mono">{tag}</Badge>
+                      ))}
+                      <span className="text-[8px] text-muted-foreground uppercase font-bold">+16 more</span>
                     </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-card border-border/50 shadow-sm h-48 flex flex-col">
+                  <CardHeader className="pb-2 border-b border-border/50 py-3">
+                    <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Activity Log</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-[9px]">
+                    <LogLine time="09:41" msg="Excel agent: 3 rows loaded" type="ok" />
+                    <LogLine time="09:42" msg="Channel: 'Pumpkin Study Beats'" type="ok" />
+                    <LogLine time="09:57" msg="Track 28/28 downloaded" type="ok" />
+                    <LogLine time="10:11" msg="Video: 1080p MP4 · 2hr complete" type="ok" />
+                    <LogLine time="10:12" msg="Approval agent: awaiting user" type="ag" />
                   </CardContent>
                 </Card>
               </div>
@@ -246,5 +159,20 @@ export default function ReviewPage() {
         </SidebarInset>
       </div>
     </SidebarProvider>
+  );
+}
+
+function LogLine({ time, msg, type }: any) {
+  const colors = {
+    ok: "text-green-500",
+    err: "text-red-500",
+    ag: "text-primary",
+  } as any;
+
+  return (
+    <div className="flex gap-2">
+      <span className="text-muted-foreground">[{time}]</span>
+      <span className={cn(colors[type])}>{msg}</span>
+    </div>
   );
 }
