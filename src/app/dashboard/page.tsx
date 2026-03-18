@@ -4,37 +4,52 @@
 import { useState, useEffect, useRef } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { 
-  TrendingUp, 
   Workflow, 
-  Zap,
-  Terminal,
-  Activity,
-  Plus,
-  ArrowUpRight,
-  FileSpreadsheet,
-  Upload,
-  ArrowRight,
+  Plus, 
+  ArrowRight, 
+  FileSpreadsheet, 
+  Activity, 
+  Radio, 
   Brain,
-  Video,
-  ShieldCheck,
-  Globe,
-  Database,
-  Radio
+  Rocket,
+  Sparkles,
+  Loader2
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
 import { processExcelUpload } from "@/lib/excel-parser";
+import { useUser, useFirestore, addDocumentNonBlocking } from "@/firebase";
+import { collection, serverTimestamp } from "firebase/firestore";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
+  const { user } = useUser();
+  const db = useFirestore();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  // Form State
+  const [newTopic, setNewTopic] = useState("");
+  const [newNiche, setNewNiche] = useState("AI Tools");
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -55,6 +70,35 @@ export default function DashboardPage() {
         title: "Import Failed",
         description: error.message,
       });
+    }
+  };
+
+  const launchNewProject = async () => {
+    if (!newTopic.trim() || !user || !db) return;
+    
+    setIsLaunching(true);
+    const ideaData = {
+      topic: newTopic,
+      niche: newNiche,
+      status: "pending",
+      createdAt: serverTimestamp(),
+    };
+
+    try {
+      const ideaRef = collection(db, "users", user.uid, "ideas");
+      addDocumentNonBlocking(ideaRef, ideaData);
+      
+      toast({
+        title: "Project Initialized",
+        description: `"${newTopic}" has been added to the production queue.`,
+      });
+      
+      setNewTopic("");
+      setIsDialogOpen(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLaunching(false);
     }
   };
 
@@ -88,9 +132,60 @@ export default function DashboardPage() {
               >
                 <FileSpreadsheet className="w-3 h-3 mr-2 text-green-500" /> Bulk Intake
               </Button>
-              <Button size="sm" className="bg-primary text-primary-foreground font-bold uppercase text-[10px] tracking-widest px-4 h-9 shadow-lg shadow-primary/20">
-                <Plus className="w-3 h-3 mr-2" /> New Project
-              </Button>
+
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="bg-primary text-primary-foreground font-bold uppercase text-[10px] tracking-widest px-4 h-9 shadow-lg shadow-primary/20">
+                    <Plus className="w-3 h-3 mr-2" /> New Project
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-card border-border shadow-2xl rounded-3xl sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle className="font-headline text-xl uppercase tracking-tighter text-primary flex items-center gap-2">
+                      <Rocket className="w-5 h-5" /> Initialize Production
+                    </DialogTitle>
+                    <DialogDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      Deploy a new concept to the 20-agent pipeline
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-6 py-4">
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Video Topic / Concept</Label>
+                      <Input 
+                        placeholder="e.g. 5 ChatGPT Secrets Nobody Uses" 
+                        value={newTopic}
+                        onChange={(e) => setNewTopic(e.target.value)}
+                        className="bg-secondary/30 border-border/50 h-11 text-sm focus:border-primary"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Target Niche</Label>
+                      <select 
+                        value={newNiche}
+                        onChange={(e) => setNewNiche(e.target.value)}
+                        className="w-full bg-secondary/30 border border-border/50 rounded-md h-11 px-3 text-sm focus:border-primary outline-none"
+                      >
+                        <option>AI Tools</option>
+                        <option>Finance</option>
+                        <option>Body Facts</option>
+                        <option>Luxury</option>
+                        <option>History</option>
+                      </select>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button 
+                      onClick={launchNewProject} 
+                      disabled={isLaunching || !newTopic.trim()}
+                      className="w-full bg-primary text-background font-black uppercase text-[10px] tracking-[0.2em] h-12 shadow-xl shadow-primary/10"
+                    >
+                      {isLaunching ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                        <><Sparkles className="w-4 h-4 mr-2" /> Launch Industrial Pipeline</>
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </header>
           
@@ -105,8 +200,6 @@ export default function DashboardPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between gap-2 overflow-x-auto pb-2 custom-scrollbar">
                   <PipelineStep label="Idea" count={120} active />
-                  <PipelineArrow />
-                  <PipelineStep label="Idea" count={42} />
                   <PipelineArrow />
                   <PipelineStep label="Script" count={18} />
                   <PipelineArrow />
@@ -173,7 +266,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="p-4 bg-secondary/10 flex gap-2">
                     <Button variant="outline" className="flex-1 text-[9px] uppercase font-bold h-8 border-border/50">+ Add Channel</Button>
-                    <Button variant="outline" className="flex-1 text-[9px] uppercase font-bold h-8 border-border/50"><Globe className="w-3 h-3 mr-2" /> Clone Node</Button>
+                    <Button variant="outline" className="flex-1 text-[9px] uppercase font-bold h-8 border-border/50">Clone Node</Button>
                   </div>
                 </CardContent>
               </Card>

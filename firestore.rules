@@ -1,154 +1,29 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    /**
-     * AI LO-FI CHANNEL FACTORY - SECURITY RULES ARCHITECTURE
-     *
-     * CORE PHILOSOPHY:
-     * This ruleset enforces a strict path-based ownership model. All data is siloed under the 
-     * /users/{userId} hierarchy. Authorization is derived primarily from the path parameters, 
-     * ensuring that users can only access their own data tree.
-     *
-     * DATA STRUCTURE:
-     * Data is organized hierarchically: /users -> channels -> contentProjects -> contentItems 
-     * -> [beats, productionJobs, analyticsSnapshots]. This structure maps the 1:N 
-     * relationships from the backend domain model into a secure, nested Firestore tree.
-     *
-     * KEY SECURITY DECISIONS:
-     * 1. Path-Based Authorization: We use the {userId} in the document path as the primary 
-     *    identifier for ownership. Access is granted if request.auth.uid matches the path's userId.
-     * 2. Denormalization for Integrity: While authorization uses the path, we enforce that 
-     *    relational IDs (like channelId, contentProjectId) are stored within the document and 
-     *    remain immutable. This ensures the data remains valid for potential future 
-     *    Collection Group queries.
-     * 3. Prototyping Flexibility: We do not enforce strict schema types (strings, ints, etc.) 
-     *    to allow rapid UI iteration. Only relational integrity and ownership are strictly 
-     *    validated.
-     * 4. Denied Public Access: No data in this system is intended for public consumption 
-     *    unauthenticated. All reads and writes require a verified identity.
-     */
-
-    // --- GLOBAL HELPER FUNCTIONS ---
-
-    /**
-     * @description Checks if the user is authenticated.
-     */
     function isSignedIn() {
       return request.auth != null;
     }
-
-    /**
-     * @description Checks if the authenticated user's UID matches the provided userId from the path.
-     */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    /**
-     * @description Combines ownership check with a check for document existence. 
-     * Used for update and delete operations to prevent modifying non-existent data.
-     */
-    function isExistingOwner(userId) {
-      return resource != null && isOwner(userId);
-    }
-
-    // --- COLLECTION RULES ---
-
-    /**
-     * @description Root user document. Manages the primary account profile.
-     * @path /users/{userId}
-     * @allow (create) User 'abc' creates document /users/abc.
-     * @deny (create) User 'abc' tries to create /users/def.
-     * @principle Ownership (Self-Creation).
-     */
     match /users/{userId} {
-      allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(userId);
+      allow get, list, create, update: if isOwner(userId);
+      
+      match /ideas/{ideaId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /jobs/{jobId} {
+        allow read, write: if isOwner(userId);
+      }
 
-      /**
-       * @description YouTube Channels managed by the user.
-       * @path /users/{userId}/channels/{channelId}
-       * @allow (get) Owner 'abc' retrieves their channel.
-       * @deny (list) Anonymous user tries to list channels.
-       * @principle Path-Based Ownership.
-       */
-      match /channels/{channelId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && request.resource.data.id == channelId;
-        allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-        allow delete: if isExistingOwner(userId);
-
-        /**
-         * @description Content Projects (albums/campaigns) under a specific channel.
-         * @path /users/{userId}/channels/{channelId}/contentProjects/{contentProjectId}
-         * @allow (create) Owner creates project with correct channelId linkage.
-         * @deny (update) Owner tries to change the channelId on an existing project.
-         * @principle Relational Integrity (Immutable Parent IDs).
-         */
-        match /contentProjects/{contentProjectId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId) && request.resource.data.channelId == channelId;
-          allow update: if isExistingOwner(userId) && request.resource.data.channelId == resource.data.channelId;
-          allow delete: if isExistingOwner(userId);
-
-          /**
-           * @description Specific content items (videos, shorts) being produced.
-           * @path /users/{userId}/channels/{channelId}/contentProjects/{contentProjectId}/contentItems/{contentItemId}
-           * @allow (list) Owner lists items within a project.
-           * @deny (create) User 'abc' creates item for User 'def''s project.
-           * @principle Path-Based Ownership.
-           */
-          match /contentItems/{contentItemId} {
-            allow get, list: if isOwner(userId);
-            allow create: if isOwner(userId) && request.resource.data.contentProjectId == contentProjectId;
-            allow update: if isExistingOwner(userId) && request.resource.data.contentProjectId == resource.data.contentProjectId;
-            allow delete: if isExistingOwner(userId);
-
-            /**
-             * @description Individual AI-generated beats for monetization.
-             * @path .../contentItems/{contentItemId}/beats/{beatId}
-             * @allow (get) Owner retrieves beat details.
-             * @deny (delete) Deleting a beat that doesn't exist.
-             * @principle Robustness for State-Changing Operations.
-             */
-            match /beats/{beatId} {
-              allow get, list: if isOwner(userId);
-              allow create: if isOwner(userId) && request.resource.data.contentItemId == contentItemId;
-              allow update: if isExistingOwner(userId) && request.resource.data.contentItemId == resource.data.contentItemId;
-              allow delete: if isExistingOwner(userId);
-            }
-
-            /**
-             * @description Automated production jobs (Cloud Function task tracking).
-             * @path .../contentItems/{contentItemId}/productionJobs/{productionJobId}
-             * @allow (update) User/System updates job status to 'Completed'.
-             * @deny (create) Job created without correct contentItemId link.
-             * @principle Relational Integrity.
-             */
-            match /productionJobs/{productionJobId} {
-              allow get, list: if isOwner(userId);
-              allow create: if isOwner(userId) && request.resource.data.contentItemId == contentItemId;
-              allow update: if isExistingOwner(userId) && request.resource.data.contentItemId == resource.data.contentItemId;
-              allow delete: if isExistingOwner(userId);
-            }
-
-            /**
-             * @description Historical performance snapshots for the video.
-             * @path .../contentItems/{contentItemId}/analyticsSnapshots/{snapshotId}
-             * @allow (list) Owner views historical performance chart data.
-             * @principle Path-Based Ownership.
-             */
-            match /analyticsSnapshots/{snapshotId} {
-              allow get, list: if isOwner(userId);
-              allow create: if isOwner(userId) && request.resource.data.contentItemId == contentItemId;
-              allow update: if isExistingOwner(userId) && request.resource.data.contentItemId == resource.data.contentItemId;
-              allow delete: if isExistingOwner(userId);
-            }
-          }
-        }
+      match /agentRuns/{runId} {
+        // System bypass for industrial logging via apiKey
+        allow create: if request.resource.data.apiKey == 'INDUSTRIAL_SYSTEM_KEY_2026' || isOwner(userId);
+        allow read: if isOwner(userId);
       }
     }
   }
