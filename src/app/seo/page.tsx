@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -9,17 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Search, Copy, RefreshCcw, Tag, Hash, FileText, Flame } from "lucide-react";
+import { Loader2, Search, Copy, RefreshCcw, Tag, Hash, FileText, Flame, AlertCircle, CheckCircle2 } from "lucide-react";
 import { aiYoutubeSeoOptimization, AiYoutubeSeoOptimizationOutput } from "@/ai/flows/ai-youtube-seo-optimization";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-const viralKeywords = [
-  "lofi beats", "lofi study music", "harbor lofi", "moon lofi", "lofi radio",
-  "study beats", "lofi chill", "relaxing lofi music", "late night lofi",
-  "lofi sleep music", "lofi hip hop", "study music 2026", "rain lofi",
-  "coding music", "focus music", "chill beats", "ambient lofi", "lofi mix",
-  "deep focus music", "background study music"
+const POWER_SEO_TAGS = [
+  "lofi beats", "lofi study music", "harbor lofi", "moon lofi", "lofi radio", 
+  "study beats", "lofi chill", "relaxing lofi music", "late night lofi", 
+  "lofi sleep music", "lofi hip hop", "study music 2026", "rain lofi", 
+  "coding music", "focus music", "chill beats", "ambient lofi", "lofi mix", 
+  "deep focus music", "background study music", "cozy lofi beats", 
+  "nighttime lofi", "chill study beats", "peaceful lofi music", "sleep lofi radio"
 ];
 
 export default function SeoOptimizerPage() {
@@ -30,14 +32,22 @@ export default function SeoOptimizerPage() {
   const [formData, setFormData] = useState({
     microNiche: "Harbor Moon LoFi Radio - Night Escape",
     videoTopic: "Moonlit Harbor Lofi 🌙 Deep Focus Study Beats",
-    keywords: viralKeywords,
+    keywords: POWER_SEO_TAGS,
     artistName: "Harbor Moon",
     bpm: 78,
     key: "C Minor",
     licensingInfo: "FREE for non-profit. Harbor Moon LoFi Radio Exclusive."
   });
 
+  const tagString = formData.keywords.join(", ");
+  const tagLength = tagString.length;
+  const isOverLimit = tagLength > 500;
+
   async function handleGenerate() {
+    if (isOverLimit) {
+      toast({ variant: "destructive", title: "Limit Exceeded", description: "Tags must be under 500 characters for YouTube Studio." });
+      return;
+    }
     setLoading(true);
     try {
       const output = await aiYoutubeSeoOptimization(formData);
@@ -57,85 +67,84 @@ export default function SeoOptimizerPage() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-[#0a0a0f]">
         <AppSidebar />
         <SidebarInset className="bg-background">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4 backdrop-blur-md bg-background/80 sticky top-0 z-50">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">SEO Metadata Hub (Harbor Moon)</h1>
+            <h1 className="font-headline font-bold text-xl uppercase tracking-tight text-primary">SEO Metadata Hub</h1>
           </header>
 
           <main className="p-6 md:p-8 space-y-8">
-            <div className="bg-primary/5 border border-primary/20 p-4 rounded-2xl flex items-center justify-between max-w-5xl mx-auto">
+            <div className="bg-primary/5 border border-primary/20 p-4 rounded-2xl flex items-center justify-between max-w-5xl mx-auto shadow-[0_0_30px_rgba(var(--primary),0.05)]">
                <div className="flex items-center gap-3">
-                 <Flame className="w-5 h-5 text-orange-500" />
+                 <Flame className="w-5 h-5 text-orange-500 animate-pulse" />
                  <div>
-                   <p className="text-[10px] font-bold uppercase text-primary">Active Blueprint: Harbor Moon LoFi Radio</p>
-                   <p className="text-xs font-headline font-bold">Week 1 Algorithm Warm-Up Calibration</p>
+                   <p className="text-[10px] font-bold uppercase text-primary tracking-widest">Active Blueprint: Harbor Moon LoFi Radio</p>
+                   <p className="text-xs font-headline font-bold">Industrial SEO Calibration: Power Tag Block v2</p>
                  </div>
                </div>
-               <Badge className="bg-green-500/20 text-green-500 uppercase font-mono text-[10px]">VIRAL-READY</Badge>
+               <Badge className="bg-green-500/20 text-green-500 uppercase font-mono text-[10px] border-green-500/20">ALGO-OPTIMIZED</Badge>
             </div>
 
             <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-5">
-              <Card className="bg-card lg:col-span-2 h-fit">
-                <CardHeader>
-                  <CardTitle className="font-headline flex items-center gap-2">
-                    <Tag className="w-5 h-5 text-primary" />
+              <Card className="bg-card lg:col-span-2 h-fit border-border/50 shadow-xl overflow-hidden rounded-3xl">
+                <CardHeader className="bg-secondary/10 border-b border-border/50">
+                  <CardTitle className="font-headline text-sm uppercase tracking-widest flex items-center gap-2">
+                    <Tag className="w-4 h-4 text-primary" />
                     Algorithm Calibration
                   </CardTitle>
-                  <CardDescription>Engineering titles based on Emotion + Scene + Use</CardDescription>
+                  <CardDescription className="text-[10px] font-bold uppercase tracking-tighter">Emotion + Scene + Use Case Logic</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6 pt-6">
                   <div className="space-y-2">
-                    <Label>Micro-Niche / Channel</Label>
+                    <Label className="text-[10px] uppercase font-bold text-muted-foreground">Channel / Micro-Niche</Label>
                     <Input 
                       value={formData.microNiche}
                       onChange={(e) => setFormData({...formData, microNiche: e.target.value})}
-                      className="bg-secondary/30"
+                      className="bg-secondary/30 h-10 text-xs border-border/50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Scene & Purpose (Viral Title Structure)</Label>
+                    <Label className="text-[10px] uppercase font-bold text-muted-foreground">Scene & Viral Purpose</Label>
                     <Textarea 
                       value={formData.videoTopic}
                       onChange={(e) => setFormData({...formData, videoTopic: e.target.value})}
-                      className="bg-secondary/30 min-h-[80px]"
-                      placeholder="Emotion + Scene + Use (e.g. Moonlit Harbor Lofi Deep Focus Study Beats)"
+                      className="bg-secondary/30 min-h-[80px] text-xs border-border/50 leading-relaxed"
+                      placeholder="e.g. Moonlit Harbor Lofi Deep Focus Study Beats"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>BPM</Label>
-                      <Input 
-                        type="number"
-                        value={formData.bpm}
-                        onChange={(e) => setFormData({...formData, bpm: parseInt(e.target.value)})}
-                        className="bg-secondary/30"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Key</Label>
-                      <Input 
-                        value={formData.key}
-                        onChange={(e) => setFormData({...formData, key: e.target.value})}
-                        className="bg-secondary/30"
-                      />
-                    </div>
-                  </div>
+                  
                   <div className="space-y-2">
-                    <Label>Viral Keyword Stack</Label>
+                    <div className="flex justify-between items-center mb-1">
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Power SEO Tag Block</Label>
+                      <span className={cn(
+                        "text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border",
+                        isOverLimit ? "bg-red-500/10 text-red-500 border-red-500/20" : "bg-primary/10 text-primary border-primary/20"
+                      )}>
+                        {tagLength} / 500 Chars
+                      </span>
+                    </div>
                     <Textarea 
-                      value={formData.keywords.join(", ")}
+                      value={tagString}
                       onChange={(e) => setFormData({...formData, keywords: e.target.value.split(",").map(k => k.trim())})}
-                      className="bg-secondary/30 min-h-[100px]"
+                      className={cn(
+                        "bg-secondary/30 min-h-[120px] text-[10px] font-mono border-border/50 custom-scrollbar",
+                        isOverLimit && "border-red-500/50"
+                      )}
                     />
+                    {isOverLimit && (
+                      <p className="text-[9px] text-red-400 font-bold uppercase flex items-center gap-1 mt-1">
+                        <AlertCircle className="w-3 h-3" /> Exceeds YouTube Studio pasting limit
+                      </p>
+                    )}
                   </div>
+
                   <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] tracking-widest shadow-lg"
+                    className="w-full bg-primary text-background font-bold h-12 uppercase text-[10px] tracking-widest shadow-lg shadow-primary/10"
                     onClick={handleGenerate}
-                    disabled={loading}
+                    disabled={loading || isOverLimit}
                   >
                     {loading ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2 h-4 w-4" />}
                     Engineer Viral Metadata
@@ -145,60 +154,62 @@ export default function SeoOptimizerPage() {
 
               <div className="lg:col-span-3 space-y-6">
                 {!result && !loading && (
-                  <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border rounded-3xl opacity-50 min-h-[400px]">
+                  <div className="flex flex-col items-center justify-center h-full text-center p-12 border-2 border-dashed border-border/50 rounded-3xl opacity-50 min-h-[450px] bg-secondary/5">
                     <FileText className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="text-lg font-bold uppercase text-[10px] tracking-widest">Metadata Engine: READY</p>
-                    <p className="text-xs text-muted-foreground mt-2 max-w-xs mx-auto">Input Harbor Moon vibes to generate SEO-optimized titles and descriptions.</p>
+                    <p className="text-lg font-headline font-bold uppercase text-[10px] tracking-[0.2em]">Metadata Engine: STANDBY</p>
+                    <p className="text-[10px] text-muted-foreground max-w-xs mx-auto mt-2 uppercase font-bold tracking-widest leading-relaxed">
+                      Input Harbor Moon vibes to generate SEO-optimized assets calibrated for high-ranking indexing.
+                    </p>
                   </div>
                 )}
 
                 {loading && (
-                   <div className="space-y-4 animate-pulse">
-                     <div className="h-20 bg-secondary/30 rounded-2xl" />
-                     <div className="h-64 bg-secondary/30 rounded-2xl" />
-                     <div className="h-32 bg-secondary/30 rounded-2xl" />
+                   <div className="space-y-6 animate-pulse">
+                     <Card className="h-24 bg-secondary/20 rounded-3xl border-border/50" />
+                     <Card className="h-64 bg-secondary/20 rounded-3xl border-border/50" />
+                     <Card className="h-32 bg-secondary/20 rounded-3xl border-border/50" />
                    </div>
                 )}
 
                 {result && (
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                    <Card className="bg-card border-primary/20">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2 bg-primary/5 rounded-t-lg">
-                        <CardTitle className="text-[10px] font-bold uppercase text-primary tracking-widest">Viral Optimized Title</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => copyToClipboard(result.title)}>
-                          <Copy className="h-4 w-4" />
+                    <Card className="bg-card border-primary/20 shadow-xl rounded-3xl overflow-hidden">
+                      <CardHeader className="flex flex-row items-center justify-between pb-3 bg-primary/5 border-b border-primary/10">
+                        <CardTitle className="text-[10px] font-black uppercase text-primary tracking-[0.2em]">Viral Optimized Title</CardTitle>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary/10" onClick={() => copyToClipboard(result.title)}>
+                          <Copy className="h-3.5 w-3.5 text-primary" />
                         </Button>
                       </CardHeader>
-                      <CardContent className="pt-4">
-                        <p className="text-xl font-headline font-bold text-foreground">{result.title}</p>
+                      <CardContent className="pt-6">
+                        <p className="text-xl font-headline font-bold text-foreground leading-tight">{result.title}</p>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-card border-border/50">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2 bg-secondary/10 rounded-t-lg">
-                        <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Description Template</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => copyToClipboard(result.description)}>
-                          <Copy className="h-4 w-4" />
+                    <Card className="bg-card border-border/50 shadow-lg rounded-3xl overflow-hidden">
+                      <CardHeader className="flex flex-row items-center justify-between pb-3 bg-secondary/10 border-b border-border/50">
+                        <CardTitle className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em]">Industrial Description Block</CardTitle>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => copyToClipboard(result.description)}>
+                          <Copy className="h-3.5 w-3.5" />
                         </Button>
                       </CardHeader>
-                      <CardContent className="pt-4">
-                        <pre className="text-[11px] whitespace-pre-wrap font-sans text-muted-foreground leading-relaxed h-64 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-4 rounded-lg italic">
+                      <CardContent className="pt-6">
+                        <pre className="text-[11px] whitespace-pre-wrap font-sans text-muted-foreground leading-relaxed h-64 overflow-y-auto pr-2 custom-scrollbar bg-secondary/20 p-5 rounded-2xl italic border border-border/50 shadow-inner">
                           {result.description}
                         </pre>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-card border-border/50">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Tag Blueprint</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => copyToClipboard(result.tags.join(", "))}>
-                          <Copy className="h-4 w-4" />
+                    <Card className="bg-card border-border/50 shadow-md rounded-3xl overflow-hidden">
+                      <CardHeader className="flex flex-row items-center justify-between pb-3">
+                        <CardTitle className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em]">Tag Blueprint Index</CardTitle>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => copyToClipboard(result.tags.join(", "))}>
+                          <Copy className="h-3.5 w-3.5" />
                         </Button>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="pt-2">
                         <div className="flex flex-wrap gap-2">
                           {result.tags.map((tag, idx) => (
-                            <Badge key={idx} variant="secondary" className="bg-primary/10 text-[9px] text-primary border-primary/20 uppercase font-mono">
+                            <Badge key={idx} variant="secondary" className="bg-primary/5 text-[9px] text-primary border-primary/20 uppercase font-mono tracking-tighter">
                               {tag}
                             </Badge>
                           ))}

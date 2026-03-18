@@ -1,8 +1,9 @@
+
 'use server';
 /**
  * @fileOverview This file implements a Genkit flow for generating YouTube SEO metadata.
  * It takes a micro-niche, video topic, and keywords as input,
- * and outputs an optimized video title, description, and a list of tags.
+ * and outputs an optimized video video title, description, and a list of tags.
  *
  * - aiYoutubeSeoOptimization - A function that generates YouTube SEO metadata.
  * - AiYoutubeSeoOptimizationInput - The input type for the aiYoutubeSeoOptimization function.
@@ -34,9 +35,9 @@ const AiYoutubeSeoOptimizationOutputSchema = z.object({
   description: z
     .string()
     .describe(
-      'A detailed YouTube video description following the Type Beat template.'
+      'A detailed YouTube video description following the Type Beat / Lo-Fi template.'
     ),
-  tags: z.array(z.string()).describe('A list of 20-30 relevant tags for the YouTube tags field.'),
+  tags: z.array(z.string()).describe('A list of high-ranking tags under 500 characters total.'),
 });
 export type AiYoutubeSeoOptimizationOutput = z.infer<typeof AiYoutubeSeoOptimizationOutputSchema>;
 
@@ -50,11 +51,11 @@ const prompt = ai.definePrompt({
   name: 'aiYoutubeSeoOptimizationPrompt',
   input: {schema: AiYoutubeSeoOptimizationInputSchema},
   output: {schema: AiYoutubeSeoOptimizationOutputSchema},
-  prompt: `You are an expert YouTube SEO specialist for professional Lo-Fi and Type Beat channels.
-Your goal is to generate comprehensive, micro-niche-optimized YouTube metadata (title, description, tags) that follows the EXACT template and tagging blueprint provided.
+  prompt: `You are an expert YouTube SEO specialist for industrial Lo-Fi and Type Beat channels. 
+Your goal is to generate comprehensive, algorithm-optimized YouTube metadata (title, description, tags) that follows the EXACT Power SEO blueprint provided.
 
 --- TITLE FORMAT ---
-[FREE] {{{artistName}}} Type Beat - "[Beat Name]" (or similar viral format)
+[FREE] {{{artistName}}} Type Beat - "[Beat Name]" (or similar viral structure like "Emotion + Scene + Use Case")
 
 --- DESCRIPTION TEMPLATE (Strict adherence required) ---
 
@@ -75,21 +76,17 @@ Instagram | [Link]
 
 --------------------
 
-[An atmospheric SEO-optimized paragraph (150 words) that describes the beat's vibe (e.g., "{{{videoTopic}}}") and naturally stacks keywords like "{{{microNiche}}}", "{{{artistName}}} type beat 2025", and "{{{artistName}}} instrumental". Mention it is perfect for artists looking for high-quality production.]
+[An atmospheric SEO-optimized paragraph (150 words) that describes the beat's vibe (e.g., "{{{videoTopic}}}") and naturally stacks keywords like "{{{microNiche}}}", "{{{artistName}}} type beat 2026", and "{{{artistName}}} instrumental". Mention it is perfect for artists looking for high-quality production.]
 
-[A line of 6-10 keywords separated by commas]
+[A line of 15-20 high-ranking keywords separated by commas]
 
 [3-5 relevant hashtags]
 
 --------------------
 
 --- TAGGING BLUEPRINT (CRITICAL) ---
-For the tags, you MUST use the following format for EACH artist/keyword name provided (e.g., if artist is Drake). 
-Replace "keyword" with the specific name:
-
-"keyword type beat, free keyword type beat, keyword type beat 2025, free keyword type beat 2025, keyword type beat free 2025, keyword type beat free, type beat, free type beat, type beat 2025, free type beat 2025, type beat free 2025, type beat free, beat, beats, type beats, free type beats"
-
-If there are multiple artists (e.g., Drake x Tory Lanez), duplicate this entire set for each artist.
+Your 'tags' output must be an array of strings. Prioritize these high-velocity terms:
+lofi beats, lofi study music, harbor lofi, moon lofi, lofi radio, study beats, lofi chill, relaxing lofi music, late night lofi, lofi sleep music, lofi hip hop, study music 2026, rain lofi, coding music, focus music, chill beats, ambient lofi, lofi mix, deep focus music, background study music, cozy lofi beats, nighttime lofi, chill study beats, peaceful lofi music, sleep lofi radio.
 
 Context for Generation:
 - Artist Name: {{{artistName}}}
@@ -100,7 +97,7 @@ Context for Generation:
 - Extra Keywords: {{#each keywords}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
 
 Ensure the description is formatted exactly like the template with the emojis and spacing provided. 
-Return the tags as an array of strings.`,
+Return exactly 20-30 tags. Total character count across all tags must be under 500.`,
 });
 
 const aiYoutubeSeoOptimizationFlow = ai.defineFlow(
