@@ -20,8 +20,16 @@ service cloud.firestore {
         allow read, write: if isOwner(userId);
       }
 
+      match /channels/{channelId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /chatHistory/{chatId} {
+        allow read, write: if isOwner(userId);
+      }
+
       match /agentRuns/{runId} {
-        // System bypass for industrial logging via apiKey
+        // System bypass for industrial logging via secret key
         allow create: if request.resource.data.apiKey == 'INDUSTRIAL_SYSTEM_KEY_2026' || isOwner(userId);
         allow read: if isOwner(userId);
       }

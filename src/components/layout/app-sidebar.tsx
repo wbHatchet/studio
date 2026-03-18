@@ -19,7 +19,8 @@ import {
   LogOut,
   Zap,
   MessageSquare,
-  Key
+  Key,
+  DollarSign
 } from "lucide-react";
 
 import {
@@ -46,6 +47,7 @@ const commandNav = [
 const growthNav = [
   { title: "AI Agent Controls", icon: Cpu, url: "/growth/lab" },
   { title: "Live Analytics", icon: BarChart3, url: "/analytics" },
+  { title: "Revenue Hub", icon: DollarSign, url: "/monetization" },
   { title: "Revenue Tracker", icon: Calculator, url: "/strategy/calculator" },
   { title: "Strategy Intel", icon: TrendingUp, url: "/strategy" },
   { title: "Strategy Chat", icon: MessageSquare, url: "/chat" },

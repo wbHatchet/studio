@@ -24,7 +24,7 @@ export default function ChatPage() {
   const messagesQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
     return query(
-      collection(db, "userProfiles", user.uid, "chatHistory"),
+      collection(db, "users", user.uid, "chatHistory"),
       orderBy("timestamp", "asc"),
       limit(50)
     );
@@ -47,7 +47,7 @@ export default function ChatPage() {
     setIsTyping(true);
 
     try {
-      const chatRef = collection(db, "userProfiles", user.uid, "chatHistory");
+      const chatRef = collection(db, "users", user.uid, "chatHistory");
       await addDoc(chatRef, {
         role: "user",
         content: userMsg,

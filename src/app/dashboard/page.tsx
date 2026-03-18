@@ -193,7 +193,7 @@ export default function DashboardPage() {
             {/* GLOBAL CONTENT PIPELINE */}
             <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
               <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
-                <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                <CardTitle className="text-[10px) font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
                   <Workflow className="w-3 h-3" /> Global Content Pipeline
                 </CardTitle>
               </CardHeader>

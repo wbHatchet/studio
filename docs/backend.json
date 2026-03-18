@@ -38,6 +38,37 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["type", "status", "ideaId", "createdAt"]
+    },
+    "Channel": {
+      "title": "Channel",
+      "type": "object",
+      "properties": {
+        "platform": { "type": "string" },
+        "handle": { "type": "string" },
+        "status": { "type": "string" },
+        "stats": { "type": "object" }
+      }
+    },
+    "AgentRun": {
+      "title": "AgentRun",
+      "type": "object",
+      "description": "Log entry for an agent execution or system event.",
+      "properties": {
+        "agentId": { "type": "string" },
+        "success": { "type": "boolean" },
+        "message": { "type": "string" },
+        "apiKey": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
     }
   },
   "auth": {
@@ -55,6 +86,18 @@
     "/users/{userId}/jobs/{jobId}": {
       "schema": { "$ref": "#/entities/Job" },
       "description": "Active production tasks"
+    },
+    "/users/{userId}/channels/{channelId}": {
+      "schema": { "$ref": "#/entities/Channel" },
+      "description": "Managed YouTube/TikTok nodes"
+    },
+    "/users/{userId}/chatHistory/{chatId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Strategy chat history"
+    },
+    "/users/{userId}/agentRuns/{runId}": {
+      "schema": { "$ref": "#/entities/AgentRun" },
+      "description": "Correction Ledger for industrial monitoring"
     }
   }
 }

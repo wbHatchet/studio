@@ -18,7 +18,7 @@ export default function DirectorLogicPage() {
   const ledgerQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
     return query(
-      collection(db, "userProfiles", user.uid, "agentRuns"),
+      collection(db, "users", user.uid, "agentRuns"),
       orderBy("timestamp", "desc"),
       limit(10)
     );
