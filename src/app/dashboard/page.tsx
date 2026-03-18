@@ -94,9 +94,15 @@ export default function DashboardPage() {
 function MetricCard({ label, value, trend, trendUp }: any) {
   return (
     <Card className="bg-secondary/30 border-border/50 p-4">
-      <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1">{label}</p>
+      <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1">
+        {label}
+      </p>
+
       <div className="text-2xl font-bold">{value}</div>
-      <p className={cn("text-[9px] font-bold mt-1 uppercase", trendUp ? "text-green-500" : "text-muted-foreground")}>
+
+      <p className={`text-[9px] font-bold mt-1 uppercase ${
+        trendUp ? "text-green-500" : "text-muted-foreground"
+      }`}>
         {trend}
       </p>
     </Card>
