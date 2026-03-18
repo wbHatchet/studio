@@ -106,15 +106,17 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between gap-2 overflow-x-auto pb-2 custom-scrollbar">
                   <PipelineStep label="Idea" count={120} active />
                   <PipelineArrow />
-                  <PipelineStep label="Script" count={42} />
+                  <PipelineStep label="Idea" count={42} />
                   <PipelineArrow />
-                  <PipelineStep label="Music" count={18} />
+                  <PipelineStep label="Script" count={18} />
                   <PipelineArrow />
-                  <PipelineStep label="Scene" count={12} />
+                  <PipelineStep label="Music" count={12} />
                   <PipelineArrow />
-                  <PipelineStep label="Video" count={8} />
+                  <PipelineStep label="Visual" count={8} />
                   <PipelineArrow />
-                  <PipelineStep label="Thumbnail" count={5} />
+                  <PipelineStep label="Assembly" count={5} />
+                  <PipelineArrow />
+                  <PipelineStep label="QC" count={3} />
                   <PipelineArrow />
                   <PipelineStep label="Uploaded" count={312} success />
                 </div>

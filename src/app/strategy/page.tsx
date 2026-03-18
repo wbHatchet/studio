@@ -23,7 +23,8 @@ import {
   Terminal,
   MousePointer2,
   CheckCircle2,
-  Lightbulb
+  Lightbulb,
+  ArrowRight
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -63,7 +64,7 @@ Rules:
 
 Goal: maximize discoverability, CTR, and suggested video traffic.`;
 
-export default function NicheIntelPage() {
+export default function StrategyPage() {
   const { toast } = useToast();
 
   const copyPrompt = () => {
@@ -177,7 +178,7 @@ export default function NicheIntelPage() {
                     <CardHeader className="bg-orange-500/5 border-b border-orange-500/10">
                       <div className="flex justify-between items-center">
                         <div>
-                          <CardTitle className="font-headline text-lg uppercase text-orange-400">🔥 30-Second AI Prompt</CardTitle>
+                          <CardTitle className="font-headline text-lg uppercase text-orange-400">🔥 30-Second AI Master Prompt</CardTitle>
                           <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Generate 500 Viral Lofi Tags Instantly</CardDescription>
                         </div>
                         <Button variant="outline" size="sm" onClick={copyPrompt} className="h-8 border-orange-500/30 text-orange-400 hover:bg-orange-500/10">
@@ -205,15 +206,15 @@ export default function NicheIntelPage() {
                           <div className="space-y-3">
                             <div className="flex gap-3">
                               <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-[10px] font-bold shrink-0">1</span>
-                              <p className="text-[11px] text-muted-foreground">Run prompt in ChatGPT</p>
+                              <p className="text-[11px] text-muted-foreground">Run prompt in ChatGPT or Claude</p>
                             </div>
                             <div className="flex gap-3">
                               <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-[10px] font-bold shrink-0">2</span>
-                              <p className="text-[11px] text-muted-foreground">Use top 30 per video</p>
+                              <p className="text-[11px] text-muted-foreground">Copy all tags and pick top 30 per video</p>
                             </div>
                             <div className="flex gap-3">
                               <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-[10px] font-bold shrink-0">3</span>
-                              <p className="text-[11px] text-muted-foreground">Rotate keyword focus daily</p>
+                              <p className="text-[11px] text-muted-foreground">Rotate keyword focus daily and upload consistently</p>
                             </div>
                           </div>
                         </div>
@@ -230,17 +231,24 @@ export default function NicheIntelPage() {
                         <CardDescription className="text-[10px] font-bold uppercase">Multi-Keyword Dominance</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                          <p className="text-xs font-bold text-foreground">Keyword Rotation Strategy</p>
-                          <div className="p-3 rounded-xl bg-background/50 border border-border/50 space-y-2">
-                            <p className="text-[10px] text-muted-foreground">Video 1 &rarr; focus <span className="text-primary font-bold">"study"</span></p>
-                            <p className="text-[10px] text-muted-foreground">Video 2 &rarr; focus <span className="text-primary font-bold">"sleep"</span></p>
-                            <p className="text-[10px] text-muted-foreground">Video 3 &rarr; focus <span className="text-primary font-bold">"rain"</span></p>
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-bold uppercase text-muted-foreground">Step 1: Paste & Pick</p>
+                            <p className="text-[11px] text-foreground leading-relaxed">Paste into YouTube Studio → pick top 25-40 highest relevance tags.</p>
+                          </div>
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-bold uppercase text-muted-foreground">Step 2: Rotate per Video</p>
+                            <div className="p-3 rounded-xl bg-background/50 border border-border/50 space-y-2">
+                              <p className="text-[10px] text-muted-foreground">Video 1 &rarr; focus <span className="text-primary font-bold">"study"</span></p>
+                              <p className="text-[10px] text-muted-foreground">Video 2 &rarr; focus <span className="text-primary font-bold">"sleep"</span></p>
+                              <p className="text-[10px] text-muted-foreground">Video 3 &rarr; focus <span className="text-primary font-bold">"rain"</span></p>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-bold uppercase text-muted-foreground">Step 3: Dominance</p>
+                            <p className="text-[11px] text-muted-foreground leading-relaxed">Repeat weekly to build topic authority across all 3 traffic lanes simultaneously.</p>
                           </div>
                         </div>
-                        <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                          Repeat weekly to build topic authority across all 3 traffic lanes simultaneously. This is what the 1M+ sub channels do.
-                        </p>
                       </CardContent>
                     </Card>
 
@@ -252,8 +260,8 @@ export default function NicheIntelPage() {
                       </CardHeader>
                       <CardContent>
                         <p className="text-[11px] text-muted-foreground leading-relaxed">
-                          Run the prompt 3 times with specific variations like <span className="text-foreground font-bold">"sleep lofi channel"</span> or <span className="text-foreground font-bold">"coding lofi mix"</span>. 
-                          This forces the AI to discover untapped traffic lanes.
+                          Run the prompt 3 times with specific variations like <span className="text-foreground font-bold">"study lofi"</span>, <span className="text-foreground font-bold">"sleep lofi"</span>, and <span className="text-foreground font-bold">"rain lofi"</span>. 
+                          You now own 3 separate traffic lanes instead of one.
                         </p>
                       </CardContent>
                     </Card>
