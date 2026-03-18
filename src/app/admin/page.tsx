@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -30,6 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 const MOCK_USERS = [
   { id: "USR-001", email: "jeff@harbormoon.ai", plan: "Empire", status: "Active", credits: "42,400", nodes: 42, joined: "Jan 12, 2026" },

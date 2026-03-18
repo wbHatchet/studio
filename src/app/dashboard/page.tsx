@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plus, CheckCircle2, Clock, AlertTriangle, Monitor, TrendingUp, Radio, Layers, Video } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -65,7 +66,9 @@ export default function DashboardPage() {
 
               <Card className="bg-card border-border/50 shadow-sm overflow-hidden h-fit">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Recent Jobs</CardTitle>
+                  <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest flex items-center gap-2">
+                    <Radio className="w-3 h-3 text-primary" /> Recent Jobs
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="divide-y divide-border/50">
@@ -100,9 +103,7 @@ function MetricCard({ label, value, trend, trendUp }: any) {
 
       <div className="text-2xl font-bold">{value}</div>
 
-      <p className={`text-[9px] font-bold mt-1 uppercase ${
-        trendUp ? "text-green-500" : "text-muted-foreground"
-      }`}>
+      <p className={cn("text-[9px] font-bold mt-1 uppercase", trendUp ? "text-green-500" : "text-muted-foreground")}>
         {trend}
       </p>
     </Card>
