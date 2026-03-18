@@ -23,7 +23,8 @@ import {
   Video,
   ShieldCheck,
   Globe,
-  Database
+  Database,
+  Radio
 } from "lucide-react";
 import { PerformanceChart } from "@/components/analytics/performance-chart";
 import { useToast } from "@/hooks/use-toast";
