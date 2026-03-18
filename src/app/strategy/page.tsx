@@ -7,10 +7,28 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Target, Search, BarChart3, TrendingUp, Zap, Sparkles, Brain, Award, Activity, CalendarDays } from "lucide-react";
+import { 
+  Target, 
+  Search, 
+  BarChart3, 
+  TrendingUp, 
+  Zap, 
+  Sparkles, 
+  Brain, 
+  Award, 
+  Activity, 
+  CalendarDays,
+  Copy,
+  Flame,
+  Terminal,
+  MousePointer2,
+  CheckCircle2,
+  Lightbulb
+} from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 const NICHE_DATA = [
   { name: 'Pop', score: 100, color: 'bg-primary', badge: 'Highest' },
@@ -28,16 +46,46 @@ const TIMELINE = [
   { month: 'Month 10-12', title: 'Full Op', desc: 'Beat farm running, placements happening, funnels converting.', stats: '1,000+ Videos · $5K-$20K+' },
 ];
 
+const VIRAL_PROMPT = `Act as a YouTube SEO expert for lofi music channels.
+
+Generate 500 HIGH-RANKING YouTube tags for a lofi channel called "Harbor Moon Lofi Radio".
+
+Rules:
+- Focus on: lofi beats, study music, sleep music, relaxing music, rain sounds, coding music, chill beats
+- Include variations of: "lofi", "study", "relax", "sleep", "focus", "rain", "night", "calm"
+- Include long-tail keywords (3–6 words)
+- Include trending phrases for 2026
+- Include niche tags like: harbor, ocean, moon, night, cafe, cozy
+- Mix high-competition + low-competition tags
+- Avoid duplicates
+- Format ALL tags in ONE line separated by commas
+- Optimize for YouTube search + suggested algorithm
+
+Goal: maximize discoverability, CTR, and suggested video traffic.`;
+
 export default function NicheIntelPage() {
+  const { toast } = useToast();
+
+  const copyPrompt = () => {
+    navigator.clipboard.writeText(VIRAL_PROMPT);
+    toast({
+      title: "Master Prompt Copied",
+      description: "Paste this into ChatGPT or Claude to generate 500 tags.",
+    });
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <SidebarInset className="bg-background">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4">
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4 backdrop-blur-md bg-background/80 sticky top-0 z-50">
             <SidebarTrigger className="-ml-1" />
             <div className="h-4 w-px bg-border/50 mx-2" />
-            <h1 className="font-headline font-bold text-xl uppercase text-primary tracking-tight">Intelligence & Roadmap</h1>
+            <div className="flex-1">
+              <h1 className="font-headline font-bold text-xl uppercase text-primary tracking-tight">Intelligence & Roadmap</h1>
+              <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Industrial Strategy Cluster</p>
+            </div>
           </header>
 
           <main className="p-6 md:p-8 space-y-8 max-w-6xl mx-auto w-full">
@@ -45,6 +93,7 @@ export default function NicheIntelPage() {
               <TabsList className="bg-secondary/50 p-1 border border-border/50 rounded-xl">
                 <TabsTrigger value="index" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6">Micro-Niche Index</TabsTrigger>
                 <TabsTrigger value="timeline" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6">Growth Timeline</TabsTrigger>
+                <TabsTrigger value="prompts" className="gap-2 font-bold uppercase text-[10px] tracking-widest px-6"><Flame className="w-3 h-3 text-orange-500" /> Master Prompts</TabsTrigger>
               </TabsList>
 
               <TabsContent value="index" className="space-y-8 m-0">
@@ -120,6 +169,96 @@ export default function NicheIntelPage() {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="prompts" className="space-y-8 m-0">
+                <div className="grid gap-8 lg:grid-cols-3">
+                  <Card className="lg:col-span-2 bg-card border-orange-500/20 shadow-xl overflow-hidden rounded-3xl">
+                    <CardHeader className="bg-orange-500/5 border-b border-orange-500/10">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <CardTitle className="font-headline text-lg uppercase text-orange-400">🔥 30-Second AI Prompt</CardTitle>
+                          <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Generate 500 Viral Lofi Tags Instantly</CardDescription>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={copyPrompt} className="h-8 border-orange-500/30 text-orange-400 hover:bg-orange-500/10">
+                          <Copy className="w-3 h-3 mr-2" /> Copy Prompt
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-6">
+                      <div className="p-6 rounded-2xl bg-black/40 border border-white/5 font-mono text-xs leading-relaxed text-blue-300 whitespace-pre-wrap">
+                        {VIRAL_PROMPT}
+                      </div>
+                      
+                      <div className="mt-8 grid grid-cols-2 gap-6">
+                        <div className="space-y-3">
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">🧠 Why This Works</h4>
+                          <ul className="space-y-2">
+                            <li className="flex gap-2 text-[11px] text-muted-foreground"><CheckCircle2 className="w-3 h-3 text-orange-400 shrink-0" /> Forces AI into SEO mode</li>
+                            <li className="flex gap-2 text-[11px] text-muted-foreground"><CheckCircle2 className="w-3 h-3 text-orange-400 shrink-0" /> Mixes broad + niche tags</li>
+                            <li className="flex gap-2 text-[11px] text-muted-foreground"><CheckCircle2 className="w-3 h-3 text-orange-400 shrink-0" /> Long-tail = easier ranking early</li>
+                            <li className="flex gap-2 text-[11px] text-muted-foreground"><CheckCircle2 className="w-3 h-3 text-orange-400 shrink-0" /> Algorithm sees topic authority fast</li>
+                          </ul>
+                        </div>
+                        <div className="space-y-3">
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">🧩 Simple Action Plan</h4>
+                          <div className="space-y-3">
+                            <div className="flex gap-3">
+                              <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-[10px] font-bold shrink-0">1</span>
+                              <p className="text-[11px] text-muted-foreground">Run prompt in ChatGPT</p>
+                            </div>
+                            <div className="flex gap-3">
+                              <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-[10px] font-bold shrink-0">2</span>
+                              <p className="text-[11px] text-muted-foreground">Use top 30 per video</p>
+                            </div>
+                            <div className="flex gap-3">
+                              <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-[10px] font-bold shrink-0">3</span>
+                              <p className="text-[11px] text-muted-foreground">Rotate keyword focus daily</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="space-y-6">
+                    <Card className="bg-primary/5 border-primary/20 shadow-lg">
+                      <CardHeader>
+                        <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-primary flex items-center gap-2">
+                          <Zap className="w-4 h-4" /> ⚡ Pro Upgrade
+                        </CardTitle>
+                        <CardDescription className="text-[10px] font-bold uppercase">Multi-Keyword Dominance</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                          <p className="text-xs font-bold text-foreground">Keyword Rotation Strategy</p>
+                          <div className="p-3 rounded-xl bg-background/50 border border-border/50 space-y-2">
+                            <p className="text-[10px] text-muted-foreground">Video 1 &rarr; focus <span className="text-primary font-bold">"study"</span></p>
+                            <p className="text-[10px] text-muted-foreground">Video 2 &rarr; focus <span className="text-primary font-bold">"sleep"</span></p>
+                            <p className="text-[10px] text-muted-foreground">Video 3 &rarr; focus <span className="text-primary font-bold">"rain"</span></p>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                          Repeat weekly to build topic authority across all 3 traffic lanes simultaneously. This is what the 1M+ sub channels do.
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-card border-border/50">
+                      <CardHeader>
+                        <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+                          <Lightbulb className="w-4 h-4" /> 🚀 Power Move
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed">
+                          Run the prompt 3 times with specific variations like <span className="text-foreground font-bold">"sleep lofi channel"</span> or <span className="text-foreground font-bold">"coding lofi mix"</span>. 
+                          This forces the AI to discover untapped traffic lanes.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </main>

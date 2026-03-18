@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Search, Copy, RefreshCcw, Tag, Hash, FileText, Flame, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Loader2, Search, Copy, RefreshCcw, Tag, Hash, FileText, Flame, AlertCircle, CheckCircle2, Terminal, Sparkles } from "lucide-react";
 import { aiYoutubeSeoOptimization, AiYoutubeSeoOptimizationOutput } from "@/ai/flows/ai-youtube-seo-optimization";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const POWER_SEO_TAGS = [
   "lofi beats", "lofi study music", "harbor lofi", "moon lofi", "lofi radio", 
@@ -23,6 +24,8 @@ const POWER_SEO_TAGS = [
   "deep focus music", "background study music", "cozy lofi beats", 
   "nighttime lofi", "chill study beats", "peaceful lofi music", "sleep lofi radio"
 ];
+
+const MASTER_PROMPT = `Act as a YouTube SEO expert for lofi music channels. Generate 500 HIGH-RANKING YouTube tags for a lofi channel called "Harbor Moon Lofi Radio"...`;
 
 export default function SeoOptimizerPage() {
   const [loading, setLoading] = useState(false);
@@ -65,6 +68,11 @@ export default function SeoOptimizerPage() {
     toast({ title: "Copied", description: "Copied to clipboard." });
   };
 
+  const copyMasterPrompt = () => {
+    navigator.clipboard.writeText(MASTER_PROMPT);
+    toast({ title: "Master Prompt Copied", description: "Paste into ChatGPT for 500+ tags." });
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#0a0a0f]">
@@ -89,68 +97,89 @@ export default function SeoOptimizerPage() {
             </div>
 
             <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-5">
-              <Card className="bg-card lg:col-span-2 h-fit border-border/50 shadow-xl overflow-hidden rounded-3xl">
-                <CardHeader className="bg-secondary/10 border-b border-border/50">
-                  <CardTitle className="font-headline text-sm uppercase tracking-widest flex items-center gap-2">
-                    <Tag className="w-4 h-4 text-primary" />
-                    Algorithm Calibration
-                  </CardTitle>
-                  <CardDescription className="text-[10px] font-bold uppercase tracking-tighter">Emotion + Scene + Use Case Logic</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6 pt-6">
-                  <div className="space-y-2">
-                    <Label className="text-[10px] uppercase font-bold text-muted-foreground">Channel / Micro-Niche</Label>
-                    <Input 
-                      value={formData.microNiche}
-                      onChange={(e) => setFormData({...formData, microNiche: e.target.value})}
-                      className="bg-secondary/30 h-10 text-xs border-border/50"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-[10px] uppercase font-bold text-muted-foreground">Scene & Viral Purpose</Label>
-                    <Textarea 
-                      value={formData.videoTopic}
-                      onChange={(e) => setFormData({...formData, videoTopic: e.target.value})}
-                      className="bg-secondary/30 min-h-[80px] text-xs border-border/50 leading-relaxed"
-                      placeholder="e.g. Moonlit Harbor Lofi Deep Focus Study Beats"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center mb-1">
-                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Power SEO Tag Block</Label>
-                      <span className={cn(
-                        "text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border",
-                        isOverLimit ? "bg-red-500/10 text-red-500 border-red-500/20" : "bg-primary/10 text-primary border-primary/20"
-                      )}>
-                        {tagLength} / 500 Chars
-                      </span>
+              <div className="lg:col-span-2 space-y-6">
+                <Card className="bg-card border-border/50 shadow-xl overflow-hidden rounded-3xl">
+                  <CardHeader className="bg-secondary/10 border-b border-border/50">
+                    <CardTitle className="font-headline text-sm uppercase tracking-widest flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-primary" />
+                      Algorithm Calibration
+                    </CardTitle>
+                    <CardDescription className="text-[10px] font-bold uppercase tracking-tighter">Emotion + Scene + Use Case Logic</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6 pt-6">
+                    <div className="space-y-2">
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Channel / Micro-Niche</Label>
+                      <Input 
+                        value={formData.microNiche}
+                        onChange={(e) => setFormData({...formData, microNiche: e.target.value})}
+                        className="bg-secondary/30 h-10 text-xs border-border/50"
+                      />
                     </div>
-                    <Textarea 
-                      value={tagString}
-                      onChange={(e) => setFormData({...formData, keywords: e.target.value.split(",").map(k => k.trim())})}
-                      className={cn(
-                        "bg-secondary/30 min-h-[120px] text-[10px] font-mono border-border/50 custom-scrollbar",
-                        isOverLimit && "border-red-500/50"
+                    <div className="space-y-2">
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Scene & Viral Purpose</Label>
+                      <Textarea 
+                        value={formData.videoTopic}
+                        onChange={(e) => setFormData({...formData, videoTopic: e.target.value})}
+                        className="bg-secondary/30 min-h-[80px] text-xs border-border/50 leading-relaxed"
+                        placeholder="e.g. Moonlit Harbor Lofi Deep Focus Study Beats"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center mb-1">
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">Power SEO Tag Block</Label>
+                        <span className={cn(
+                          "text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border",
+                          isOverLimit ? "bg-red-500/10 text-red-500 border-red-500/20" : "bg-primary/10 text-primary border-primary/20"
+                        )}>
+                          {tagLength} / 500 Chars
+                        </span>
+                      </div>
+                      <Textarea 
+                        value={tagString}
+                        onChange={(e) => setFormData({...formData, keywords: e.target.value.split(",").map(k => k.trim())})}
+                        className={cn(
+                          "bg-secondary/30 min-h-[120px] text-[10px] font-mono border-border/50 custom-scrollbar",
+                          isOverLimit && "border-red-500/50"
+                        )}
+                      />
+                      {isOverLimit && (
+                        <p className="text-[9px] text-red-400 font-bold uppercase flex items-center gap-1 mt-1">
+                          <AlertCircle className="w-3 h-3" /> Exceeds YouTube Studio pasting limit
+                        </p>
                       )}
-                    />
-                    {isOverLimit && (
-                      <p className="text-[9px] text-red-400 font-bold uppercase flex items-center gap-1 mt-1">
-                        <AlertCircle className="w-3 h-3" /> Exceeds YouTube Studio pasting limit
-                      </p>
-                    )}
-                  </div>
+                    </div>
 
-                  <Button 
-                    className="w-full bg-primary text-background font-bold h-12 uppercase text-[10px] tracking-widest shadow-lg shadow-primary/10"
-                    onClick={handleGenerate}
-                    disabled={loading || isOverLimit}
-                  >
-                    {loading ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2 h-4 w-4" />}
-                    Engineer Viral Metadata
-                  </Button>
-                </CardContent>
-              </Card>
+                    <Button 
+                      className="w-full bg-primary text-background font-bold h-12 uppercase text-[10px] tracking-widest shadow-lg shadow-primary/10"
+                      onClick={handleGenerate}
+                      disabled={loading || isOverLimit}
+                    >
+                      {loading ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2 h-4 w-4" />}
+                      Engineer Viral Metadata
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-orange-500/5 border-orange-500/20 border-dashed">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-[10px] font-black uppercase text-orange-400 flex items-center gap-2">
+                      <Terminal className="w-3 h-3" /> 30s Master Prompt
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold italic">"Generate 500 HIGH-RANKING tags for Harbor Moon..."</p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1 h-8 text-[9px] uppercase font-bold border-orange-500/20 text-orange-400 hover:bg-orange-500/10" onClick={copyMasterPrompt}>
+                        <Copy className="w-3 h-3 mr-2" /> Copy Prompt
+                      </Button>
+                      <Link href="/strategy" className="flex-1">
+                        <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold text-muted-foreground">View Blueprint</Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
 
               <div className="lg:col-span-3 space-y-6">
                 {!result && !loading && (
