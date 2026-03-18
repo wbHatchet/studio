@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -61,16 +60,16 @@ export default function ApiKeysPage() {
                 <div className="flex justify-between items-center mb-4">
                   <div>
                     <h2 className="text-lg font-headline font-bold uppercase tracking-tight">Industrial API Stack</h2>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">8 of 14 APIs configured · Grid Ready</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">9 of 14 APIs configured · Grid Ready</p>
                   </div>
                   <Badge className="bg-primary text-background font-black uppercase text-[10px]">MVP Active</Badge>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-[9px] font-black uppercase tracking-tighter text-muted-foreground">
                     <span>Integration Velocity</span>
-                    <span>68% Complete</span>
+                    <span>74% Complete</span>
                   </div>
-                  <Progress value={68} className="h-1.5 bg-secondary" />
+                  <Progress value={74} className="h-1.5 bg-secondary" />
                 </div>
               </div>
               <CardContent className="p-8 space-y-10">
@@ -111,10 +110,10 @@ export default function ApiKeysPage() {
                       icon={Mic2}
                     />
                     <ApiKeyInput 
-                      label="Apify (Trend Scrapers)" 
-                      placeholder="Enter API Key..." 
-                      status="Pending"
-                      icon={Search}
+                      label="Suno AI (Auth State)" 
+                      placeholder="suno_auth.json detected" 
+                      status="Connected"
+                      icon={Zap}
                     />
                   </div>
                 </section>
@@ -133,17 +132,17 @@ export default function ApiKeysPage() {
                       icon={Youtube}
                     />
                     <ApiKeyInput 
+                      label="Zapper Deploy API" 
+                      placeholder="0ac5370a5211e3e18b3238caff98b040" 
+                      status="Connected"
+                      icon={Zap}
+                      isZapier
+                    />
+                    <ApiKeyInput 
                       label="Zapier / n8n Webhook" 
                       placeholder="https://hooks.zapier.com/..." 
                       status="Pending"
                       icon={LinkIcon}
-                      isZapier
-                    />
-                    <ApiKeyInput 
-                      label="Repurpose.io (Auto-Dist)" 
-                      placeholder="Enter API Key..." 
-                      status="Connected"
-                      icon={Share2}
                     />
                   </div>
                 </section>

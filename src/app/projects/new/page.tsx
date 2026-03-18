@@ -17,12 +17,14 @@ import {
   Layout, 
   FileSpreadsheet,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 
 const NICHES = [
   { id: 'halloween', name: 'Halloween Lofi', icon: '🎃', sub: 'Cozy · Pumpkin Cafe' },
@@ -38,9 +40,23 @@ const STEPS = ["Pick Niche", "Upload Data", "Configure", "Launch"];
 export default function NewProjectPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedNiche, setSelectedNiche] = useState('halloween');
+  const [isLaunching, setIsLaunching] = useState(false);
+  const { toast } = useToast();
 
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0));
+
+  const handleLaunch = async () => {
+    setIsLaunching(true);
+    // Industrial logic: Triggering Zapper Deployment sequence
+    setTimeout(() => {
+      toast({
+        title: "Zapper Deployment Triggered",
+        description: "Industrial grid dispatching 13 agents via Zapper Deploy protocol.",
+      });
+      window.location.href = '/review';
+    }, 1500);
+  };
 
   return (
     <SidebarProvider>
@@ -203,13 +219,19 @@ export default function NewProjectPage() {
                   <AgentTag label="Video Composer" />
                   <AgentTag label="Metadata" />
                   <AgentTag label="QC Gate" />
+                  <AgentTag label="Zapper Deploy" />
                   <AgentTag label="YT Upload" />
                 </div>
 
                 <div className="flex justify-between pt-4">
                   <Button variant="ghost" onClick={prevStep} className="text-[10px] font-bold uppercase">Back</Button>
-                  <Button className="bg-primary text-primary-foreground font-bold uppercase text-xs h-12 px-12 shadow-xl shadow-primary/20">
-                    <Rocket className="mr-2 w-4 h-4" /> Launch Pipeline
+                  <Button 
+                    onClick={handleLaunch}
+                    disabled={isLaunching}
+                    className="bg-primary text-primary-foreground font-bold uppercase text-xs h-12 px-12 shadow-xl shadow-primary/20"
+                  >
+                    {isLaunching ? <Loader2 className="mr-2 w-4 h-4 animate-spin" /> : <Rocket className="mr-2 w-4 h-4" />}
+                    Launch via Zapper
                   </Button>
                 </div>
               </div>
