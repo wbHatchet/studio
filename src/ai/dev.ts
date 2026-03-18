@@ -9,3 +9,4 @@ import '@/ai/flows/ai-visuals-and-animation-flow.ts';
 import '@/ai/flows/ai-trend-prediction.ts';
 import '@/ai/flows/ai-hook-optimizer.ts';
 import '@/ai/flows/ai-voice-generation.ts';
+import '@/ai/flows/ai-initial-project-kickoff.ts';

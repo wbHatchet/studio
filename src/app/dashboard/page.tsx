@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -27,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { processExcelUpload } from "@/lib/excel-parser";
 import { useUser, useFirestore, addDocumentNonBlocking } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
+import { kickoffProject } from "@/ai/flows/ai-initial-project-kickoff";
 import {
   Dialog,
   DialogContent,
@@ -77,26 +77,40 @@ export default function DashboardPage() {
     if (!newTopic.trim() || !user || !db) return;
     
     setIsLaunching(true);
-    const ideaData = {
-      topic: newTopic,
-      niche: newNiche,
-      status: "pending",
-      createdAt: serverTimestamp(),
-    };
-
     try {
+      // 1. Kick off AI expansion flow
+      const aiExpansion = await kickoffProject({ topic: newTopic, niche: newNiche });
+
+      // 2. Save expanded project to Firestore
+      const ideaData = {
+        topic: newTopic,
+        expandedTopic: aiExpansion.expandedTopic,
+        niche: newNiche,
+        mood: aiExpansion.mood,
+        visualPrompt: aiExpansion.visualPrompt,
+        musicStyle: aiExpansion.musicStyle,
+        strategyInsight: aiExpansion.strategyInsight,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      };
+
       const ideaRef = collection(db, "users", user.uid, "ideas");
       addDocumentNonBlocking(ideaRef, ideaData);
       
       toast({
         title: "Project Initialized",
-        description: `"${newTopic}" has been added to the production queue.`,
+        description: `"${aiExpansion.expandedTopic}" is now in production.`,
       });
       
       setNewTopic("");
       setIsDialogOpen(false);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      toast({
+        variant: "destructive",
+        title: "Launch Failed",
+        description: "AI expansion could not complete. Check API keys.",
+      });
     } finally {
       setIsLaunching(false);
     }
@@ -193,7 +207,7 @@ export default function DashboardPage() {
             {/* GLOBAL CONTENT PIPELINE */}
             <Card className="bg-card border-border/50 shadow-xl overflow-hidden">
               <CardHeader className="bg-primary/5 py-4 border-b border-border/50">
-                <CardTitle className="text-[10px) font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
+                <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2 tracking-widest">
                   <Workflow className="w-3 h-3" /> Global Content Pipeline
                 </CardTitle>
               </CardHeader>
